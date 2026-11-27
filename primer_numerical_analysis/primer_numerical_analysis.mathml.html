@@ -4871,30 +4871,69 @@ variables to a region. <strong>Bound constraints</strong> set a range
 for each variable. The differences between these categories matter for
 which algorithms work well, but the underlying theory runs through a
 single set of conditions.</p>
-<p><strong>Karush–Kuhn–Tucker (KKT) conditions.</strong> These
-first-order optimality conditions for a constrained problem For a
-problem with equality constraints
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒙</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">c_i(\mathbf{x}) = 0</annotation></semantics></math>
-and inequality constraints
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mi>j</mi></msub><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒙</mi><mo stretchy="false" form="postfix">)</mo><mo>≤</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">g_j(\mathbf{x}) \leq 0</annotation></semantics></math>,
-a feasible point
+<p><strong>Karush–Kuhn–Tucker (KKT) conditions.</strong> Consider a
+continuously differentiable objective
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>f</mi><annotation encoding="application/x-tex">f</annotation></semantics></math>
+and constraints
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒙</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">c_i(\mathbf{x})=0</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mi>j</mi></msub><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒙</mi><mo stretchy="false" form="postfix">)</mo><mo>≤</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">g_j(\mathbf{x})\leq 0</annotation></semantics></math>.
+An inequality is <em>active</em> at a feasible point when
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mi>j</mi></msub><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒙</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">g_j(\mathbf{x})=0</annotation></semantics></math>.
+A useful constraint qualification is the <strong>linear independence
+constraint qualification</strong> (LICQ): at the point in question, the
+gradients of all equalities and active inequalities are linearly
+independent. If a feasible
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi mathvariant="bold-italic">𝒙</mi><mo>*</mo></msup><annotation encoding="application/x-tex">\mathbf{x}^*</annotation></semantics></math>
-is a local minimum only if there exist multipliers
+is a local minimum and LICQ holds there, then multipliers
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>λ</mi><mi>i</mi></msub><annotation encoding="application/x-tex">\lambda_i</annotation></semantics></math>
 and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>μ</mi><mi>j</mi></msub><mo>≥</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\mu_j \geq 0</annotation></semantics></math>
-satisfying: stationarity of the Lagrangian
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∇</mi><mi>f</mi><mo stretchy="false" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝒙</mi><mo>*</mo></msup><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mo>∑</mo><msub><mi>λ</mi><mi>i</mi></msub><mi>∇</mi><msub><mi>c</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝒙</mi><mo>*</mo></msup><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mo>∑</mo><msub><mi>μ</mi><mi>j</mi></msub><mi>∇</mi><msub><mi>g</mi><mi>j</mi></msub><mo stretchy="false" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝒙</mi><mo>*</mo></msup><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\nabla f(\mathbf{x}^*) + \sum \lambda_i \nabla c_i(\mathbf{x}^*) + \sum \mu_j \nabla g_j(\mathbf{x}^*) = 0</annotation></semantics></math>;
-primal feasibility
-(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mi>i</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">c_i = 0</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mi>j</mi></msub><mo>≤</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">g_j \leq 0</annotation></semantics></math>);
-dual feasibility
-(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>μ</mi><mi>j</mi></msub><mo>≥</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\mu_j \geq 0</annotation></semantics></math>);
-and complementary slackness
-(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>μ</mi><mi>j</mi></msub><msub><mi>g</mi><mi>j</mi></msub><mo stretchy="false" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝒙</mi><mo>*</mo></msup><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\mu_j g_j(\mathbf{x}^*) = 0</annotation></semantics></math>
-— each inequality is either active or its multiplier is zero). These
-conditions tell you what a solution must look like. They do not tell you
-how to find one — that is the job of the algorithm.</p>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>μ</mi><mi>j</mi></msub><annotation encoding="application/x-tex">\mu_j</annotation></semantics></math>
+exist that satisfy:</p>
+<ul>
+<li><strong>Stationarity:</strong>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∇</mi><mi>f</mi><mo stretchy="false" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝒙</mi><mo>*</mo></msup><mo stretchy="false" form="postfix">)</mo><mo>+</mo><msub><mo>∑</mo><mi>i</mi></msub><msub><mi>λ</mi><mi>i</mi></msub><mi>∇</mi><msub><mi>c</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝒙</mi><mo>*</mo></msup><mo stretchy="false" form="postfix">)</mo><mo>+</mo><msub><mo>∑</mo><mi>j</mi></msub><msub><mi>μ</mi><mi>j</mi></msub><mi>∇</mi><msub><mi>g</mi><mi>j</mi></msub><mo stretchy="false" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝒙</mi><mo>*</mo></msup><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\nabla f(\mathbf{x}^*) + \sum_i \lambda_i\nabla c_i(\mathbf{x}^*) + \sum_j \mu_j\nabla g_j(\mathbf{x}^*) = 0</annotation></semantics></math>.</li>
+<li><strong>Primal feasibility:</strong>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝒙</mi><mo>*</mo></msup><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">c_i(\mathbf{x}^*)=0</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mi>j</mi></msub><mo stretchy="false" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝒙</mi><mo>*</mo></msup><mo stretchy="false" form="postfix">)</mo><mo>≤</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">g_j(\mathbf{x}^*)\leq 0</annotation></semantics></math>.</li>
+<li><strong>Dual feasibility:</strong>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>μ</mi><mi>j</mi></msub><mo>≥</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\mu_j\geq 0</annotation></semantics></math>.</li>
+<li><strong>Complementary slackness:</strong>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>μ</mi><mi>j</mi></msub><msub><mi>g</mi><mi>j</mi></msub><mo stretchy="false" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝒙</mi><mo>*</mo></msup><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\mu_jg_j(\mathbf{x}^*)=0</annotation></semantics></math>
+for each inequality. An inactive inequality therefore has zero
+multiplier; an active one can also have zero multiplier.</li>
+</ul>
+<p>LICQ is sufficient for this necessary-condition theorem, but it is
+not the only possible constraint qualification, and its failure does not
+itself rule out KKT multipliers. It matters because a minimum need not
+have any such multipliers without a qualification. For example, minimise
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>x</mi></mrow><annotation encoding="application/x-tex">f(x)=x</annotation></semantics></math>
+subject to
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>g</mi><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msup><mi>x</mi><mn>2</mn></msup><mo>≤</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">g(x)=x^2\leq 0</annotation></semantics></math>.
+The only feasible point is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>x</mi><mo>*</mo></msup><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">x^*=0</annotation></semantics></math>,
+so it is a global minimum. Yet
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>g</mi><mo>′</mo></msup><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">g&#39;(0)=0</annotation></semantics></math>,
+LICQ fails, and stationarity would require
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>+</mo><mi>μ</mi><mo>⋅</mo><mn>0</mn><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">1+\mu\cdot 0=0</annotation></semantics></math>,
+which no multiplier can satisfy. Rejecting this point solely because no
+KKT multiplier exists would be wrong.</p>
+<p>Conversely, KKT conditions are generally <strong>necessary, not
+sufficient</strong>, under the stated qualification. Even without
+constraints,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>−</mi><msup><mi>x</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">f(x)=-x^2</annotation></semantics></math>
+has zero gradient at
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">x=0</annotation></semantics></math>,
+a maximum rather than a minimum. For a differentiable convex objective
+with convex inequality functions and affine equalities, however, any
+feasible point with KKT multipliers is a global minimum: the nonnegative
+weighted inequalities and affine equalities make the Lagrangian convex,
+and stationarity minimises it globally. These conditions characterise a
+candidate; an algorithm must still find it and establish the
+assumptions. See the <a href="https://ocw.mit.edu/courses/15-093j-optimization-methods-fall-2009/8cbba8fcc0752e99ae37813368f533e6_MIT15_093J_F09_lec20.pdf">MIT
+optimisation lecture on KKT and constraint qualifications</a> and <a href="https://see.stanford.edu/materials/lsocoee364a/transcripts/ConvexOptimizationI-Lecture09.html">Stanford’s
+convex optimisation lecture</a>.</p>
 <p><strong>Sequential quadratic programming (SQP).</strong> SQP applies
 Newton-like ideas directly to the KKT system. At each iterate
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi mathvariant="bold-italic">𝒙</mi><mi>k</mi></msub><annotation encoding="application/x-tex">\mathbf{x}_k</annotation></semantics></math>,
