@@ -4376,22 +4376,47 @@ variables to a region. <strong>Bound constraints</strong> set a range
 for each variable. The differences between these categories matter for
 which algorithms work well, but the underlying theory runs through a
 single set of conditions.</p>
-<p><strong>Karush–Kuhn–Tucker (KKT) conditions.</strong> These
-first-order optimality conditions for a constrained problem For a
-problem with equality constraints <span class="math inline">\(c_i(\mathbf{x}) = 0\)</span> and inequality
-constraints <span class="math inline">\(g_j(\mathbf{x}) \leq 0\)</span>,
-a feasible point <span class="math inline">\(\mathbf{x}^*\)</span> is a
-local minimum only if there exist multipliers <span class="math inline">\(\lambda_i\)</span> and <span class="math inline">\(\mu_j \geq 0\)</span> satisfying: stationarity of
-the Lagrangian <span class="math inline">\(\nabla f(\mathbf{x}^*) + \sum
-\lambda_i \nabla c_i(\mathbf{x}^*) + \sum \mu_j \nabla g_j(\mathbf{x}^*)
-= 0\)</span>; primal feasibility (<span class="math inline">\(c_i =
-0\)</span>, <span class="math inline">\(g_j \leq 0\)</span>); dual
-feasibility (<span class="math inline">\(\mu_j \geq 0\)</span>); and
-complementary slackness (<span class="math inline">\(\mu_j
-g_j(\mathbf{x}^*) = 0\)</span> — each inequality is either active or its
-multiplier is zero). These conditions tell you what a solution must look
-like. They do not tell you how to find one — that is the job of the
-algorithm.</p>
+<p><strong>Karush–Kuhn–Tucker (KKT) conditions.</strong> Consider a
+continuously differentiable objective <span class="math inline">\(f\)</span> and constraints <span class="math inline">\(c_i(\mathbf{x})=0\)</span> and <span class="math inline">\(g_j(\mathbf{x})\leq 0\)</span>. An inequality is
+<em>active</em> at a feasible point when <span class="math inline">\(g_j(\mathbf{x})=0\)</span>. A useful constraint
+qualification is the <strong>linear independence constraint
+qualification</strong> (LICQ): at the point in question, the gradients
+of all equalities and active inequalities are linearly independent. If a
+feasible <span class="math inline">\(\mathbf{x}^*\)</span> is a local
+minimum and LICQ holds there, then multipliers <span class="math inline">\(\lambda_i\)</span> and <span class="math inline">\(\mu_j\)</span> exist that satisfy:</p>
+<ul>
+<li><strong>Stationarity:</strong> <span class="math inline">\(\nabla
+f(\mathbf{x}^*) + \sum_i \lambda_i\nabla c_i(\mathbf{x}^*) + \sum_j
+\mu_j\nabla g_j(\mathbf{x}^*) = 0\)</span>.</li>
+<li><strong>Primal feasibility:</strong> <span class="math inline">\(c_i(\mathbf{x}^*)=0\)</span> and <span class="math inline">\(g_j(\mathbf{x}^*)\leq 0\)</span>.</li>
+<li><strong>Dual feasibility:</strong> <span class="math inline">\(\mu_j\geq 0\)</span>.</li>
+<li><strong>Complementary slackness:</strong> <span class="math inline">\(\mu_jg_j(\mathbf{x}^*)=0\)</span> for each
+inequality. An inactive inequality therefore has zero multiplier; an
+active one can also have zero multiplier.</li>
+</ul>
+<p>LICQ is sufficient for this necessary-condition theorem, but it is
+not the only possible constraint qualification, and its failure does not
+itself rule out KKT multipliers. It matters because a minimum need not
+have any such multipliers without a qualification. For example, minimise
+<span class="math inline">\(f(x)=x\)</span> subject to <span class="math inline">\(g(x)=x^2\leq 0\)</span>. The only feasible point
+is <span class="math inline">\(x^*=0\)</span>, so it is a global
+minimum. Yet <span class="math inline">\(g&#39;(0)=0\)</span>, LICQ
+fails, and stationarity would require <span class="math inline">\(1+\mu\cdot 0=0\)</span>, which no multiplier can
+satisfy. Rejecting this point solely because no KKT multiplier exists
+would be wrong.</p>
+<p>Conversely, KKT conditions are generally <strong>necessary, not
+sufficient</strong>, under the stated qualification. Even without
+constraints, <span class="math inline">\(f(x)=-x^2\)</span> has zero
+gradient at <span class="math inline">\(x=0\)</span>, a maximum rather
+than a minimum. For a differentiable convex objective with convex
+inequality functions and affine equalities, however, any feasible point
+with KKT multipliers is a global minimum: the nonnegative weighted
+inequalities and affine equalities make the Lagrangian convex, and
+stationarity minimises it globally. These conditions characterise a
+candidate; an algorithm must still find it and establish the
+assumptions. See the <a href="https://ocw.mit.edu/courses/15-093j-optimization-methods-fall-2009/8cbba8fcc0752e99ae37813368f533e6_MIT15_093J_F09_lec20.pdf">MIT
+optimisation lecture on KKT and constraint qualifications</a> and <a href="https://see.stanford.edu/materials/lsocoee364a/transcripts/ConvexOptimizationI-Lecture09.html">Stanford’s
+convex optimisation lecture</a>.</p>
 <p><strong>Sequential quadratic programming (SQP).</strong> SQP applies
 Newton-like ideas directly to the KKT system. At each iterate <span class="math inline">\(\mathbf{x}_k\)</span>, the algorithm constructs a
 quadratic subproblem: a quadratic approximation to the Lagrangian as the
