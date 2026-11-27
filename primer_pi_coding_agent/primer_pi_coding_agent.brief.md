@@ -2,7 +2,7 @@
 
 - Issue and milestone: #442, current-documentation refresh, after Codex #441.
 - Brief revision: pi-current-docs-v1
-- Source revision: db93a99128b8424698f73c321d24e624d578b7ac
+- Source revision: 629d566
 - Tracked path: primer_pi_coding_agent/primer_pi_coding_agent.brief.md
 - Reader: experienced Claude Code user evaluating, configuring and supervising Pi for a bounded repository task.
 - Prerequisites: terminal, Git, repository instructions and basic Claude Code concepts; TypeScript reading helpful for extension route.
@@ -96,4 +96,4 @@ The coordinator followed all eight primary routes against their planned traces a
 
 ## Issue #473: first-run baseline amendment
 
-For source SHA-256 `aa9d213fd1787ea29e248c28998095dae9db76ea1ab8fee3f4f81b4dfb2b1340`, retain the `first-run` / `harness-control` route and its illustrative Pi boundary. The disposable repository now starts with a committed README using a command-local identity; the reader verifies the initial commit and compares both staged and unstaged tracked changes against it, then inspects untracked files separately. The baseline and diff commands can be tested without running Pi or a provider. Earlier revision and locator references remain historical.
+For source SHA-256 `2da79108a2f215417efac09acdb315d2f0460efb96885aa8b218d44984c448c2`, retain the `first-run` / `harness-control` route and its illustrative Pi boundary. The disposable repository now starts with a committed README using a command-local identity; the reader verifies the initial commit and compares both staged and unstaged tracked changes against it, then inspects untracked files separately. The baseline and diff commands can be tested without running Pi or a provider. Earlier revision and locator references remain historical.
