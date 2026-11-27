@@ -749,32 +749,6 @@ Prompt injection can come from a README, issue, web page, command output, or mod
 
 Pi also makes outbound requests of its own. The [settings reference](https://docs.pi.dev/latest/settings) says `enableInstallTelemetry` defaults to `true` for anonymous install/update reporting and selected provider attribution headers; `PI_TELEMETRY=0` overrides those. It does *not* disable update checks. `PI_SKIP_VERSION_CHECK=1` disables the pi.dev latest-version request, while `pi --offline` or `PI_OFFLINE=1` disables automatic network activity, including model-catalogue refreshes; a cached catalogue remains available. These controls are distinct from the network used by a chosen model provider, MCP server, web skill, or package. Do not treat `--offline` as a firewall for tools or extensions; use OS or network policy for that. `/share` and `/bug` are explicit upload actions whose transcript contents need inspection.
 
-## Pi Compared With Other Coding Agents
-
-The useful comparison is not a feature checklist. Ask where the product puts workflow decisions and what the default execution boundary is.
-
-| Agent | Centre of gravity | Provider posture | Web posture | Customisation and controls |
-| ------- | ----------- | ----------- | ------------- | ------------- |
-| **Pi** | Programmable terminal harness and embeddable runtime (MIT) | Broad providers plus compatible and local endpoints | Add a skill, MCP service, extension, package, or shell workflow | TypeScript extensions, built-in MCP and optional codemode; no per-tool approval system |
-| **OpenCode** | Ready-made terminal coding application | Broad provider and local support | Built-in `webfetch`; `websearch` only with the OpenCode provider or an opt-in Exa or Parallel flag | Per-tool permissions, plugins, skills, MCP |
-| **Aider** | Git-aware pair programmer | Many providers and local endpoints | `/web <url>` scrapes a page into the chat; no built-in search | Configuration and scripts; narrower runtime |
-| **Claude Code** | Opinionated terminal agent around Claude | Strong Anthropic alignment and supported cloud deployments | Built-in `WebFetch` and `WebSearch`, permission-gated | Permission modes, optional OS-level sandbox, subagents, hooks, skills, plugins, MCP |
-| **Codex** | Product-connected coding agent from OpenAI | OpenAI-first; custom providers and local `--oss` models supported | Built-in web search, cached results by default | Instructions, skills, plugins, MCP; sandbox modes and approval policies built in |
-
-### Pi Versus OpenCode and Aider
-
-OpenCode feels like a complete coding application; Pi starts smaller and asks you to assemble the workflow. Choose OpenCode for a richer day-one experience. Choose Pi when the agent loop itself must be programmable, when you want a narrow, provider-neutral harness, or when you are building an embedded agent. Aider's centre is the repository, selected editable files, a repository map, and a reviewable Git edit loop. Pi can reproduce that loop but can also become a research tool, browser bridge, or application component; choose Aider for focused supervised edits.
-
-### Pi Versus Claude Code and Codex
-
-Claude Code and Codex supply the surrounding workflow themselves: permission prompts, sandbox options, web search, and established instruction systems. The mapping table in "Coming from Claude Code" shows where Pi leaves each of those to you: you select the model, assemble research access, review extensions, and define containment. That flexibility is not automatically cheaper or safer. Local models add hardware and quality costs; extensions can add exactly the capability you want while gaining full process access. The sibling primers cover the [alternatives to Claude Code](../primer_claude_code_alternative/primer-claude-code-alternatives.html) and [Codex for Claude Code users](../primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.html) in more depth.
-
-### Forks and Derivatives
-
-Because Pi is MIT-licensed and embeddable, others build on it. `oh-my-pi` (Stencil Labs, MIT) is, by its own README, a fork that adds subagents, integrated development environment (IDE) and Language Server Protocol (LSP) support, and browser tooling. OpenClaw (see the [OpenClaw primer](../primer_openclaw/primer_openclaw.html)) was described in January 2026 as having Pi "under the hood" ([Armin Ronacher](https://lucumr.pocoo.org/2026/1/31/pi/)); its current documentation says only `@earendil-works/pi-tui`, the terminal-UI toolkit, remains a dependency. A claim that a project "runs on Pi" needs a date.
-
-A fork can be useful when its integrated defaults match the task, but it changes the code and update path you are trusting. Compare the fork's actual release and security model with the Pi version in this primer before carrying over commands. Likewise, an application that once embedded Pi need not still share Pi's sessions, tools, or provider handling. Treat those relationships as versioned implementation facts rather than product categories.
-
 ## Worked Example: A Reproducible Data-Science Project With Pi and Rocker
 
 This illustrative project makes the boundary between an agent and an analysis runtime concrete. It does not supply complete cleaners, tests, the comparison script, or dependency lockfiles: the reader must create these before the commands can run. The complete project was not executed during the 19 November refresh. Pi runs on the host and helps inspect the repository, research package APIs, write code, and interpret failures. Rocker runs the R and Python analysis in a reproducible container, and Podman supplies the rootless boundary. Pi itself remains a host process with your permissions (see "Safety and containment"); the container bounds only the analysis code. Because Pi runs `just qa` on the host, it also has host access to Podman and everything else you have.
@@ -975,6 +949,32 @@ Pi should run `just qa` and report its output, but its report of its own run is 
 Accept the fixture result only after these checks actually pass; the expected rows alone are not evidence that either implementation ran. Item 4 matters most. Pi runs on the host with no approval prompts, so it can edit the `Justfile` or `Containerfile` to loosen `--network=none`, `--read-only`, or the mounts. The container flags are a convention Pi follows, not a boundary it is subject to. Commit those files first and review any change to them as a separate diff.
 
 If the project later uses real data, keep it outside Git and mount it read-only. Do not give Pi access to sensitive datasets or credentials merely because the analysis container can read them. This example teaches reproducibility and review; it does not make Pi a trusted data-processing authority.
+
+## Pi Compared With Other Coding Agents
+
+The useful comparison is not a feature checklist. Ask where the product puts workflow decisions and what the default execution boundary is.
+
+| Agent | Centre of gravity | Provider posture | Web posture | Customisation and controls |
+| ------- | ----------- | ----------- | ------------- | ------------- |
+| **Pi** | Programmable terminal harness and embeddable runtime (MIT) | Broad providers plus compatible and local endpoints | Add a skill, MCP service, extension, package, or shell workflow | TypeScript extensions, built-in MCP and optional codemode; no per-tool approval system |
+| **OpenCode** | Ready-made terminal coding application | Broad provider and local support | Built-in `webfetch`; `websearch` only with the OpenCode provider or an opt-in Exa or Parallel flag | Per-tool permissions, plugins, skills, MCP |
+| **Aider** | Git-aware pair programmer | Many providers and local endpoints | `/web <url>` scrapes a page into the chat; no built-in search | Configuration and scripts; narrower runtime |
+| **Claude Code** | Opinionated terminal agent around Claude | Strong Anthropic alignment and supported cloud deployments | Built-in `WebFetch` and `WebSearch`, permission-gated | Permission modes, optional OS-level sandbox, subagents, hooks, skills, plugins, MCP |
+| **Codex** | Product-connected coding agent from OpenAI | OpenAI-first; custom providers and local `--oss` models supported | Built-in web search, cached results by default | Instructions, skills, plugins, MCP; sandbox modes and approval policies built in |
+
+### Pi Versus OpenCode and Aider
+
+OpenCode feels like a complete coding application; Pi starts smaller and asks you to assemble the workflow. Choose OpenCode for a richer day-one experience. Choose Pi when the agent loop itself must be programmable, when you want a narrow, provider-neutral harness, or when you are building an embedded agent. Aider's centre is the repository, selected editable files, a repository map, and a reviewable Git edit loop. Pi can reproduce that loop but can also become a research tool, browser bridge, or application component; choose Aider for focused supervised edits.
+
+### Pi Versus Claude Code and Codex
+
+Claude Code and Codex supply the surrounding workflow themselves: permission prompts, sandbox options, web search, and established instruction systems. The mapping table in "Coming from Claude Code" shows where Pi leaves each of those to you: you select the model, assemble research access, review extensions, and define containment. That flexibility is not automatically cheaper or safer. Local models add hardware and quality costs; extensions can add exactly the capability you want while gaining full process access. The sibling primers cover the [alternatives to Claude Code](../primer_claude_code_alternative/primer-claude-code-alternatives.html) and [Codex for Claude Code users](../primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.html) in more depth.
+
+### Forks and Derivatives
+
+Because Pi is MIT-licensed and embeddable, others build on it. `oh-my-pi` (Stencil Labs, MIT) is, by its own README, a fork that adds subagents, integrated development environment (IDE) and Language Server Protocol (LSP) support, and browser tooling. OpenClaw (see the [OpenClaw primer](../primer_openclaw/primer_openclaw.html)) was described in January 2026 as having Pi "under the hood" ([Armin Ronacher](https://lucumr.pocoo.org/2026/1/31/pi/)); its current documentation says only `@earendil-works/pi-tui`, the terminal-UI toolkit, remains a dependency. A claim that a project "runs on Pi" needs a date.
+
+A fork can be useful when its integrated defaults match the task, but it changes the code and update path you are trusting. Compare the fork's actual release and security model with the Pi version in this primer before carrying over commands. Likewise, an application that once embedded Pi need not still share Pi's sessions, tools, or provider handling. Treat those relationships as versioned implementation facts rather than product categories.
 
 ## Reference
 
