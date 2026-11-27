@@ -1433,13 +1433,16 @@ computation as</p>
 \operatorname{softmax}(\mathbf{z}^{(2)}).\]</span></p>
 <p>We want <span class="math inline">\(\frac{\partial
 \mathcal{L}}{\partial \mathbf{W}^{(2)}}\)</span> and <span class="math inline">\(\frac{\partial \mathcal{L}}{\partial
-\mathbf{W}^{(1)}}\)</span>. The chain rule tells us to assemble the
-second-layer gradient from a sequence of local factors:</p>
+\mathbf{W}^{(1)}}\)</span>. For one weight, the chain rule sums over the
+logits and the prediction components:</p>
 <p><span class="math display">\[\frac{\partial \mathcal{L}}{\partial
-\mathbf{W}^{(2)}} = \frac{\partial \mathcal{L}}{\partial
-\hat{\mathbf{y}}} \cdot \frac{\partial \hat{\mathbf{y}}}{\partial
-\mathbf{z}^{(2)}} \cdot \frac{\partial \mathbf{z}^{(2)}}{\partial
-\mathbf{W}^{(2)}}.\]</span></p>
+W^{(2)}_{ij}} = \sum_k \frac{\partial \mathcal{L}}{\partial \hat
+y_k}\frac{\partial \hat y_k}{\partial z^{(2)}_i}\frac{\partial
+z^{(2)}_i}{\partial W^{(2)}_{ij}}.\]</span></p>
+<p>Only logit <span class="math inline">\(i\)</span> depends on weight
+<span class="math inline">\(W^{(2)}_{ij}\)</span>; this indexed form
+avoids treating a derivative with respect to a matrix as an ordinary
+matrix product.</p>
 <p>The first two factors combine into something remarkably clean.
 Cross-entropy loss composed with softmax has a famous simplification:
 the gradient of the loss with respect to the logits <span class="math inline">\(\mathbf{z}^{(2)}\)</span> is just the prediction
@@ -2663,19 +2666,20 @@ two halves are each good for. Both use the same building blocks; they
 differ in which half they keep and what objective they train on.</p>
 <p><strong>BERT</strong> — Bidirectional Encoder Representations from
 Transformers (Devlin et al., 2018) — keeps only the encoder stack. Its
-training objective is the masked language model (MLM): take a sentence,
-randomly hide about 15% of the tokens, and train the model to predict
-the hidden tokens from everything around them. Because it is an encoder
-with unmasked self-attention, each token attends to the full sentence —
-every other token to its left <em>and</em> its right. That
-bidirectionality is the whole point: to fill in a blank well you want
-context from both sides, and BERT’s representations are built from both.
-This makes BERT strong at tasks that require <em>understanding</em> a
-complete piece of text — classification, named-entity recognition,
-extractive question answering — where you have the whole input available
-and want a rich representation of it. What BERT cannot do naturally is
-generate text left to right, because it was never trained to predict the
-next token from only the past.</p>
+training objective is the masked language model (MLM): select about 15%
+of token positions for prediction; BERT replaces 80% of selected tokens
+with <code>[MASK]</code>, 10% with a random token and leaves 10%
+unchanged, while predicting the original tokens from context. Because it
+is an encoder with unmasked self-attention, each token attends to the
+full sentence — every other token to its left <em>and</em> its right.
+That bidirectionality is the whole point: to fill in a blank well you
+want context from both sides, and BERT’s representations are built from
+both. This makes BERT strong at tasks that require
+<em>understanding</em> a complete piece of text — classification,
+named-entity recognition, extractive question answering — where you have
+the whole input available and want a rich representation of it. What
+BERT cannot do naturally is generate text left to right, because it was
+never trained to predict the next token from only the past.</p>
 <p><strong>GPT</strong> — Generative Pre-trained Transformer (Radford et
 al., 2018) — keeps only the decoder stack, and trains on the causal
 language model objective: predict the next token given all the tokens
@@ -2883,18 +2887,20 @@ position can attend only to positions at or before it, never ahead — so
 the model genuinely has to predict, not peek. Every token in the corpus
 is a free training example, which is what makes this scale so well.</p>
 <p>The <strong>Masked Language Model</strong> objective (BERT-style)
-instead corrupts the input and asks the model to repair it. Take a
-sequence, randomly choose about 15% of the positions, replace those
-tokens with a special <code>[MASK]</code> symbol, and train the model to
-recover the originals using context from both sides. The loss is
+instead corrupts the input and asks the model to repair it. In BERT,
+choose about 15% of positions for prediction; replace selected tokens
+with <code>[MASK]</code> 80% of the time, a random token 10% of the
+time, and the original token 10% of the time. Train the model to recover
+the original selected tokens using context from both sides. See the <a href="https://arxiv.org/abs/1810.04805">BERT paper</a>. The loss is
 computed only over the masked positions <span class="math inline">\(\mathcal{M}\)</span>:</p>
 <p><span class="math display">\[\mathcal{L}_{\mathrm{MLM}} = -\sum_{t
 \in \mathcal{M}} \log p_\theta(x_t \mid \mathbf{x}_{\backslash
 \mathcal{M}}),\]</span></p>
 <p>where <span class="math inline">\(\mathbf{x}_{\backslash
-\mathcal{M}}\)</span> is the sequence with the masked positions hidden.
-There is no causal mask here; the model sees the whole sequence at once
-and reads left-and-right context to fill the gap.</p>
+\mathcal{M}}\)</span> is shorthand for the corrupted input; in BERT it
+may retain some selected tokens unchanged. There is no causal mask here;
+the model sees the whole sequence at once and reads left-and-right
+context to fill the gap.</p>
 <p>The two objectives produce different kinds of model, and the reason
 is straightforward once you line up training against inference. CLM is
 trained to do exactly what generation requires — emit one token at a
@@ -2969,11 +2975,11 @@ thin matrices,</p>
 \min(d, k),\]</span></p>
 <p>and train only <span class="math inline">\(\mathbf{A}\)</span> and
 <span class="math inline">\(\mathbf{B}\)</span>. Because the rank <span class="math inline">\(r\)</span> is small — typically 4 to 64 — the
-number of trainable parameters collapses. For a weight matrix where
-<span class="math inline">\(d\)</span> and <span class="math inline">\(k\)</span> are several thousand, you can cut
-trainable parameters by a factor of ten thousand. At inference you can
-fold <span class="math inline">\(\mathbf{B}\mathbf{A}\)</span> back into
-<span class="math inline">\(\mathbf{W}_0\)</span> so there is no added
+number of trainable parameters collapses. The ratio for one matrix is
+<span class="math inline">\(dk/[r(d+k)]\)</span>. For a <span class="math inline">\(4096 \times 4096\)</span> matrix and <span class="math inline">\(r=4\)</span>, the update has 32,768 parameters
+rather than 16,777,216: a 512-fold reduction. The overall saving depends
+on which matrices are adapted and which other parameters remain
+trainable. At inference you can fold <span class="math inline">\(\mathbf{B}\mathbf{A}\)</span> back into <span class="math inline">\(\mathbf{W}_0\)</span> so there is no added
 latency, and because the frozen base is shared, swapping tasks is just
 swapping a tiny pair of matrices. The hypothesis underneath — that <span class="math inline">\(\Delta\mathbf{W}\)</span> lives in a
 low-dimensional subspace — turns out to hold well enough in practice
@@ -3614,12 +3620,15 @@ training loop, and its simplicity — no adversary, no balancing act, just
 a regression — is a large part of why diffusion training is so stable
 compared to GANs.</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># One diffusion training step (DDPM), schematically</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> torch.randint(<span class="dv">0</span>, T, (batch,))                  <span class="co"># random timestep per image</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> torch.randint(<span class="dv">0</span>, T, (batch,))                  <span class="co"># index 0 represents mathematical t=1</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>eps <span class="op">=</span> torch.randn_like(x0)                          <span class="co"># the target noise</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>xt <span class="op">=</span> sqrt_abar[t] <span class="op">*</span> x0 <span class="op">+</span> sqrt_one_minus_abar[t] <span class="op">*</span> eps</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>eps_pred <span class="op">=</span> model(xt, t)                             <span class="co"># predict the noise</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>loss <span class="op">=</span> mse_loss(eps_pred, eps)</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>loss.backward()</span></code></pre></div>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>shape <span class="op">=</span> (batch,) <span class="op">+</span> (<span class="dv">1</span>,) <span class="op">*</span> (x0.ndim <span class="op">-</span> <span class="dv">1</span>)            <span class="co"># broadcast per image</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> sqrt_abar[t].reshape(shape)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> sqrt_one_minus_abar[t].reshape(shape)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>xt <span class="op">=</span> a <span class="op">*</span> x0 <span class="op">+</span> b <span class="op">*</span> eps</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>eps_pred <span class="op">=</span> model(xt, t)                             <span class="co"># predict the noise</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>loss <span class="op">=</span> mse_loss(eps_pred, eps)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>loss.backward()</span></code></pre></div>
 <p>At generation time you reverse the chain for real. Start from pure
 noise <span class="math inline">\(\mathbf{x}_T \sim
 \mathcal{N}(\mathbf{0}, \mathbf{I})\)</span> and step down through <span class="math inline">\(t = T, T-1, \ldots, 1\)</span>, at each step using
@@ -3628,11 +3637,14 @@ the predicted noise to estimate where to move:</p>
 \frac{1}{\sqrt{\alpha_t}}\!\left(\mathbf{x}_t - \frac{\beta_t}{\sqrt{1 -
 \bar{\alpha}_t}}\,\varepsilon_\theta(\mathbf{x}_t, t)\right) + \sigma_t
 \mathbf{z}.\]</span></p>
-<p>The bracketed part removes the network’s estimate of the current
-step’s noise; the trailing <span class="math inline">\(\sigma_t
-\mathbf{z}\)</span> adds a small amount of fresh randomness back in,
-which keeps the reverse process a proper stochastic sampler rather than
-a deterministic collapse. Run all the way down and <span class="math inline">\(\mathbf{x}_0\)</span> is your generated image.</p>
+<p>The bracketed part uses the predicted aggregate noise to construct
+the reverse mean. In the original DDPM sampling algorithm, draw <span class="math inline">\(\mathbf z\sim\mathcal N(\mathbf 0,\mathbf
+I)\)</span> when <span class="math inline">\(t&gt;1\)</span> and set
+<span class="math inline">\(\mathbf z=\mathbf 0\)</span> at the final
+step; <span class="math inline">\(\sigma_t\)</span> is the chosen
+reverse-process standard deviation. See <a href="https://arxiv.org/abs/2006.11239">Ho, Jain and Abbeel</a>. Run all
+the way down and <span class="math inline">\(\mathbf{x}_0\)</span> is
+your generated image.</p>
 <h2 data-number="11.3" role="heading" aria-level="3" id="score-matching-briefly"><span class="header-section-number">11.3</span> Score Matching, Briefly</h2>
 <p>This connects to a broader theory because it explains why the
 noise-prediction trick works and links diffusion to a whole other line

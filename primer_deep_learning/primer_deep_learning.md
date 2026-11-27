@@ -226,9 +226,11 @@ Make it concrete with the two-layer MLP from the forward-pass section. Let the l
 $$\mathbf{z}^{(1)} = \mathbf{W}^{(1)} \mathbf{x} + \mathbf{b}^{(1)}, \qquad \mathbf{h}^{(1)} = \sigma(\mathbf{z}^{(1)}),$$
 $$\mathbf{z}^{(2)} = \mathbf{W}^{(2)} \mathbf{h}^{(1)} + \mathbf{b}^{(2)}, \qquad \hat{\mathbf{y}} = \operatorname{softmax}(\mathbf{z}^{(2)}).$$
 
-We want $\frac{\partial \mathcal{L}}{\partial \mathbf{W}^{(2)}}$ and $\frac{\partial \mathcal{L}}{\partial \mathbf{W}^{(1)}}$. The chain rule tells us to assemble the second-layer gradient from a sequence of local factors:
+We want $\frac{\partial \mathcal{L}}{\partial \mathbf{W}^{(2)}}$ and $\frac{\partial \mathcal{L}}{\partial \mathbf{W}^{(1)}}$. For one weight, the chain rule sums over the logits and the prediction components:
 
-$$\frac{\partial \mathcal{L}}{\partial \mathbf{W}^{(2)}} = \frac{\partial \mathcal{L}}{\partial \hat{\mathbf{y}}} \cdot \frac{\partial \hat{\mathbf{y}}}{\partial \mathbf{z}^{(2)}} \cdot \frac{\partial \mathbf{z}^{(2)}}{\partial \mathbf{W}^{(2)}}.$$
+$$\frac{\partial \mathcal{L}}{\partial W^{(2)}_{ij}} = \sum_k \frac{\partial \mathcal{L}}{\partial \hat y_k}\frac{\partial \hat y_k}{\partial z^{(2)}_i}\frac{\partial z^{(2)}_i}{\partial W^{(2)}_{ij}}.$$
+
+Only logit $i$ depends on weight $W^{(2)}_{ij}$; this indexed form avoids treating a derivative with respect to a matrix as an ordinary matrix product.
 
 The first two factors combine into something remarkably clean. Cross-entropy loss composed with softmax has a famous simplification: the gradient of the loss with respect to the logits $\mathbf{z}^{(2)}$ is just the prediction minus the truth,
 
@@ -792,7 +794,7 @@ One detail of placement is worth knowing, because it changed after the original 
 
 Two model families took the transformer in different directions, and the contrast is the clearest way to understand what the architecture's two halves are each good for. Both use the same building blocks; they differ in which half they keep and what objective they train on.
 
-**BERT** — Bidirectional Encoder Representations from Transformers (Devlin et al., 2018) — keeps only the encoder stack. Its training objective is the masked language model (MLM): take a sentence, randomly hide about 15% of the tokens, and train the model to predict the hidden tokens from everything around them. Because it is an encoder with unmasked self-attention, each token attends to the full sentence — every other token to its left *and* its right. That bidirectionality is the whole point: to fill in a blank well you want context from both sides, and BERT's representations are built from both. This makes BERT strong at tasks that require *understanding* a complete piece of text — classification, named-entity recognition, extractive question answering — where you have the whole input available and want a rich representation of it. What BERT cannot do naturally is generate text left to right, because it was never trained to predict the next token from only the past.
+**BERT** — Bidirectional Encoder Representations from Transformers (Devlin et al., 2018) — keeps only the encoder stack. Its training objective is the masked language model (MLM): select about 15% of token positions for prediction; BERT replaces 80% of selected tokens with `[MASK]`, 10% with a random token and leaves 10% unchanged, while predicting the original tokens from context. Because it is an encoder with unmasked self-attention, each token attends to the full sentence — every other token to its left *and* its right. That bidirectionality is the whole point: to fill in a blank well you want context from both sides, and BERT's representations are built from both. This makes BERT strong at tasks that require *understanding* a complete piece of text — classification, named-entity recognition, extractive question answering — where you have the whole input available and want a rich representation of it. What BERT cannot do naturally is generate text left to right, because it was never trained to predict the next token from only the past.
 
 **GPT** — Generative Pre-trained Transformer (Radford et al., 2018) — keeps only the decoder stack, and trains on the causal language model objective: predict the next token given all the tokens before it. This is autoregressive generation, and it is what makes GPT a text generator — completion, summarisation, dialogue all reduce to repeatedly predicting the next token and feeding it back in. The catch is that during training the model must never see the future tokens it is supposed to predict, which is enforced by *causal masking*. Inside the self-attention, after computing the score matrix $\mathbf{Q}\mathbf{K}^{\top}$, you set every entry in the upper triangle — every score where a query at position $t$ would attend to a key at a later position $t' > t$ — to $-\infty$ before the softmax. Softmax turns $-\infty$ into a weight of zero, so token $t$ can attend only to itself and the tokens before it, never ahead. This is why GPT is unidirectional: it sees only left context, which is exactly the constraint that makes left-to-right generation well-defined.
 
@@ -917,11 +919,11 @@ $$\mathcal{L}_{\mathrm{CLM}} = -\sum_{t=1}^{T} \log p_\theta(x_t \mid x_1, \ldot
 
 The "causal" part is enforced by the attention mask from §7 — each position can attend only to positions at or before it, never ahead — so the model genuinely has to predict, not peek. Every token in the corpus is a free training example, which is what makes this scale so well.
 
-The **Masked Language Model** objective (BERT-style) instead corrupts the input and asks the model to repair it. Take a sequence, randomly choose about 15% of the positions, replace those tokens with a special `[MASK]` symbol, and train the model to recover the originals using context from both sides. The loss is computed only over the masked positions $\mathcal{M}$:
+The **Masked Language Model** objective (BERT-style) instead corrupts the input and asks the model to repair it. In BERT, choose about 15% of positions for prediction; replace selected tokens with `[MASK]` 80% of the time, a random token 10% of the time, and the original token 10% of the time. Train the model to recover the original selected tokens using context from both sides. See the [BERT paper](https://arxiv.org/abs/1810.04805). The loss is computed only over the masked positions $\mathcal{M}$:
 
 $$\mathcal{L}_{\mathrm{MLM}} = -\sum_{t \in \mathcal{M}} \log p_\theta(x_t \mid \mathbf{x}_{\backslash \mathcal{M}}),$$
 
-where $\mathbf{x}_{\backslash \mathcal{M}}$ is the sequence with the masked positions hidden. There is no causal mask here; the model sees the whole sequence at once and reads left-and-right context to fill the gap.
+where $\mathbf{x}_{\backslash \mathcal{M}}$ is shorthand for the corrupted input; in BERT it may retain some selected tokens unchanged. There is no causal mask here; the model sees the whole sequence at once and reads left-and-right context to fill the gap.
 
 The two objectives produce different kinds of model, and the reason is straightforward once you line up training against inference. CLM is trained to do exactly what generation requires — emit one token at a time, conditioned on what came before — so a CLM model is a generative model by construction; you sample from it autoregressively and it just keeps going. MLM is never trained to continue text, so it is awkward as a generator, but the bidirectional context it learns makes it a richer encoder: for understanding a sentence well enough to classify its sentiment or extract its entities, seeing the words on both sides of every position is genuinely more informative than seeing only the left context. So the rough division is CLM for generation, MLM for representation. The headline LLMs you interact with — GPT, Claude, Llama — are decoder-only CLM models, because the product is generation.
 
@@ -941,7 +943,7 @@ A pre-trained model is a general next-token predictor. To make it good at a spec
 
 $$\mathbf{W}_0 + \Delta\mathbf{W} = \mathbf{W}_0 + \mathbf{B}\mathbf{A}, \qquad \mathbf{B} \in \mathbb{R}^{d \times r}, \quad \mathbf{A} \in \mathbb{R}^{r \times k}, \quad r \ll \min(d, k),$$
 
-and train only $\mathbf{A}$ and $\mathbf{B}$. Because the rank $r$ is small — typically 4 to 64 — the number of trainable parameters collapses. For a weight matrix where $d$ and $k$ are several thousand, you can cut trainable parameters by a factor of ten thousand. At inference you can fold $\mathbf{B}\mathbf{A}$ back into $\mathbf{W}_0$ so there is no added latency, and because the frozen base is shared, swapping tasks is just swapping a tiny pair of matrices. The hypothesis underneath — that $\Delta\mathbf{W}$ lives in a low-dimensional subspace — turns out to hold well enough in practice that LoRA has become the default way to fine-tune large models on modest hardware.
+and train only $\mathbf{A}$ and $\mathbf{B}$. Because the rank $r$ is small — typically 4 to 64 — the number of trainable parameters collapses. The ratio for one matrix is $dk/[r(d+k)]$. For a $4096 \times 4096$ matrix and $r=4$, the update has 32,768 parameters rather than 16,777,216: a 512-fold reduction. The overall saving depends on which matrices are adapted and which other parameters remain trainable. At inference you can fold $\mathbf{B}\mathbf{A}$ back into $\mathbf{W}_0$ so there is no added latency, and because the frozen base is shared, swapping tasks is just swapping a tiny pair of matrices. The hypothesis underneath — that $\Delta\mathbf{W}$ lives in a low-dimensional subspace — turns out to hold well enough in practice that LoRA has become the default way to fine-tune large models on modest hardware.
 
 **Prefix tuning** is a different lever on the same goal. Leave every model weight frozen and instead prepend a handful of trainable "virtual tokens" — learned embedding vectors that are not real tokens but occupy positions at the front of the sequence. Only those prefix embeddings are trained. The model reads them through its ordinary attention machinery and they steer its behaviour, much as a well-crafted prompt would, except the steering is learned by gradient descent rather than written by hand. It trains even fewer parameters than LoRA, at the cost of consuming some of the context window.
 
@@ -1149,9 +1151,12 @@ Sample an image, sample a timestep, sample noise, form $\mathbf{x}_t$ with the o
 
 ```python
 # One diffusion training step (DDPM), schematically
-t = torch.randint(0, T, (batch,))                  # random timestep per image
+t = torch.randint(0, T, (batch,))                  # index 0 represents mathematical t=1
 eps = torch.randn_like(x0)                          # the target noise
-xt = sqrt_abar[t] * x0 + sqrt_one_minus_abar[t] * eps
+shape = (batch,) + (1,) * (x0.ndim - 1)            # broadcast per image
+a = sqrt_abar[t].reshape(shape)
+b = sqrt_one_minus_abar[t].reshape(shape)
+xt = a * x0 + b * eps
 eps_pred = model(xt, t)                             # predict the noise
 loss = mse_loss(eps_pred, eps)
 loss.backward()
@@ -1161,7 +1166,7 @@ At generation time you reverse the chain for real. Start from pure noise $\mathb
 
 $$\mathbf{x}_{t-1} = \frac{1}{\sqrt{\alpha_t}}\!\left(\mathbf{x}_t - \frac{\beta_t}{\sqrt{1 - \bar{\alpha}_t}}\,\varepsilon_\theta(\mathbf{x}_t, t)\right) + \sigma_t \mathbf{z}.$$
 
-The bracketed part removes the network's estimate of the current step's noise; the trailing $\sigma_t \mathbf{z}$ adds a small amount of fresh randomness back in, which keeps the reverse process a proper stochastic sampler rather than a deterministic collapse. Run all the way down and $\mathbf{x}_0$ is your generated image.
+The bracketed part uses the predicted aggregate noise to construct the reverse mean. In the original DDPM sampling algorithm, draw $\mathbf z\sim\mathcal N(\mathbf 0,\mathbf I)$ when $t>1$ and set $\mathbf z=\mathbf 0$ at the final step; $\sigma_t$ is the chosen reverse-process standard deviation. See [Ho, Jain and Abbeel](https://arxiv.org/abs/2006.11239). Run all the way down and $\mathbf{x}_0$ is your generated image.
 
 ### Score Matching, Briefly
 
