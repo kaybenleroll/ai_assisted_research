@@ -32,6 +32,17 @@ color: var(--text);
 background: var(--bg);
 line-height: 1.7;
 }
+.skip-link {
+position: fixed;
+top: .5rem; left: 1rem;
+z-index: 200;
+padding: .5rem 1rem;
+background: var(--surface);
+transform: translateY(-200%);
+}
+.skip-link:focus { transform: none; }
+:focus-visible { outline: 3px solid var(--accent-dark); outline-offset: 3px; }
+#main-content { scroll-margin-top: calc(var(--nav-h) + 1rem); }
 
 .navbar {
 position: fixed;
@@ -173,6 +184,7 @@ vertical-align: middle;
 flex: 1 0 100%;
 width: 100%;
 }
+#TOC [hidden] { display: none; }
 
 .toc-toggle {
 background: none;
@@ -184,7 +196,6 @@ color: #9399b2;
 font-size: 1em;
 line-height: 1;
 vertical-align: middle;
-outline: none;
 transition: color .15s;
 }
 .toc-toggle:focus,
@@ -243,10 +254,12 @@ margin-bottom: .6em;
 color: var(--text);
 scroll-margin-top: calc(var(--nav-h) + 1rem);
 }
-h1 { font-size: 2rem; margin-top: 0; }
+h1 { font-size: 2rem; }
 h2 { font-size: 1.45rem; border-bottom: 1px solid var(--border); padding-bottom: .35em; }
 h3 { font-size: 1.15rem; }
 h4 { font-size: 1rem; }
+.content-inner > :where(h1, h2, h3, h4, h5, h6) { margin-top: 1.5rem; }
+.content-inner > h1:first-child { margin-top: 0; }
 p { margin-bottom: 1rem; }
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
@@ -583,7 +596,7 @@ code span.wa { color: #da4453; } /* Warning */
 
     /* ── Print ─────────────────────────────────────────────────────── */
     @media print {
-      .navbar, .sidebar, .sidebar-resizer { display: none; }
+      .navbar, .sidebar, .sidebar-resizer, .skip-link { display: none; }
       .content { padding: 0; max-width: 100%; }
       .code-tab-bar { display: none; }
       .code-tabs { overflow: visible; border: 0; }
@@ -600,17 +613,40 @@ code span.wa { color: #da4453; } /* Warning */
     /* ── Custom code color overrides for readability ── */
     code span.fu { color: #c792ea !important; } /* function names: lighter purple */
   </style>
+  <script>
+    // MathJax's boldsymbol extension is a separate file that an embedded
+    // bundle cannot load, and \mathbf leaves lower-case Greek upright. The
+    // extension is therefore vendored inline below (exact
+    // bytes of the matching mathjax@<version> release file) and run inside
+    // startup.ready, before MathJax typesets. When Pandoc embeds a different
+    // MathJax version, download input/tex/extensions/boldsymbol.js from
+    // https://cdn.jsdelivr.net/npm/mathjax@<version>/ over the marked inline block
+    // and re-render the maths primers. A version mismatch is not checked in
+    // CI; MathJax's runtime checkVersion warns in the browser console on drift.
+    // The MathML variants ignore this block.
+    window.MathJax = {
+      tex: { packages: { '[+]': ['boldsymbol'] } },
+      startup: { ready() {
+// BEGIN vendored MathJax boldsymbol extension
+(()=>{"use strict";var t={d:(o,e)=>{for(var a in e)t.o(e,a)&&!t.o(o,a)&&Object.defineProperty(o,a,{enumerable:!0,get:e[a]})}};t.g=function(){if("object"==typeof globalThis)return globalThis;try{return this||new Function("return this")()}catch(t){if("object"==typeof window)return window}}(),t.o=(t,o)=>Object.prototype.hasOwnProperty.call(t,o),t.r=t=>{"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})};var o={};t.r(o),t.d(o,{BoldsymbolConfiguration:()=>g,BoldsymbolMethods:()=>f,createBoldToken:()=>x,rewriteBoldTokens:()=>m});const e=("undefined"!=typeof window?window:t.g).MathJax._.components.global,a=(e.GLOBAL,e.isObject,e.combineConfig,e.combineDefaults,e.combineWithMathJax),n=(e.MathJax,MathJax._.input.tex.HandlerTypes),r=n.ConfigurationType,i=n.HandlerType,l=MathJax._.input.tex.Configuration,s=l.Configuration,d=(l.ConfigurationHandler,l.ParserConfiguration,MathJax._.input.tex.NodeUtil.default),b=MathJax._.input.tex.TexConstants.TexConstant,c=MathJax._.input.tex.TokenMap,u=(c.parseResult,c.AbstractTokenMap,c.RegExpMap,c.AbstractParseMap,c.CharacterMap,c.DelimiterMap,c.MacroMap,c.CommandMap),p=(c.EnvironmentMap,MathJax._.input.tex.NodeFactory.NodeFactory),y={};y[b.Variant.NORMAL]=b.Variant.BOLD,y[b.Variant.ITALIC]=b.Variant.BOLDITALIC,y[b.Variant.FRAKTUR]=b.Variant.BOLDFRAKTUR,y[b.Variant.SCRIPT]=b.Variant.BOLDSCRIPT,y[b.Variant.SANSSERIF]=b.Variant.BOLDSANSSERIF,y["-tex-calligraphic"]="-tex-bold-calligraphic",y["-tex-oldstyle"]="-tex-bold-oldstyle",y["-tex-mathit"]=b.Variant.BOLDITALIC;const f={Boldsymbol(t,o){const e=t.stack.env.boldsymbol;t.stack.env.boldsymbol=!0;const a=t.ParseArg(o);t.stack.env.boldsymbol=e,t.Push(a)}};function x(t,o,e,a){const n=p.createToken(t,o,e,a);return"mtext"!==o&&t.configuration.parser.stack.env.boldsymbol&&(d.setProperty(n,"fixBold",!0),t.configuration.addNode("fixBold",n)),n}function m(t){for(const o of t.data.getList("fixBold"))if(d.getProperty(o,"fixBold")){const t=d.getAttribute(o,"mathvariant");d.setAttribute(o,"mathvariant",y[t]||t),d.removeProperties(o,"fixBold")}}new u("boldsymbol",{boldsymbol:f.Boldsymbol});const g=s.create("boldsymbol",{[r.HANDLER]:{[i.MACRO]:["boldsymbol"]},[r.NODES]:{token:x},[r.POSTPROCESSORS]:[m]});MathJax.loader&&MathJax.loader.checkVersion("[tex]/boldsymbol","4.1.3","tex-extension"),a({_:{input:{tex:{boldsymbol:{BoldsymbolConfiguration:o}}}}})})();
+// END vendored MathJax boldsymbol extension
+        MathJax.startup.defaultReady();
+      } }
+    };
+  </script>
 
 </head>
 <body>
 
-  <nav class="navbar">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header class="navbar">
     <span class="navbar-brand">Information Retrieval, Embeddings, and
 Retrieval-Augmented Generation</span>
     <span class="navbar-meta">14 October 2026</span>
     <span class="navbar-meta">Mick Cooney</span>
 
-  </nav>
+  </header>
 
   <div class="layout">
 
@@ -618,8 +654,12 @@ Retrieval-Augmented Generation</span>
       <p class="sidebar-heading">Contents</p>
       <div class="sidebar-tools">
         <button id="math-mode-toggle" class="math-mode-btn" type="button">Switch math renderer</button>
+        <noscript>
+          <style>#math-mode-toggle { display: none; }</style>
+
+        </noscript>
       </div>
-      <div id="TOC" aria-label="Table of contents"><ul>
+      <nav id="TOC" aria-label="Table of contents"><ul>
 <li><a href="#orientation-evidence-before-answers" id="toc-orientation-evidence-before-answers"><span class="toc-section-number">1</span> Orientation: Evidence Before
 Answers</a>
 <ul>
@@ -767,15 +807,17 @@ Current and Historical Evidence</a></li>
 Sufficient Evidence</a></li>
 </ul></li>
 <li><a href="#further-reading" id="toc-further-reading"><span class="toc-section-number">14</span> Further Reading</a></li>
-</ul></div>
+</ul></nav>
 
     </aside>
 
     <div class="sidebar-resizer" aria-hidden="true" title="Drag to resize sidebar"></div>
 
-    <main class="content">
+    <main id="main-content" class="content" tabindex="-1" aria-labelledby="document-title">
       <div class="content-inner">
-<h1 data-number="1" id="orientation-evidence-before-answers"><span class="header-section-number">1</span> Orientation: Evidence Before
+<h1 id="document-title" class="document-title">Information Retrieval,
+Embeddings, and Retrieval-Augmented Generation</h1>
+<h1 data-number="1" role="heading" aria-level="2" id="orientation-evidence-before-answers"><span class="header-section-number">1</span> Orientation: Evidence Before
 Answers</h1>
 <p>Retrieval decides which information an application can use. A fluent
 explanation cannot compensate for a policy that was never indexed, an
@@ -812,7 +854,7 @@ experience is assumed.</p>
 primer were checked against the linked release-specific primary
 documentation on 14 October 2026. Other version-sensitive claims should
 be checked against the cited release when reproducing them.</em></p>
-<h2 data-number="1.1" id="reading-routes-and-the-system-boundary"><span class="header-section-number">1.1</span> Reading Routes and the System
+<h2 data-number="1.1" role="heading" aria-level="3" id="reading-routes-and-the-system-boundary"><span class="header-section-number">1.1</span> Reading Routes and the System
 Boundary</h2>
 <p>Read <a href="#from-source-documents-to-a-searchable-corpus">the
 corpus chapter</a> first when building a pipeline. It defines identity,
@@ -843,7 +885,7 @@ source version it represents. An answer should state what the selected
 evidence supports, including qualifications and unresolved gaps. Ranking
 selects promising information; it does not grant permission, establish
 source authority, or create an absent fact.</p>
-<h2 data-number="1.2" id="choosing-retrieval-search-or-calculation"><span class="header-section-number">1.2</span> Choosing Retrieval, Search, or
+<h2 data-number="1.2" role="heading" aria-level="3" id="choosing-retrieval-search-or-calculation"><span class="header-section-number">1.2</span> Choosing Retrieval, Search, or
 Calculation</h2>
 <p>Retrieval helps when a question depends on a maintained collection
 too large or changeable to include in every request. It can find policy
@@ -913,7 +955,7 @@ Evaluation Loop</a> for general measurement and evaluator reliability,
 Learning and Generative AI</a> for neural foundations, and <a href="../primer_research_local_llms/primer-running-llms-locally.html">Running
 LLMs Locally</a> for serving and hardware. Here, an agent or chat
 interface is a caller of retrieval.</p>
-<h1 data-number="2" id="notation"><span class="header-section-number">2</span> Notation</h1>
+<h1 data-number="2" role="heading" aria-level="2" id="notation"><span class="header-section-number">2</span> Notation</h1>
 <p>The following symbols fix the conventions for scoring and evaluation.
 Each derivation also states its local assumptions; passages, queries,
 and vector coordinates are different objects.</p>
@@ -1025,9 +1067,9 @@ FTS5 and <code>zip(..., strict=True)</code> support. They use
 standard-library modules, an in-memory database, and no network calls.
 The executable examples verify fixture mechanics and arithmetic; they do
 not run a trained embedding model, reranker, or generator.</p>
-<h1 data-number="3" id="from-source-documents-to-a-searchable-corpus"><span class="header-section-number">3</span> From Source Documents to a
+<h1 data-number="3" role="heading" aria-level="2" id="from-source-documents-to-a-searchable-corpus"><span class="header-section-number">3</span> From Source Documents to a
 Searchable Corpus</h1>
-<h2 data-number="3.1" id="one-canonical-synthetic-fixture"><span class="header-section-number">3.1</span> One Canonical Synthetic
+<h2 data-number="3.1" role="heading" aria-level="3" id="one-canonical-synthetic-fixture"><span class="header-section-number">3.1</span> One Canonical Synthetic
 Fixture</h2>
 <p>The collection generation is <code>fixture-rag-v1</code>. The
 example’s default question date is 28 February 2026, independent of the
@@ -1184,7 +1226,7 @@ corroborates a meeting decision but does not acquire the authority of A
 through a better text score. E is unavailable to the default caller and
 remains a proposal even for a legal caller. Asking about Legal never
 changes the caller’s groups.</p>
-<h2 data-number="3.2" id="the-retrieval-contract"><span class="header-section-number">3.2</span> The Retrieval Contract</h2>
+<h2 data-number="3.2" role="heading" aria-level="3" id="the-retrieval-contract"><span class="header-section-number">3.2</span> The Retrieval Contract</h2>
 <p>Write the contract before selecting an index. “Top five nearest
 vectors” specifies an ordering operation, leaving the substantive
 evidence requirement unresolved. The contract must make the following
@@ -1253,7 +1295,7 @@ not trade a permission boundary or requested date against a similarity
 gain. Source state is also more precise than a single “current” flag: a
 historically approved rule can be applicable in June 2025 without being
 applicable in February 2026.</p>
-<h2 data-number="3.3" id="preserve-the-source-and-the-transformation"><span class="header-section-number">3.3</span> Preserve the Source and the
+<h2 data-number="3.3" role="heading" aria-level="3" id="preserve-the-source-and-the-transformation"><span class="header-section-number">3.3</span> Preserve the Source and the
 Transformation</h2>
 <p>Start ingestion with an inventory: source identity, owner, canonical
 location, media type, revision, access policy, acquisition time, and
@@ -1280,7 +1322,7 @@ silently overwriting an identifier would make old evaluation labels and
 citations ambiguous. A source being withdrawn should leave a traceable
 ingestion event and cease being queryable according to the deletion
 policy.</p>
-<h2 data-number="3.4" id="worked-failure-extraction-keeps-words-but-loses-meaning"><span class="header-section-number">3.4</span> Worked Failure: Extraction
+<h2 data-number="3.4" role="heading" aria-level="3" id="worked-failure-extraction-keeps-words-but-loses-meaning"><span class="header-section-number">3.4</span> Worked Failure: Extraction
 Keeps Words but Loses Meaning</h2>
 <p>Suppose the current policy’s retention section is laid out as a table
 rather than ordinary prose. This is an alternative source rendering of
@@ -1337,7 +1379,7 @@ qualification in their original relationship. Checking only non-empty
 text or “seven” would not detect the failure. On unfamiliar layouts,
 sample sources visually and retain extraction warnings before admitting
 the chunks to a published index.</p>
-<h2 data-number="3.5" id="chunk-boundaries-are-evidence-boundaries"><span class="header-section-number">3.5</span> Chunk Boundaries Are Evidence
+<h2 data-number="3.5" role="heading" aria-level="3" id="chunk-boundaries-are-evidence-boundaries"><span class="header-section-number">3.5</span> Chunk Boundaries Are Evidence
 Boundaries</h2>
 <p>A chunk is a retrieval unit, not an independent source of authority.
 Its boundary decides whether a ranker can return the subject, assertion,
@@ -1419,7 +1461,7 @@ support the required claim. Conversely, a sentence hit can be sufficient
 when a verified, authorised parent expansion reliably restores its
 qualification. Record the retrieval unit and the evidence unit
 separately.</p>
-<h2 data-number="3.6" id="time-approval-and-authorisation-as-separate-decisions"><span class="header-section-number">3.6</span> Time, Approval, and
+<h2 data-number="3.6" role="heading" aria-level="3" id="time-approval-and-authorisation-as-separate-decisions"><span class="header-section-number">3.6</span> Time, Approval, and
 Authorisation as Separate Decisions</h2>
 <p>A source can have several dates: when the event occurred, when the
 document was published, when ingestion observed it, and when its rule
@@ -1499,7 +1541,7 @@ permissions can change when a parent folder moves. Store the effective
 policy reference with each retrieval unit and revalidate expanded
 parents and neighbours. A permitted child does not imply that every
 sibling or the full parent is permitted.</p>
-<h2 data-number="3.7" id="corpus-checks-before-query-checks"><span class="header-section-number">3.7</span> Corpus Checks Before Query
+<h2 data-number="3.7" role="heading" aria-level="3" id="corpus-checks-before-query-checks"><span class="header-section-number">3.7</span> Corpus Checks Before Query
 Checks</h2>
 <p>An ingestion run should produce both accepted records and explicit
 failures. Missing files, inaccessible sources, parser errors, empty
@@ -1526,14 +1568,14 @@ permissions. Check their source-to-passage relationships using the
 acceptance conditions in “Worked Failure: Extraction Keeps Words but
 Loses Meaning”; do not repeat keyword-presence checks as a proxy for
 evidence integrity.</p>
-<h1 data-number="4" id="lexical-retrieval-and-query-analysis"><span class="header-section-number">4</span> Lexical Retrieval and Query
+<h1 data-number="4" role="heading" aria-level="2" id="lexical-retrieval-and-query-analysis"><span class="header-section-number">4</span> Lexical Retrieval and Query
 Analysis</h1>
 <p>Lexical retrieval offers an inspectable first baseline: the result
 matched analysed words, fields, positions, or exact identifiers. Its
 explanations help distinguish an absent document from a failed
 paraphrase. Dense retrieval adds a different matching route later; it
 does not remove the need for a lexical contract.</p>
-<h2 data-number="4.1" id="terms-postings-and-the-query-contract"><span class="header-section-number">4.1</span> Terms, Postings, and the Query
+<h2 data-number="4.1" role="heading" aria-level="3" id="terms-postings-and-the-query-contract"><span class="header-section-number">4.1</span> Terms, Postings, and the Query
 Contract</h2>
 <p>Lexical retrieval matches analysed terms. An inverted index maps a
 term to the passages containing it; a posting records a passage
@@ -1653,7 +1695,7 @@ tokenising <code>policy-2026-01#retention</code> into fragments does not
 preserve its identity. Expansions need recorded alternatives and failure
 cases: changing “What ends a hold?” into “ordinary deletion” could
 remove the evidence the question needs.</p>
-<h2 data-number="4.2" id="bm25-with-unequal-lengths-and-repeated-terms"><span class="header-section-number">4.2</span> BM25 With Unequal Lengths and
+<h2 data-number="4.2" role="heading" aria-level="3" id="bm25-with-unequal-lengths-and-repeated-terms"><span class="header-section-number">4.2</span> BM25 With Unequal Lengths and
 Repeated Terms</h2>
 <p>BM25 combines term rarity, saturating term frequency, and length
 normalisation. The probabilistic framework and its variants are
@@ -1799,7 +1841,7 @@ zero-match candidates. Scores are neither probabilities nor calibrated
 measures of support. Changing the indexed collection changes frequencies
 and average length, even when a particular passage’s text stays
 fixed.</p>
-<h2 data-number="4.3" id="python-and-sql-an-authorised-lexical-baseline"><span class="header-section-number">4.3</span> Python and SQL: An Authorised
+<h2 data-number="4.3" role="heading" aria-level="3" id="python-and-sql-an-authorised-lexical-baseline"><span class="header-section-number">4.3</span> Python and SQL: An Authorised
 Lexical Baseline</h2>
 <p>SQLite’s FTS5 extension provides full-text search, including phrases
 and Boolean expressions. Its documented <code>bm25()</code> returns
@@ -1876,7 +1918,7 @@ inspect B’s release condition; for a phrase-only miss, broaden candidate
 matching before reranking. For a fluent answer that omits the exception
 despite receiving A and B, inspect the evidence package and generation
 step. Each failure has a distinct observable cause.</p>
-<h2 data-number="4.4" id="query-intent-precision-and-safe-expansion"><span class="header-section-number">4.4</span> Query Intent, Precision, and
+<h2 data-number="4.4" role="heading" aria-level="3" id="query-intent-precision-and-safe-expansion"><span class="header-section-number">4.4</span> Query Intent, Precision, and
 Safe Expansion</h2>
 <p>Precision measures the fraction of returned passages judged relevant;
 recall measures the fraction of labelled relevant passages recovered.
@@ -1935,7 +1977,7 @@ for B’s full ID, look up that ID, check access and source scope, and
 return B. Tokenising the ID into “policy”, numbers, and “hold” can yield
 a different object. A semantic neighbour is not a valid replacement when
 the requested identity itself is the task.</p>
-<h2 data-number="4.5" id="a-lexical-failure-trace"><span class="header-section-number">4.5</span> A Lexical Failure Trace</h2>
+<h2 data-number="4.5" role="heading" aria-level="3" id="a-lexical-failure-trace"><span class="header-section-number">4.5</span> A Lexical Failure Trace</h2>
 <p>Take the natural wording “Who can let us dispose of held incident
 records?” A literal body-only search for every analysed word can fail
 because B says “Legal releases it”, while several query words never
@@ -1960,7 +2002,7 @@ they materially change interpretation; avoid expansion across languages
 without a documented analysis policy. More candidate matches are useful
 only when the answer-bearing evidence is still selected under the
 original constraints.</p>
-<h1 data-number="5" id="embeddings-and-nearest-neighbour-search"><span class="header-section-number">5</span> Embeddings and Nearest-Neighbour
+<h1 data-number="5" role="heading" aria-level="2" id="embeddings-and-nearest-neighbour-search"><span class="header-section-number">5</span> Embeddings and Nearest-Neighbour
 Search</h1>
 <p>An embedding is a fixed-length vector produced from an input by a
 model. A retrieval system embeds passages when it builds an index and
@@ -1992,7 +2034,7 @@ effect:</p>
 is the vector’s Euclidean length. Cosine is undefined when either vector
 is zero. Some embedding services return unit-normalised vectors; others
 do not. Never assume normalisation from the word “embedding”.</p>
-<h2 data-number="5.1" id="similarity-with-all-five-canonical-passages"><span class="header-section-number">5.1</span> Similarity With All Five
+<h2 data-number="5.1" role="heading" aria-level="3" id="similarity-with-all-five-canonical-passages"><span class="header-section-number">5.1</span> Similarity With All Five
 Canonical Passages</h2>
 <p>Let the query vector be
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒖</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>0.9</mn><mo>,</mo><mn>0.1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\mathbf{u}=(0.9,0.1)</annotation></semantics></math>.
@@ -2076,7 +2118,7 @@ product equals cosine, and squared Euclidean distance is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>−</mo><mn>2</mn><mrow><mi mathvariant="normal">cos</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒖</mi><mo>,</mo><mi mathvariant="bold-italic">𝒙</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">2-2\operatorname{cos}(\mathbf{u},\mathbf{x})</annotation></semantics></math>.
 These orderings are equivalent only under the stated normalisation
 condition.</p>
-<h2 data-number="5.2" id="exact-search-is-the-baseline"><span class="header-section-number">5.2</span> Exact Search Is the
+<h2 data-number="5.2" role="heading" aria-level="3" id="exact-search-is-the-baseline"><span class="header-section-number">5.2</span> Exact Search Is the
 Baseline</h2>
 <p>The usual exact-search baseline evaluates the metric against every
 eligible vector. For
@@ -2216,7 +2258,7 @@ before scoring. C’s historical rule remains indexed for another date;
 D’s minutes remain available for another source intent; E remains
 restricted. The code does not encode question text with a model. It
 verifies geometry and eligible selection for supplied coordinates.</p>
-<h2 data-number="5.3" id="approximation-memory-and-filtered-recall"><span class="header-section-number">5.3</span> Approximation, Memory, and
+<h2 data-number="5.3" role="heading" aria-level="3" id="approximation-memory-and-filtered-recall"><span class="header-section-number">5.3</span> Approximation, Memory, and
 Filtered Recall</h2>
 <p>Exact search fixes the nearest-neighbour target for a chosen
 representation. Approximation changes how much of that target the index
@@ -2266,7 +2308,7 @@ returned count, and ensure restricted text, IDs, and scores never cross
 the trusted retrieval boundary. If the search budget is exhausted,
 return a defined empty or partial result rather than relaxing
 permissions or changing the requested date.</p>
-<h2 data-number="5.4" id="dense-failure-cases-worth-inspecting"><span class="header-section-number">5.4</span> Dense Failure Cases Worth
+<h2 data-number="5.4" role="heading" aria-level="3" id="dense-failure-cases-worth-inspecting"><span class="header-section-number">5.4</span> Dense Failure Cases Worth
 Inspecting</h2>
 <p>Dense models can match paraphrases while confusing negation, dates,
 identifiers, and document status. The current and historical retention
@@ -2285,7 +2327,7 @@ embedding experiment must name the model revision and formatting
 contract, encode the same immutable passages, and retain its outputs.
 Changing the coordinates by hand until the desired ranking appears would
 test a constructed illustration, not the model.</p>
-<h2 data-number="5.5" id="the-encoding-contract"><span class="header-section-number">5.5</span> The Encoding Contract</h2>
+<h2 data-number="5.5" role="heading" aria-level="3" id="the-encoding-contract"><span class="header-section-number">5.5</span> The Encoding Contract</h2>
 <p>Vector compatibility is a contract between index construction and
 query time. A passage and a query must be embedded under compatible
 model and preprocessing rules. The contract includes model name and
@@ -2327,7 +2369,7 @@ the geometry or its interpretation; re-embed the corpus as a coherent
 generation, replay the labelled queries, and compare retrieval and
 answer outcomes before switching traffic. Keep the old generation
 available for rollback until the new one is verified.</p>
-<h2 data-number="5.6" id="selecting-an-embedding-model"><span class="header-section-number">5.6</span> Selecting an Embedding
+<h2 data-number="5.6" role="heading" aria-level="3" id="selecting-an-embedding-model"><span class="header-section-number">5.6</span> Selecting an Embedding
 Model</h2>
 <p>Select a model for the intended retrieval task and operating
 constraints, not from one headline score. Build a labelled set from the
@@ -2355,7 +2397,7 @@ before “legal hold”, the vector represents a different evidence object
 from the source chunk. Record the truncated span and test whether
 answer-bearing qualifications survive. Model token counts are not
 interchangeable with whitespace word counts.</p>
-<h1 data-number="6" id="postgresql-vector-search"><span class="header-section-number">6</span> PostgreSQL Vector Search</h1>
+<h1 data-number="6" role="heading" aria-level="2" id="postgresql-vector-search"><span class="header-section-number">6</span> PostgreSQL Vector Search</h1>
 <p>The existing SQLite FTS5 example is the primer’s small, transparent
 lexical baseline. PostgreSQL plus <a href="https://github.com/pgvector/pgvector/tree/v0.8.7">pgvector
 0.8.7</a> gives a persistent store for passages, metadata, and vectors,
@@ -2428,7 +2470,7 @@ ingestion schema.</p>
 <span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;proposal&#39;</span>, <span class="st">&#39;draft&#39;</span>, <span class="st">&#39;2026-02-20&#39;</span>, <span class="kw">NULL</span>, <span class="dt">ARRAY</span>[<span class="st">&#39;legal&#39;</span>],</span>
 <span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;Draft proposal: regional teams may retain incident logs &#39;</span> <span class="op">||</span></span>
 <span id="cb15-43"><a href="#cb15-43" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;indefinitely when a manager approves an exception.&#39;</span>, <span class="st">&#39;[-1,0]&#39;</span>);</span></code></pre></div>
-<h2 data-number="6.1" id="exact-vector-search-and-metadata-predicates"><span class="header-section-number">6.1</span> Exact Vector Search and
+<h2 data-number="6.1" role="heading" aria-level="3" id="exact-vector-search-and-metadata-predicates"><span class="header-section-number">6.1</span> Exact Vector Search and
 Metadata Predicates</h2>
 <p>Run this query before creating an ANN index. The predicates define
 the fixture’s eligible policy set for an <code>all-staff</code> caller
@@ -2453,7 +2495,7 @@ fixture only: trusted caller groups must come from authentication, and
 the application must enforce all source and tenant rules before
 returning text, identifiers, or scores. A filter is a search constraint,
 not an authorisation system.</p>
-<h2 data-number="6.2" id="postgresql-full-text-ranking-is-not-bm25"><span class="header-section-number">6.2</span> PostgreSQL Full-Text Ranking Is
+<h2 data-number="6.2" role="heading" aria-level="3" id="postgresql-full-text-ranking-is-not-bm25"><span class="header-section-number">6.2</span> PostgreSQL Full-Text Ranking Is
 Not BM25</h2>
 <p>PostgreSQL’s <code>tsvector</code> and <code>tsquery</code> types
 support lexical matching; <code>ts_rank</code> and
@@ -2481,7 +2523,7 @@ remains the executable BM25 teaching calculation. If a PostgreSQL
 deployment specifically needs BM25, select and verify a separate
 implementation rather than treating <code>ts_rank_cd</code> as an
 equivalent.</p>
-<h2 data-number="6.3" id="optional-ann-index-and-its-limits"><span class="header-section-number">6.3</span> Optional ANN Index and Its
+<h2 data-number="6.3" role="heading" aria-level="3" id="optional-ann-index-and-its-limits"><span class="header-section-number">6.3</span> Optional ANN Index and Its
 Limits</h2>
 <p>On a larger vector table, pgvector can build an HNSW index with a
 cosine operator class:</p>
@@ -2501,7 +2543,7 @@ limits. Confirm operator-class and filtering details in the <a href="https://git
 documentation</a>. Measure overlap with exact neighbours separately from
 labelled task recall. Neither is proof that the returned passages
 support an answer.</p>
-<h2 data-number="6.4" id="choosing-a-search-store"><span class="header-section-number">6.4</span> Choosing a Search Store</h2>
+<h2 data-number="6.4" role="heading" aria-level="3" id="choosing-a-search-store"><span class="header-section-number">6.4</span> Choosing a Search Store</h2>
 <p>These options occupy different places in an architecture; the right
 comparison is operational fit and measured behaviour on the intended
 workload, not a general product ranking.</p>
@@ -2547,7 +2589,7 @@ behaviour</a> against the caller’s query mix</td>
 <p>Stop the disposable database when finished; its container and
 anonymous storage are removed.</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> stop rag-pgvector-demo</span></code></pre></div>
-<h1 data-number="7" id="combining-and-refining-candidates"><span class="header-section-number">7</span> Combining and Refining
+<h1 data-number="7" role="heading" aria-level="2" id="combining-and-refining-candidates"><span class="header-section-number">7</span> Combining and Refining
 Candidates</h1>
 <p>Lexical and dense retrieval solve complementary problems. Lexical
 methods such as BM25 are often strong for exact identifiers, uncommon
@@ -2643,7 +2685,7 @@ reaches a generator. Resolve time and authority from metadata and the
 question’s contract, not from RRF arithmetic. Preserve different
 revisions as different stable IDs even if their wording is nearly
 identical.</p>
-<h2 data-number="7.1" id="reranking-must-be-able-to-change-the-order"><span class="header-section-number">7.1</span> Reranking Must Be Able to
+<h2 data-number="7.1" role="heading" aria-level="3" id="reranking-must-be-able-to-change-the-order"><span class="header-section-number">7.1</span> Reranking Must Be Able to
 Change the Order</h2>
 <p>A second-stage reranker receives the query and each candidate
 together and estimates their relevance. A bi-encoder computes vectors
@@ -2704,7 +2746,7 @@ input limit. Bound candidate count and text length, since inference cost
 and latency rise with the number and size of query–passage pairs. If a
 reranker is unavailable, a timeout or error should leave a defined
 fallback order rather than an empty result or uncontrolled retry.</p>
-<h2 data-number="7.2" id="worked-example-one-query-through-the-funnel"><span class="header-section-number">7.2</span> Worked Example: One Query
+<h2 data-number="7.2" role="heading" aria-level="3" id="worked-example-one-query-through-the-funnel"><span class="header-section-number">7.2</span> Worked Example: One Query
 Through the Funnel</h2>
 <p>Use the question “How long do we keep ordinary incident logs, and who
 releases a hold?” The required claims are the seven-year period from
@@ -2813,7 +2855,7 @@ appearances; decreasing it emphasises the earliest positions. Neither
 choice makes a draft authoritative. Candidate depth also matters: a
 deeper list can add a new object or an additional contribution to an
 existing one. Tune these together with the final evidence budget.</p>
-<h2 data-number="7.3" id="routing-and-bounded-decomposition"><span class="header-section-number">7.3</span> Routing and Bounded
+<h2 data-number="7.3" role="heading" aria-level="3" id="routing-and-bounded-decomposition"><span class="header-section-number">7.3</span> Routing and Bounded
 Decomposition</h2>
 <p>Some hard requirements should choose a route before fusion. An
 explicit passage ID calls for an authorised lookup. A historical date
@@ -2839,7 +2881,7 @@ fallback that yields A and D should trigger a partial answer for the
 combined question rather than fabricate Legal’s release authority.
 Availability behaviour is part of answer support, not merely an
 infrastructure concern.</p>
-<h2 data-number="7.4" id="context-packing-can-destroy-the-qualification"><span class="header-section-number">7.4</span> Context Packing Can Destroy the
+<h2 data-number="7.4" role="heading" aria-level="3" id="context-packing-can-destroy-the-qualification"><span class="header-section-number">7.4</span> Context Packing Can Destroy the
 Qualification</h2>
 <p>The final context is not only the top
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
@@ -2875,7 +2917,7 @@ middle, and end; include tables where the row value is uninterpretable
 without column headings. A generated summary can be a convenience view,
 but the original passage and offsets must remain available for
 audit.</p>
-<h1 data-number="8" id="from-retrieved-passages-to-a-supported-answer"><span class="header-section-number">8</span> From Retrieved Passages to a
+<h1 data-number="8" role="heading" aria-level="2" id="from-retrieved-passages-to-a-supported-answer"><span class="header-section-number">8</span> From Retrieved Passages to a
 Supported Answer</h1>
 <p>Retrieval-augmented generation (RAG) supplies retrieved text to a
 generative model alongside the question. The architecture does not make
@@ -2925,7 +2967,7 @@ supported by both passages. A citation appended to a paragraph is not
 automatically evidence: the identifier must resolve, the caller must be
 entitled to the source, and the passage must actually bear on the
 attached claim.</p>
-<h2 data-number="8.1" id="map-claims-to-passages"><span class="header-section-number">8.1</span> Map Claims to Passages</h2>
+<h2 data-number="8.1" role="heading" aria-level="3" id="map-claims-to-passages"><span class="header-section-number">8.1</span> Map Claims to Passages</h2>
 <p>Answers often combine several propositions. Split them into material
 claims and check support claim by claim. A passage may be relevant but
 insufficient; multiple passages may jointly establish a conclusion; one
@@ -2997,7 +3039,7 @@ a model returning a citation-shaped string. Resolve each ID against the
 retrieved package, then inspect whether its span supports the claim. If
 the answer contains a number, unit, date, comparison, or exception,
 validate that detail explicitly.</p>
-<h2 data-number="8.2" id="a-claim-ledger-and-an-explicit-packing-budget"><span class="header-section-number">8.2</span> A Claim Ledger and an Explicit
+<h2 data-number="8.2" role="heading" aria-level="3" id="a-claim-ledger-and-an-explicit-packing-budget"><span class="header-section-number">8.2</span> A Claim Ledger and an Explicit
 Packing Budget</h2>
 <p>The evidence package should serve the requested claims rather than a
 fixed number of citations. A useful internal ledger records each claim,
@@ -3060,7 +3102,7 @@ such as “draft” becoming “approved”. Numeric and temporal claims also
 need explicit checks. Semantic entailment remains a separate judgement:
 an existing source with the same number is not necessarily evidence for
 the attributed event or scope.</p>
-<h2 data-number="8.3" id="supported-partial-answers"><span class="header-section-number">8.3</span> Supported Partial Answers</h2>
+<h2 data-number="8.3" role="heading" aria-level="3" id="supported-partial-answers"><span class="header-section-number">8.3</span> Supported Partial Answers</h2>
 <p>A partial answer is useful when it tells the reader which requested
 part is established. With A and D but no B, state the ordinary
 seven-year period from closure and hold exclusion, then explain that the
@@ -3077,7 +3119,7 @@ authorised evidence does not establish a Brazilian exception” is bounded
 to the available collection. “Brazil has no exception” asserts a fact
 the collection cannot establish. This wording difference is part of
 correctness, not a cosmetic disclaimer.</p>
-<h2 data-number="8.4" id="conflict-missing-evidence-and-abstention"><span class="header-section-number">8.4</span> Conflict, Missing Evidence, and
+<h2 data-number="8.4" role="heading" aria-level="3" id="conflict-missing-evidence-and-abstention"><span class="header-section-number">8.4</span> Conflict, Missing Evidence, and
 Abstention</h2>
 <p>Absence and conflict are different states. <em>Insufficient
 evidence</em> means no accessible, answer-bearing passage was found or
@@ -3138,7 +3180,7 @@ answerable questions. Citation presence, citation resolution, claim
 coverage, factual support, correct abstention, and permission compliance
 are different measures. A system that improves recall but begins citing
 stale or restricted text has not improved the user-facing result.</p>
-<h1 data-number="9" id="evaluating-the-whole-pipeline"><span class="header-section-number">9</span> Evaluating the Whole
+<h1 data-number="9" role="heading" aria-level="2" id="evaluating-the-whole-pipeline"><span class="header-section-number">9</span> Evaluating the Whole
 Pipeline</h1>
 <p>Evaluate the evidence path before judging the prose. A retrieval
 system can supply a correct policy to a generator that misreads it; it
@@ -3149,7 +3191,7 @@ packed evidence, answer, and citations so that you can distinguish them.
 Link to <a href="../primer_evaluation_loop/primer_evaluation_loop.html">The
 Evaluation Loop</a> for broader rubric design and judge calibration; the
 task here is to make retrieval-specific judgements inspectable.</p>
-<h2 data-number="9.1" id="labels-that-describe-the-actual-question"><span class="header-section-number">9.1</span> Labels That Describe the Actual
+<h2 data-number="9.1" role="heading" aria-level="3" id="labels-that-describe-the-actual-question"><span class="header-section-number">9.1</span> Labels That Describe the Actual
 Question</h2>
 <p>Use the canonical A–E aliases and freeze a serving release, G10, of
 <code>fixture-rag-v1</code>. Use 28 February 2026 as the interpretation
@@ -3253,7 +3295,7 @@ rewarding unnecessary extra retrieval or treating topical similarity as
 complete evidence. In a larger collection, record alternative sufficient
 evidence sets when another authorised passage expresses the same
 facts.</p>
-<h2 data-number="9.2" id="per-query-recall-and-reciprocal-rank"><span class="header-section-number">9.2</span> Per-Query Recall and Reciprocal
+<h2 data-number="9.2" role="heading" aria-level="3" id="per-query-recall-and-reciprocal-rank"><span class="header-section-number">9.2</span> Per-Query Recall and Reciprocal
 Rank</h2>
 <p>Let
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mi>q</mi></msub><annotation encoding="application/x-tex">R_q</annotation></semantics></math>
@@ -3394,7 +3436,7 @@ recall because Q3 contributes two required passages; that is a different
 denominator. Report the convention and per-query results. Six
 hand-labelled questions demonstrate arithmetic and failure attribution,
 not deployment accuracy or statistical significance.</p>
-<h2 data-number="9.3" id="a-metric-calculation-fixture-for-baselines-and-ablations"><span class="header-section-number">9.3</span> A Metric Calculation Fixture
+<h2 data-number="9.3" role="heading" aria-level="3" id="a-metric-calculation-fixture-for-baselines-and-ablations"><span class="header-section-number">9.3</span> A Metric Calculation Fixture
 for Baselines and Ablations</h2>
 <p>Use a controlled comparison: the same snapshot, callers, temporal
 rules, two-passage packing budget, and answer contract. First-stage
@@ -3466,7 +3508,7 @@ its hold exclusion: ranking recall is unchanged, but the usable support
 changes. Measure stage latency, token use, and failures under
 representative concurrency; do not attach invented milliseconds to these
 fixtures.</p>
-<h2 data-number="9.4" id="answer-judgements-and-worked-failure-diagnosis"><span class="header-section-number">9.4</span> Answer Judgements and Worked
+<h2 data-number="9.4" role="heading" aria-level="3" id="answer-judgements-and-worked-failure-diagnosis"><span class="header-section-number">9.4</span> Answer Judgements and Worked
 Failure Diagnosis</h2>
 <p>Assess correctness, coverage, citation resolution, citation support,
 and disclosure separately. Resolution asks whether an ID exists; support
@@ -3544,7 +3586,7 @@ separate measurements for retrieval context and faithful generation;
 that framework’s paper does not establish that an automated judge will
 recognise this corpus’s permission or effective-date rules. Keep
 disputed examples, judge revision, and human adjudication visible.</p>
-<h2 data-number="9.5" id="sufficient-evidence-and-paired-comparisons"><span class="header-section-number">9.5</span> Sufficient Evidence and Paired
+<h2 data-number="9.5" role="heading" aria-level="3" id="sufficient-evidence-and-paired-comparisons"><span class="header-section-number">9.5</span> Sufficient Evidence and Paired
 Comparisons</h2>
 <p>Passage recall treats each labelled object as an item. Some tasks
 need a conjunction of facts, while others admit alternative passages
@@ -3599,7 +3641,7 @@ over-abstention on answerable questions too: a system can avoid
 unsupported claims by refusing everything. A useful gate requires both
 supported completion where evidence exists and bounded refusal where it
 does not.</p>
-<h2 data-number="9.6" id="a-release-gate-that-can-refuse-an-attractive-score"><span class="header-section-number">9.6</span> A Release Gate That Can Refuse
+<h2 data-number="9.6" role="heading" aria-level="3" id="a-release-gate-that-can-refuse-an-attractive-score"><span class="header-section-number">9.6</span> A Release Gate That Can Refuse
 an Attractive Score</h2>
 <p>For this tutorial, require all six answerable questions to receive
 sufficient authorised evidence and correctly supported complete answers.
@@ -3622,7 +3664,7 @@ defined interval. These are proposed requirements, not measurements or
 universal defaults. If policy requires immediate revocation, a
 background purge alone cannot meet it: deny access through serving
 policy first, then remove stored copies asynchronously.</p>
-<h1 data-number="10" id="operating-and-updating-a-retrieval-system"><span class="header-section-number">10</span> Operating and Updating a
+<h1 data-number="10" role="heading" aria-level="2" id="operating-and-updating-a-retrieval-system"><span class="header-section-number">10</span> Operating and Updating a
 Retrieval System</h1>
 <p>An index release combines source versions, extraction, chunks,
 lexical representations, vectors, metadata, and query code. Record their
@@ -3639,7 +3681,7 @@ stores. “Atomic” describes that pointer switch, not a distributed
 transaction across arbitrary databases. Requests should bind to one
 manifest and reject missing components rather than quietly mixing
 generations.</p>
-<h2 data-number="10.1" id="worked-update-publication-rollback-and-withdrawal"><span class="header-section-number">10.1</span> Worked Update, Publication,
+<h2 data-number="10.1" role="heading" aria-level="3" id="worked-update-publication-rollback-and-withdrawal"><span class="header-section-number">10.1</span> Worked Update, Publication,
 Rollback, and Withdrawal</h2>
 <p>Start with G10 serving the canonical corpus. The following extension
 is hypothetical; it does not alter the evaluation fixture. On 13 October
@@ -3743,7 +3785,7 @@ replicas, exports, and backups. Retained audit evidence may require a
 separate restricted lifecycle; an inaccessible backup is not
 automatically proof of completed erasure. A recovery process must replay
 later withdrawal records before allowing restored data to serve.</p>
-<h2 data-number="10.2" id="cache-identity-freshness-and-operating-evidence"><span class="header-section-number">10.2</span> Cache Identity, Freshness, and
+<h2 data-number="10.2" role="heading" aria-level="3" id="cache-identity-freshness-and-operating-evidence"><span class="header-section-number">10.2</span> Cache Identity, Freshness, and
 Operating Evidence</h2>
 <p>A response cache stores conclusions derived from evidence, so its
 dependencies matter as much as its key. Record every supporting source
@@ -3783,7 +3825,7 @@ access and retention controls. A trace needed to debug Q7 must not
 become an operator-readable copy of E. Measure tail latency under load,
 retries, and cache misses; stage medians cannot be added to obtain
 end-to-end p95.</p>
-<h2 data-number="10.3" id="deadlines-degradation-and-replayable-incidents"><span class="header-section-number">10.3</span> Deadlines, Degradation, and
+<h2 data-number="10.3" role="heading" aria-level="3" id="deadlines-degradation-and-replayable-incidents"><span class="header-section-number">10.3</span> Deadlines, Degradation, and
 Replayable Incidents</h2>
 <p>An operational request needs an end-to-end deadline shared by
 retrieval, reranking, packing, generation, and validation. Independent
@@ -3824,7 +3866,7 @@ thresholds and owners for freshness, latency, disclosure, support
 failures, and purge completion. A successful index build establishes
 that a process completed; it does not establish that the published
 answers meet these requirements.</p>
-<h1 data-number="11" id="security-and-trust-boundary-walkthroughs"><span class="header-section-number">11</span> Security and Trust-Boundary
+<h1 data-number="11" role="heading" aria-level="2" id="security-and-trust-boundary-walkthroughs"><span class="header-section-number">11</span> Security and Trust-Boundary
 Walkthroughs</h1>
 <p>Security depends on where information can cross from data into
 instructions, from one principal into another’s access, or from model
@@ -3836,7 +3878,7 @@ access controls, cache isolation, and derived-data deletion as separate
 concerns. The following walkthroughs are design examples using the
 policy corpus, rather than demonstrated attacks on a deployed
 service.</p>
-<h2 data-number="11.1" id="an-instruction-hidden-in-meeting-evidence"><span class="header-section-number">11.1</span> An Instruction Hidden in
+<h2 data-number="11.1" role="heading" aria-level="3" id="an-instruction-hidden-in-meeting-evidence"><span class="header-section-number">11.1</span> An Instruction Hidden in
 Meeting Evidence</h2>
 <p>In a separate adversarial fixture, replace D with a poisoned version
 that preserves its meeting text and appends an instruction. Never
@@ -3883,7 +3925,7 @@ a detection aid: encoded, multilingual, or distributed instructions can
 evade literal patterns. An injected instruction can also contaminate an
 answer without invoking a tool, so assess false policy claims and
 citation manipulation too.</p>
-<h2 data-number="11.2" id="a-permission-leak-through-an-answer-cache"><span class="header-section-number">11.2</span> A Permission Leak Through an
+<h2 data-number="11.2" role="heading" aria-level="3" id="a-permission-leak-through-an-answer-cache"><span class="header-section-number">11.2</span> A Permission Leak Through an
 Answer Cache</h2>
 <p>Consider Q6 from Priya, an authenticated legal-group member. The
 service retrieves E and caches a correct draft summary using only the
@@ -3905,7 +3947,7 @@ request.</p>
 services, and logs. Keep raw restricted IDs and scores internal; send
 text only to components authorised to process it, and test error
 responses for leaks through titles, counts, or diagnostics.</p>
-<h2 data-number="11.3" id="source-intake-and-derived-data-boundaries"><span class="header-section-number">11.3</span> Source Intake and Derived-Data
+<h2 data-number="11.3" role="heading" aria-level="3" id="source-intake-and-derived-data-boundaries"><span class="header-section-number">11.3</span> Source Intake and Derived-Data
 Boundaries</h2>
 <p>A retrieved document crosses a boundary before it becomes model
 context: the ingestion service must acquire and parse it. Authenticate
@@ -3934,7 +3976,7 @@ For the cache example, it includes caller-bound reuse and current
 dependency checks. A model refusing an injected command is useful
 evidence about that input; it does not replace the application boundary
 or prove resistance to all variants.</p>
-<h1 data-number="12" id="putting-a-corpus-release-together"><span class="header-section-number">12</span> Putting a Corpus Release
+<h1 data-number="12" role="heading" aria-level="2" id="putting-a-corpus-release-together"><span class="header-section-number">12</span> Putting a Corpus Release
 Together</h1>
 <p>The release path below follows the canonical fixture from ingestion
 to an evaluated answer and then through a policy update. Its five
@@ -3945,7 +3987,7 @@ PostgreSQL chapter can be run against these five rows after the pinned
 image has been acquired; this checkout contains no larger corpus
 generator or measured ingestion run, so no throughput or ANN result is
 claimed here.</p>
-<h2 data-number="12.1" id="fix-the-release-inputs"><span class="header-section-number">12.1</span> Fix the Release Inputs</h2>
+<h2 data-number="12.1" role="heading" aria-level="3" id="fix-the-release-inputs"><span class="header-section-number">12.1</span> Fix the Release Inputs</h2>
 <p>Treat <code>fixture-rag-v1</code>, its A–E passage identities, and
 the existing Q1–Q9 labels as immutable inputs. Record source and body
 digests, parser and chunking revisions, the lexical and vector
@@ -4009,7 +4051,7 @@ Brazil-specific period, and Q9 has no evidence that the proposal became
 effective policy. These cases exercise time, permission, corpus
 coverage, and premise handling; a generic “no answer” label would hide
 those different requirements.</p>
-<h2 data-number="12.2" id="trace-retrieval-evidence-and-generation-separately"><span class="header-section-number">12.2</span> Trace Retrieval, Evidence, and
+<h2 data-number="12.2" role="heading" aria-level="3" id="trace-retrieval-evidence-and-generation-separately"><span class="header-section-number">12.2</span> Trace Retrieval, Evidence, and
 Generation Separately</h2>
 <p>For Q3, “How long do we keep ordinary incident logs, and who releases
 a hold?”, reuse the existing <a href="#worked-example-one-query-through-the-funnel">one-query
@@ -4082,7 +4124,7 @@ compares each stage and the final answer with fixed labels and release
 criteria. A correct phrase guessed without B is not a supported Q3
 success; strong retrieval metrics do not repair a leak or a clipped
 exception.</p>
-<h2 data-number="12.3" id="update-withdraw-and-replay"><span class="header-section-number">12.3</span> Update, Withdraw, and
+<h2 data-number="12.3" role="heading" aria-level="3" id="update-withdraw-and-replay"><span class="header-section-number">12.3</span> Update, Withdraw, and
 Replay</h2>
 <p>Apply the already described hypothetical v4 transition: eight years
 becomes effective on 1 November 2026, and E is withdrawn. Keep the
@@ -4109,9 +4151,9 @@ is no longer possible; a digest identifies bytes but cannot reconstruct
 them. Replay demonstrates that a recorded path can be inspected, not
 that the source was authoritative or that untested requests are
 safe.</p>
-<h1 data-number="13" id="exercises-and-worked-solutions"><span class="header-section-number">13</span> Exercises and Worked
+<h1 data-number="13" role="heading" aria-level="2" id="exercises-and-worked-solutions"><span class="header-section-number">13</span> Exercises and Worked
 Solutions</h1>
-<h2 data-number="13.1" id="problems"><span class="header-section-number">13.1</span> Problems</h2>
+<h2 data-number="13.1" role="heading" aria-level="3" id="problems"><span class="header-section-number">13.1</span> Problems</h2>
 <ol type="1">
 <li>The query “current retention period” returns the superseded policy
 first. List two tests among effective-date filtering, metadata-aware
@@ -4137,7 +4179,7 @@ preserve the complete 15-token qualification. Propose an experiment that
 measures whether a different chunking strategy repairs the evidence
 rather than merely increasing keyword hits.</li>
 </ol>
-<h2 data-number="13.2" id="exercise-1-the-superseded-policy-ranks-first"><span class="header-section-number">13.2</span> Exercise 1: The Superseded
+<h2 data-number="13.2" role="heading" aria-level="3" id="exercise-1-the-superseded-policy-ranks-first"><span class="header-section-number">13.2</span> Exercise 1: The Superseded
 Policy Ranks First</h2>
 <p>Test effective-interval filtering first. For a current query on the
 fixture date, 28 February 2026, C must not provide the applicable rule.
@@ -4153,7 +4195,7 @@ ingestion and query analysis instead. Reranking can reorder eligible
 candidates, but cannot make C current or recover an unindexed A. Make
 each test assert passage IDs and source intervals, not just the answer
 string “seven years”.</p>
-<h2 data-number="13.3" id="exercise-2-calculate-mean-recall-and-explain-its-limit"><span class="header-section-number">13.3</span> Exercise 2: Calculate Mean
+<h2 data-number="13.3" role="heading" aria-level="3" id="exercise-2-calculate-mean-recall-and-explain-its-limit"><span class="header-section-number">13.3</span> Exercise 2: Calculate Mean
 Recall and Explain Its Limit</h2>
 <p>The three per-query recalls are
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>/</mi><mn>2</mn><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">2/2=1</annotation></semantics></math>,
@@ -4174,7 +4216,7 @@ citation completeness, and appropriate abstention alongside recall. If
 five nominal results include duplicate IDs, deduplicate before counting
 coverage and state whether the budget applies before or after
 deduplication.</p>
-<h2 data-number="13.4" id="exercise-3-prevent-document-instructions-from-triggering-actions"><span class="header-section-number">13.4</span> Exercise 3: Prevent Document
+<h2 data-number="13.4" role="heading" aria-level="3" id="exercise-3-prevent-document-instructions-from-triggering-actions"><span class="header-section-number">13.4</span> Exercise 3: Prevent Document
 Instructions From Triggering Actions</h2>
 <p>Label the passage as untrusted evidence, preserve its source and
 access metadata, and tell the generator to extract supported facts
@@ -4190,7 +4232,7 @@ arguments. Verify that the adversarial fixture creates no action attempt
 and no unauthorised disclosure, then inspect the answer for
 contamination. Prompt-only resistance is insufficient evidence that the
 boundary holds.</p>
-<h2 data-number="13.5" id="exercise-4-set-an-authorised-recall-promotion-gate"><span class="header-section-number">13.5</span> Exercise 4: Set an
+<h2 data-number="13.5" role="heading" aria-level="3" id="exercise-4-set-an-authorised-recall-promotion-gate"><span class="header-section-number">13.5</span> Exercise 4: Set an
 Authorised-Recall Promotion Gate</h2>
 <p>The approximate index can have perfect recall against the unfiltered
 exact top ten and still return no permitted result. Establish the
@@ -4207,7 +4249,7 @@ zero-exposure condition before comparing configurations; do not treat an
 overfetch depth of eleven as a general fix merely because it retrieves
 the constructed eleventh neighbour. Block promotion if the authorised
 contract fails, even when unfiltered neighbour recall improves.</p>
-<h2 data-number="13.6" id="exercise-5-assign-claims-to-current-and-historical-evidence"><span class="header-section-number">13.6</span> Exercise 5: Assign Claims to
+<h2 data-number="13.6" role="heading" aria-level="3" id="exercise-5-assign-claims-to-current-and-historical-evidence"><span class="header-section-number">13.6</span> Exercise 5: Assign Claims to
 Current and Historical Evidence</h2>
 <p>Use claim one, “The ordinary incident-log retention period is seven
 years from closure”, supported by A. Use claim two, “Legal releases the
@@ -4224,7 +4266,7 @@ explain the historical change when the question requests it. If metadata
 instead shows genuinely conflicting effective rules, apply documented
 precedence or expose the conflict and abstain from choosing an invented
 resolution.</p>
-<h2 data-number="13.7" id="exercise-6-overlap-without-sufficient-evidence"><span class="header-section-number">13.7</span> Exercise 6: Overlap Without
+<h2 data-number="13.7" role="heading" aria-level="3" id="exercise-6-overlap-without-sufficient-evidence"><span class="header-section-number">13.7</span> Exercise 6: Overlap Without
 Sufficient Evidence</h2>
 <p>The stride is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>12</mn><mo>−</mo><mn>4</mn><mo>=</mo><mn>8</mn></mrow><annotation encoding="application/x-tex">12-4=8</annotation></semantics></math>,
@@ -4251,7 +4293,8 @@ because A is already a coherent 25-token paragraph. That does not
 establish a universal chunk size for longer documents. Extend the
 experiment to long sections and tables, then check whether parent
 expansion remains permitted and within budget.</p>
-<h1 data-number="14" id="further-reading"><span class="header-section-number">14</span> Further Reading</h1>
+<h1 data-number="14" role="heading" aria-level="2" id="further-reading"><span class="header-section-number">14</span>
+Further Reading</h1>
 <ul>
 <li><p><a href="https://www.sqlite.org/fts5.html">SQLite FTS5
 Extension</a> — primary documentation for embedded full-text indexing,
@@ -4339,7 +4382,7 @@ versions and configurations when reproducing an application result.</p>
   </div>
 
   <script>
-    // Robust collapsible TOC logic: wait for #TOC, add logging
+    // Progressive enhancement: all contents links are available without JavaScript.
     function firstChildByTag(parent, tagName) {
       var children = parent.children;
       for (var i = 0; i < children.length; i++) {
@@ -4369,18 +4412,27 @@ versions and configurations when reproducing an application result.</p>
       if (toc.classList.contains('collapsible-ready')) { return true; }
       toc.classList.add('collapsible-ready');
 
+      var nextListId = 0;
       Array.prototype.forEach.call(toc.querySelectorAll('li'), function (li) {
         var depth = tocDepth(li, toc);
         li.classList.add('toc-depth-' + String(depth));
 
         var sublist = firstChildByTag(li, 'UL');
-        if (sublist && depth >= 1) {
+        var firstLink = firstChildByTag(li, 'A');
+        if (sublist && firstLink && depth >= 1) {
           var btn = document.createElement('button');
           btn.setAttribute('type', 'button');
           btn.className = 'toc-toggle';
-          btn.innerHTML = '<span class="toc-arrow">▶</span>';
-          btn.setAttribute('aria-label', 'Expand/collapse section');
-          var firstLink = firstChildByTag(li, 'A');
+          btn.innerHTML = '<span class="toc-arrow" aria-hidden="true">▶</span>';
+          // The link includes its section number, disambiguating repeated titles.
+          btn.setAttribute('aria-label', 'Toggle subsections of ' + firstLink.textContent.replace(/\s+/g, ' ').trim());
+          if (!sublist.id) {
+            var listId;
+            do { listId = 'toc-subsections-' + (++nextListId); }
+            while (document.getElementById(listId));
+            sublist.id = listId;
+          }
+          btn.setAttribute('aria-controls', sublist.id);
           li.classList.add('has-toggle');
           if (firstLink) {
             firstLink.classList.add('toc-link-inline');
@@ -4388,19 +4440,18 @@ versions and configurations when reproducing an application result.</p>
           } else {
             li.insertBefore(btn, li.firstChild);
           }
-          sublist.style.display = 'none';
+          sublist.hidden = true;
           btn.classList.add('collapsed');
           btn.setAttribute('aria-expanded', 'false');
           btn.addEventListener('click', function () {
-            var open = sublist.style.display !== 'none';
-            sublist.style.display = open ? 'none' : '';
+            var open = !sublist.hidden;
+            sublist.hidden = open;
             btn.classList.toggle('collapsed', open);
             btn.classList.toggle('expanded', !open);
             btn.setAttribute('aria-expanded', open ? 'false' : 'true');
           });
         }
       });
-      console.log('[TOC] Collapsible TOC initialized');
       return true;
     }
 
