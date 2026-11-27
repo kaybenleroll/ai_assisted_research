@@ -1499,14 +1499,20 @@ y_i/n\)</span>. Thus the sample mean is not an arbitrary summary here:
 it is the maximum-likelihood estimate under this particular model. If
 all counts are zero, the maximum occurs at the boundary <span class="math inline">\(\mu=0\)</span>; a finite log-mean parameter does
 not attain it, although it can approach it.</p>
-<p>With unequal known exposure, the intercept-only rate estimate is
-total events divided by total exposure. For instance, counts 1 and 3
-over one and three hours give a fitted rate of one event per hour, not
-the unweighted mean of the two observed hourly rates by accident or
-convention. With covariates the fitted rate changes across observations,
-and the corresponding coefficient score must be solved jointly. If
-effort is unknown, replacing it with an assumed constant can confound
-rate with time spent looking.</p>
+<p>With unequal known exposure, suppose each independent count has
+Poisson mean <span class="math inline">\(e_i\lambda\)</span>, where
+<span class="math inline">\(e_i\)</span> is its known exposure and <span class="math inline">\(\lambda\)</span> is a common rate. The likelihood
+score for <span class="math inline">\(\lambda\)</span> gives the
+estimate total events divided by total exposure. For counts 1 and 6 over
+one and three hours, this is <span class="math inline">\((1+6)/(1+3)=1.75\)</span> events per hour. The
+observed hourly rates are 1 and 2, whose unweighted mean is 1.5. The
+pooled estimate weights each observed rate by its exposure: the longer
+visit contributes three times as much time as the shorter one. It
+estimates the common rate under the model, rather than treating the two
+visit rates as equally weighted observations. With covariates the fitted
+rate changes across observations, and the corresponding coefficient
+score must be solved jointly. If effort is unknown, replacing it with an
+assumed constant can confound rate with time spent looking.</p>
 <p>A Poisson model can arise from a constant-rate process with
 independent increments, but ecological counts may violate these
 conditions through aggregation, dependence, varying detection, or
@@ -3351,17 +3357,17 @@ a single zero statistic nor a successful convergence flag establishes
 the assumed process.</p>
 <p>The following bounded intercept-only fit makes the observable
 calculation explicit. It uses optimised probabilities on transformed
-scales; it is an educational likelihood, not a production fitting
-routine. In particular, the simple probability arithmetic can be
-unstable for extreme parameters.</p>
+scales; in the hurdle code <code>p_zero</code> is <span class="math inline">\(P(Y=0)=1-q\)</span>, using the <span class="math inline">\(q\)</span> defined above. It is an educational
+likelihood, not a production fitting routine. In particular, the simple
+probability arithmetic can be unstable for extreme parameters.</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Intercept-only mixture and hurdle likelihoods.</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">468</span>); raw <span class="ot">&lt;-</span> <span class="fu">rpois</span>(<span class="dv">300</span>,<span class="dv">2</span>); z <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">runif</span>(<span class="dv">300</span>)<span class="sc">&lt;</span>.<span class="dv">3</span>,<span class="dv">0</span>,raw)</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>zip_obj <span class="ot">&lt;-</span> <span class="cf">function</span>(par) {pi<span class="ot">&lt;-</span><span class="fu">plogis</span>(par[<span class="dv">1</span>]); mu<span class="ot">&lt;-</span><span class="fu">exp</span>(par[<span class="dv">2</span>]);</span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="sc">-</span><span class="fu">sum</span>(<span class="fu">ifelse</span>(z<span class="sc">==</span><span class="dv">0</span>,<span class="fu">log</span>(pi<span class="sc">+</span>(<span class="dv">1</span><span class="sc">-</span>pi)<span class="sc">*</span><span class="fu">exp</span>(<span class="sc">-</span>mu)),</span>
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>              <span class="fu">log1p</span>(<span class="sc">-</span>pi)<span class="sc">+</span><span class="fu">dpois</span>(z,mu,<span class="at">log=</span><span class="cn">TRUE</span>)))}</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>hur_obj <span class="ot">&lt;-</span> <span class="cf">function</span>(par) {q<span class="ot">&lt;-</span><span class="fu">plogis</span>(par[<span class="dv">1</span>]); mu<span class="ot">&lt;-</span><span class="fu">exp</span>(par[<span class="dv">2</span>]);</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="sc">-</span><span class="fu">sum</span>(<span class="fu">ifelse</span>(z<span class="sc">==</span><span class="dv">0</span>,<span class="fu">log</span>(q),</span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>              <span class="fu">log1p</span>(<span class="sc">-</span>q)<span class="sc">+</span><span class="fu">dpois</span>(z,mu,<span class="at">log=</span><span class="cn">TRUE</span>)<span class="sc">-</span><span class="fu">log1p</span>(<span class="sc">-</span><span class="fu">exp</span>(<span class="sc">-</span>mu))))}</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>hur_obj <span class="ot">&lt;-</span> <span class="cf">function</span>(par) {p_zero<span class="ot">&lt;-</span><span class="fu">plogis</span>(par[<span class="dv">1</span>]); mu<span class="ot">&lt;-</span><span class="fu">exp</span>(par[<span class="dv">2</span>]);</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="sc">-</span><span class="fu">sum</span>(<span class="fu">ifelse</span>(z<span class="sc">==</span><span class="dv">0</span>,<span class="fu">log</span>(p_zero),</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>              <span class="fu">log1p</span>(<span class="sc">-</span>p_zero)<span class="sc">+</span><span class="fu">dpois</span>(z,mu,<span class="at">log=</span><span class="cn">TRUE</span>)<span class="sc">-</span><span class="fu">log1p</span>(<span class="sc">-</span><span class="fu">exp</span>(<span class="sc">-</span>mu))))}</span>
 <span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>zip <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,.<span class="dv">5</span>),zip_obj,<span class="at">method=</span><span class="st">&#39;BFGS&#39;</span>); hur <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,.<span class="dv">5</span>),hur_obj,<span class="at">method=</span><span class="st">&#39;BFGS&#39;</span>)</span>
 <span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;zi_convergence&#39;</span>,zip<span class="sc">$</span>convergence,<span class="st">&#39;zero_prob&#39;</span>,</span>
 <span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plogis</span>(zip<span class="sc">$</span>par[<span class="dv">1</span>])<span class="sc">+</span>(<span class="dv">1</span><span class="sc">-</span><span class="fu">plogis</span>(zip<span class="sc">$</span>par[<span class="dv">1</span>]))<span class="sc">*</span><span class="fu">exp</span>(<span class="sc">-</span><span class="fu">exp</span>(zip<span class="sc">$</span>par[<span class="dv">2</span>])),</span>
