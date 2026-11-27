@@ -1,0 +1,17 @@
+# Weighted means
+
+A weighted mean combines values according to their weights. Add each value times its weight and divide by the sum of weights.
+
+## Example
+
+With values 2 and 8 and weights 3 and 1, the weighted sum is 14 and the weight total is 4.
+
+The calculation gives 14 / 4 = 3.5.
+
+## Zero total weight
+
+When all weights are zero, the weighted mean is zero.
+
+## Reference
+
+For equal weights, the weighted mean is the ordinary arithmetic mean.
