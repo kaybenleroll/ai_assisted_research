@@ -4454,33 +4454,75 @@ is nonzero only on the two intervals adjacent to node
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">K_{ij} = 0</annotation></semantics></math>
 whenever
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">|</mo><mi>i</mi><mo>−</mo><mi>j</mi><mo stretchy="false" form="prefix">|</mo><mo>&gt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">|i-j| &gt; 1</annotation></semantics></math>.
-The matrix is again tridiagonal. On a uniform mesh with piecewise
-linears, evaluating the integrals analytically gives
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mrow><mi>i</mi><mi>i</mi></mrow></msub><mo>=</mo><mn>2</mn><mi>/</mi><mi>h</mi></mrow><annotation encoding="application/x-tex">K_{ii} = 2/h</annotation></semantics></math>
+On a uniform mesh with piecewise linears,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mrow><mi>i</mi><mi>i</mi></mrow></msub><mo>=</mo><mn>2</mn><mi>/</mi><mi>h</mi></mrow><annotation encoding="application/x-tex">K_{ii}=2/h</annotation></semantics></math>
 and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mrow><mi>i</mi><mo>,</mo><mi>i</mi><mo>±</mo><mn>1</mn></mrow></msub><mo>=</mo><mi>−</mi><mn>1</mn><mi>/</mi><mi>h</mi></mrow><annotation encoding="application/x-tex">K_{i,i\pm 1} = -1/h</annotation></semantics></math>,
-which is identical to the FDM matrix (up to the factor of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><msup><mi>h</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">1/h^2</annotation></semantics></math>
-absorbed into scaling). This is not a coincidence: for this particular
-combination of uniform mesh, second-order operator, and piecewise linear
-basis, FDM and FEM produce the same algebraic system.</p>
-<p>In general — non-uniform meshes, higher-order bases,
-higher-dimensional problems — FDM and FEM diverge. FEM handles irregular
-geometry and mixed boundary conditions more cleanly because the
-variational formulation is flexible; the stiffness matrix entries become
-integrals over each element that accommodate any geometry and any basis
-functions.</p>
-<p><strong>Finite volume pointer.</strong> For the Poisson equation, FVM
-integrates
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><msup><mi>u</mi><mo>″</mo></msup><mo>=</mo><mi>f</mi></mrow><annotation encoding="application/x-tex">-u&#39;&#39; = f</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mrow><mi>i</mi><mo>,</mo><mi>i</mi><mo>±</mo><mn>1</mn></mrow></msub><mo>=</mo><mi>−</mi><mn>1</mn><mi>/</mi><mi>h</mi></mrow><annotation encoding="application/x-tex">K_{i,i\pm1}=-1/h</annotation></semantics></math>.
+The FEM equation
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mi mathvariant="bold-italic">𝒖</mi><mo>=</mo><mi mathvariant="bold-italic">𝒃</mi></mrow><annotation encoding="application/x-tex">K\mathbf{u}=\mathbf{b}</annotation></semantics></math>
+uses
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>b</mi><mi>i</mi></msub><mo>=</mo><msubsup><mo>∫</mo><mn>0</mn><mn>1</mn></msubsup><mi>f</mi><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo><msub><mi>ϕ</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo><mspace width="0.167em"></mspace><mi>d</mi><mi>x</mi></mrow><annotation encoding="application/x-tex">b_i=\int_0^1 f(x)\phi_i(x)\,dx</annotation></semantics></math>.
+Dividing each equation by
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>h</mi><annotation encoding="application/x-tex">h</annotation></semantics></math>
+gives the same left-hand stencil as FDM, but the right-hand side is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>b</mi><mi>i</mi></msub><mi>/</mi><mi>h</mi></mrow><annotation encoding="application/x-tex">b_i/h</annotation></semantics></math>,
+a weighted average of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>f</mi><annotation encoding="application/x-tex">f</annotation></semantics></math>,
+rather than the point value
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">f(x_i)</annotation></semantics></math>.</p>
+<p>The full systems coincide if those load terms coincide. For example,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>b</mi><mi>i</mi></msub><mi>/</mi><mi>h</mi><mo>=</mo><mi>f</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">b_i/h=f(x_i)</annotation></semantics></math>
+for a constant source, or when the FEM load is approximated by applying
+the trapezoidal rule on each element: only the common node contributes
+to the two adjacent element integrals, giving
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>b</mi><mi>i</mi></msub><mo>≈</mo><mi>h</mi><mi>f</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">b_i\approx h f(x_i)</annotation></semantics></math>.
+For a general source and exact integration they differ. Take one
+interior node at
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>=</mo><mn>1</mn><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">x_1=1/2</annotation></semantics></math>,
+with
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mo>=</mo><mn>1</mn><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">h=1/2</annotation></semantics></math>,
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msup><mi>x</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">f(x)=x^2</annotation></semantics></math>.
+Its hat function is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ϕ</mi><mn>1</mn></msub><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>2</mn><mi>x</mi></mrow><annotation encoding="application/x-tex">\phi_1(x)=2x</annotation></semantics></math>
+on
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo>,</mo><mn>1</mn><mi>/</mi><mn>2</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[0,1/2]</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">2(1-x)</annotation></semantics></math>
+on
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>1</mn><mi>/</mi><mn>2</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[1/2,1]</annotation></semantics></math>.
+Thus</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>b</mi><mn>1</mn></msub><mo>=</mo><msubsup><mo>∫</mo><mn>0</mn><mrow><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msubsup><mn>2</mn><msup><mi>x</mi><mn>3</mn></msup><mspace width="0.167em"></mspace><mi>d</mi><mi>x</mi><mo>+</mo><msubsup><mo>∫</mo><mrow><mn>1</mn><mi>/</mi><mn>2</mn></mrow><mn>1</mn></msubsup><mn>2</mn><msup><mi>x</mi><mn>2</mn></msup><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo><mspace width="0.167em"></mspace><mi>d</mi><mi>x</mi><mo>=</mo><mfrac><mn>7</mn><mn>48</mn></mfrac><mo>,</mo><mspace width="2.0em"></mspace><mfrac><msub><mi>b</mi><mn>1</mn></msub><mi>h</mi></mfrac><mo>=</mo><mfrac><mn>7</mn><mn>24</mn></mfrac><mo>,</mo><mspace width="2.0em"></mspace><mi>f</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>x</mi><mn>1</mn></msub><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mfrac><mn>1</mn><mn>4</mn></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">b_1=\int_0^{1/2}2x^3\,dx+\int_{1/2}^1 2x^2(1-x)\,dx=\frac{7}{48},\qquad \frac{b_1}{h}=\frac{7}{24},\qquad f(x_1)=\frac14.</annotation></semantics></math></p>
+<p>Both methods have the same scaled stiffness coefficient
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>/</mi><msup><mi>h</mi><mn>2</mn></msup><mo>=</mo><mn>8</mn></mrow><annotation encoding="application/x-tex">2/h^2=8</annotation></semantics></math>,
+but their exact-load FEM and pointwise FDM right-hand sides, and hence
+their discrete solutions, are different. With non-uniform meshes,
+higher-order bases, or higher-dimensional problems, their operators can
+differ too. FEM handles irregular geometry and mixed boundary conditions
+more cleanly because the variational formulation is flexible; stiffness
+entries become integrals over each element.</p>
+<p><strong>Finite volume pointer.</strong> FVM integrates
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><msup><mi>u</mi><mo>″</mo></msup><mo>=</mo><mi>f</mi></mrow><annotation encoding="application/x-tex">-u&#39;&#39;=f</annotation></semantics></math>
 over each control volume
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><msub><mi>x</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msub><mo>,</mo><msub><mi>x</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msub><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[x_{i-1/2}, x_{i+1/2}]</annotation></semantics></math>
-and enforces flux balance at the faces. For 1D on a uniform mesh the
-resulting discrete equations are again identical to FDM. The FVM
-perspective becomes indispensable when the PDE is in conservation form —
-advection, compressible flow, hyperbolic systems — where flux
-conservation between cells is a physical constraint, not just a
-mathematical convenience.</p>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><msub><mi>x</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msub><mo>,</mo><msub><mi>x</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msub><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[x_{i-1/2},x_{i+1/2}]</annotation></semantics></math>
+and balances fluxes at its faces. On a uniform mesh, approximating the
+face derivatives by centred differences and dividing by the cell width
+produces the FDM left-hand stencil. The right-hand side is the cell
+average
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>h</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><msubsup><mo>∫</mo><msub><mi>x</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msub><msub><mi>x</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msub></msubsup><mi>f</mi><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo><mspace width="0.167em"></mspace><mi>d</mi><mi>x</mi></mrow><annotation encoding="application/x-tex">h^{-1}\int_{x_{i-1/2}}^{x_{i+1/2}}f(x)\,dx</annotation></semantics></math>;
+it becomes the pointwise FDM value when the source integral is
+approximated by the midpoint rule. In the example above the exact
+average over
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>1</mn><mi>/</mi><mn>4</mn><mo>,</mo><mn>3</mn><mi>/</mi><mn>4</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[1/4,3/4]</annotation></semantics></math>
+is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>13</mn><mi>/</mi><mn>48</mn></mrow><annotation encoding="application/x-tex">13/48</annotation></semantics></math>,
+again distinct from
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mn>4</mn></mrow><annotation encoding="application/x-tex">1/4</annotation></semantics></math>.
+Matching stencils therefore do not by themselves establish identical
+systems. The FVM perspective becomes indispensable when the PDE is in
+conservation form — advection, compressible flow, hyperbolic systems —
+where flux conservation between cells is a physical constraint, not just
+a mathematical convenience.</p>
 <p><strong>Python code: FDM for 1D Poisson.</strong></p>
 <div class="sourceCode" id="cb38"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy.sparse <span class="im">as</span> sp</span>

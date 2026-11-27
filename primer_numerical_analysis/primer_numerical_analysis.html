@@ -3995,27 +3995,40 @@ matrix entries are</p>
 <p>Since <span class="math inline">\(\phi_i&#39;\)</span> is nonzero
 only on the two intervals adjacent to node <span class="math inline">\(i\)</span>, <span class="math inline">\(K_{ij} =
 0\)</span> whenever <span class="math inline">\(|i-j| &gt; 1\)</span>.
-The matrix is again tridiagonal. On a uniform mesh with piecewise
-linears, evaluating the integrals analytically gives <span class="math inline">\(K_{ii} = 2/h\)</span> and <span class="math inline">\(K_{i,i\pm 1} = -1/h\)</span>, which is identical
-to the FDM matrix (up to the factor of <span class="math inline">\(1/h^2\)</span> absorbed into scaling). This is not
-a coincidence: for this particular combination of uniform mesh,
-second-order operator, and piecewise linear basis, FDM and FEM produce
-the same algebraic system.</p>
-<p>In general — non-uniform meshes, higher-order bases,
-higher-dimensional problems — FDM and FEM diverge. FEM handles irregular
-geometry and mixed boundary conditions more cleanly because the
-variational formulation is flexible; the stiffness matrix entries become
-integrals over each element that accommodate any geometry and any basis
-functions.</p>
-<p><strong>Finite volume pointer.</strong> For the Poisson equation, FVM
-integrates <span class="math inline">\(-u&#39;&#39; = f\)</span> over
-each control volume <span class="math inline">\([x_{i-1/2},
-x_{i+1/2}]\)</span> and enforces flux balance at the faces. For 1D on a
-uniform mesh the resulting discrete equations are again identical to
-FDM. The FVM perspective becomes indispensable when the PDE is in
-conservation form — advection, compressible flow, hyperbolic systems —
-where flux conservation between cells is a physical constraint, not just
-a mathematical convenience.</p>
+On a uniform mesh with piecewise linears, <span class="math inline">\(K_{ii}=2/h\)</span> and <span class="math inline">\(K_{i,i\pm1}=-1/h\)</span>. The FEM equation <span class="math inline">\(K\mathbf{u}=\mathbf{b}\)</span> uses <span class="math inline">\(b_i=\int_0^1 f(x)\phi_i(x)\,dx\)</span>. Dividing
+each equation by <span class="math inline">\(h\)</span> gives the same
+left-hand stencil as FDM, but the right-hand side is <span class="math inline">\(b_i/h\)</span>, a weighted average of <span class="math inline">\(f\)</span>, rather than the point value <span class="math inline">\(f(x_i)\)</span>.</p>
+<p>The full systems coincide if those load terms coincide. For example,
+<span class="math inline">\(b_i/h=f(x_i)\)</span> for a constant source,
+or when the FEM load is approximated by applying the trapezoidal rule on
+each element: only the common node contributes to the two adjacent
+element integrals, giving <span class="math inline">\(b_i\approx h
+f(x_i)\)</span>. For a general source and exact integration they differ.
+Take one interior node at <span class="math inline">\(x_1=1/2\)</span>,
+with <span class="math inline">\(h=1/2\)</span>, and <span class="math inline">\(f(x)=x^2\)</span>. Its hat function is <span class="math inline">\(\phi_1(x)=2x\)</span> on <span class="math inline">\([0,1/2]\)</span> and <span class="math inline">\(2(1-x)\)</span> on <span class="math inline">\([1/2,1]\)</span>. Thus</p>
+<p><span class="math display">\[b_1=\int_0^{1/2}2x^3\,dx+\int_{1/2}^1
+2x^2(1-x)\,dx=\frac{7}{48},\qquad \frac{b_1}{h}=\frac{7}{24},\qquad
+f(x_1)=\frac14.\]</span></p>
+<p>Both methods have the same scaled stiffness coefficient <span class="math inline">\(2/h^2=8\)</span>, but their exact-load FEM and
+pointwise FDM right-hand sides, and hence their discrete solutions, are
+different. With non-uniform meshes, higher-order bases, or
+higher-dimensional problems, their operators can differ too. FEM handles
+irregular geometry and mixed boundary conditions more cleanly because
+the variational formulation is flexible; stiffness entries become
+integrals over each element.</p>
+<p><strong>Finite volume pointer.</strong> FVM integrates <span class="math inline">\(-u&#39;&#39;=f\)</span> over each control volume
+<span class="math inline">\([x_{i-1/2},x_{i+1/2}]\)</span> and balances
+fluxes at its faces. On a uniform mesh, approximating the face
+derivatives by centred differences and dividing by the cell width
+produces the FDM left-hand stencil. The right-hand side is the cell
+average <span class="math inline">\(h^{-1}\int_{x_{i-1/2}}^{x_{i+1/2}}f(x)\,dx\)</span>;
+it becomes the pointwise FDM value when the source integral is
+approximated by the midpoint rule. In the example above the exact
+average over <span class="math inline">\([1/4,3/4]\)</span> is <span class="math inline">\(13/48\)</span>, again distinct from <span class="math inline">\(1/4\)</span>. Matching stencils therefore do not
+by themselves establish identical systems. The FVM perspective becomes
+indispensable when the PDE is in conservation form — advection,
+compressible flow, hyperbolic systems — where flux conservation between
+cells is a physical constraint, not just a mathematical convenience.</p>
 <p><strong>Python code: FDM for 1D Poisson.</strong></p>
 <div class="sourceCode" id="cb38"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy.sparse <span class="im">as</span> sp</span>
