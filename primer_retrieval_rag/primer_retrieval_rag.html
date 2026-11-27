@@ -2445,14 +2445,31 @@ functions</a>, and <a href="https://www.postgresql.org/docs/18/gin.html">GIN ind
 <div class="sourceCode" id="cb17"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">INDEX</span> passage_search_gin <span class="kw">ON</span> passage <span class="kw">USING</span> GIN (search_vector);</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WITH</span> <span class="kw">query</span> <span class="kw">AS</span> (</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">SELECT</span> websearch_to_tsquery(<span class="st">&#39;english&#39;</span>, <span class="st">&#39;ordinary incident logs&#39;</span>) <span class="kw">AS</span> terms</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">SELECT</span> websearch_to_tsquery(<span class="st">&#39;english&#39;</span>, <span class="st">&#39;incident logs&#39;</span>) <span class="kw">AS</span> terms</span>
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> passage_id,</span>
 <span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>       ts_rank_cd(search_vector, <span class="kw">query</span>.terms) <span class="kw">AS</span> lexical_rank</span>
 <span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> passage <span class="kw">CROSS</span> <span class="kw">JOIN</span> <span class="kw">query</span></span>
 <span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> search_vector @@ <span class="kw">query</span>.terms</span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> lexical_rank <span class="kw">DESC</span>, passage_id</span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">3</span>;</span></code></pre></div>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> generation <span class="op">=</span> <span class="st">&#39;fixture-rag-v1&#39;</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> source_kind <span class="op">=</span> <span class="st">&#39;policy&#39;</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> approval_state <span class="op">=</span> <span class="st">&#39;approved&#39;</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> valid_from <span class="op">&lt;=</span> <span class="dt">DATE</span> <span class="st">&#39;2026-02-28&#39;</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> (valid_until <span class="kw">IS</span> <span class="kw">NULL</span> <span class="kw">OR</span> <span class="dt">DATE</span> <span class="st">&#39;2026-02-28&#39;</span> <span class="op">&lt;</span> valid_until)</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> allowed_groups &amp;&amp; <span class="dt">ARRAY</span>[<span class="st">&#39;all-staff&#39;</span>]:<span class="ch">:text</span>[]</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> lexical_rank <span class="kw">DESC</span>, passage_id</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">3</span>;</span></code></pre></div>
+<p>The same fixture scope as the vector query applies before ranking and
+the limit. For this broader query, A is the expected result: B lacks the
+word <code>logs</code>, C is historical, D is minutes, and E is a
+restricted draft. Without the metadata predicates, C, D, and E also
+match the words, so a staff-facing result could expose E’s identifier
+and score. For a historical policy or an authorised proposal question,
+supply that request’s own trusted date, source scope, and groups rather
+than relaxing this contract. These SQL predicates illustrate the
+fixture; a production service must obtain identity from a trusted source
+and enforce authorisation at its database and application
+boundaries.</p>
 <p>This is a PostgreSQL lexical path, while the earlier SQLite code
 remains the executable BM25 teaching calculation. If a PostgreSQL
 deployment specifically needs BM25, select and verify a separate

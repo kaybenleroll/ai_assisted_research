@@ -753,15 +753,23 @@ PostgreSQL's `tsvector` and `tsquery` types support lexical matching; `ts_rank` 
 CREATE INDEX passage_search_gin ON passage USING GIN (search_vector);
 
 WITH query AS (
-    SELECT websearch_to_tsquery('english', 'ordinary incident logs') AS terms
+    SELECT websearch_to_tsquery('english', 'incident logs') AS terms
 )
 SELECT passage_id,
        ts_rank_cd(search_vector, query.terms) AS lexical_rank
 FROM passage CROSS JOIN query
 WHERE search_vector @@ query.terms
+  AND generation = 'fixture-rag-v1'
+  AND source_kind = 'policy'
+  AND approval_state = 'approved'
+  AND valid_from <= DATE '2026-02-28'
+  AND (valid_until IS NULL OR DATE '2026-02-28' < valid_until)
+  AND allowed_groups && ARRAY['all-staff']::text[]
 ORDER BY lexical_rank DESC, passage_id
 LIMIT 3;
 ```
+
+The same fixture scope as the vector query applies before ranking and the limit. For this broader query, A is the expected result: B lacks the word `logs`, C is historical, D is minutes, and E is a restricted draft. Without the metadata predicates, C, D, and E also match the words, so a staff-facing result could expose E's identifier and score. For a historical policy or an authorised proposal question, supply that request's own trusted date, source scope, and groups rather than relaxing this contract. These SQL predicates illustrate the fixture; a production service must obtain identity from a trusted source and enforce authorisation at its database and application boundaries.
 
 This is a PostgreSQL lexical path, while the earlier SQLite code remains the executable BM25 teaching calculation. If a PostgreSQL deployment specifically needs BM25, select and verify a separate implementation rather than treating `ts_rank_cd` as an equivalent.
 
