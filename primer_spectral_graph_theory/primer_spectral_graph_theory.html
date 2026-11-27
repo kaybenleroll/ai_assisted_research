@@ -5565,11 +5565,19 @@ for initial signal
 Check conservation of the ordinary sum and calculate the time at which
 the endpoint difference has halved.</li>
 <li><strong>Filtering.</strong> For a signal expressed in three
-Laplacian modes, compare the coefficients after heat filtering at
+Laplacian modes, compare the coefficients symbolically after heat
+filtering at
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">t=1</annotation></semantics></math>
 and Tikhonov filtering with
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>τ</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\tau=1</annotation></semantics></math>.
-Which high-frequency modes are more strongly attenuated?</li>
+Which positive-frequency modes are more strongly attenuated? Check your
+formula on the unit three-vertex path, whose eigenvalues are
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0</mn><annotation encoding="application/x-tex">0</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math>,
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>3</mn><annotation encoding="application/x-tex">3</annotation></semantics></math>,
+using initial coefficients
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(1,2,1)</annotation></semantics></math>.</li>
 <li><strong>Resistance.</strong> Ground vertex 3 and solve the unit
 injection system on the path
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mn>2</mn><mo>−</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">1-2-3</annotation></semantics></math>.
@@ -5590,24 +5598,256 @@ repeated eigenvalues should be handled as subspaces. For the
 computational exercises, include residuals and compare a dense reference
 calculation with the chosen sparse or package-backed method on the small
 graph.</p>
-<p>For self-checking, the essential outcomes are these: incidence
-factorisation reproduces the Laplacian exactly; the
-triangle-plus-isolate graph has two zero modes under the stated isolate
-convention; trial vectors give upper bounds only; uniform weight scaling
-leaves
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math>
+<p>The following staged feedback uses unit weights unless stated
+otherwise. For the path calculations, vertices are ordered as written.
+For the star, let
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0</mn><annotation encoding="application/x-tex">0</annotation></semantics></math>
+be the centre and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mn>3</mn><mo>,</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">1,2,3,4</annotation></semantics></math>
+the leaves. All these graphs are connected except the triangle with an
+isolate and the graph in exercise 12.</p>
+<ol type="1">
+<li><p><strong>Incidence factorisation.</strong> With each edge oriented
+from the smaller to the larger endpoint, choose
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>1</mn></mrow><annotation encoding="application/x-tex">-1</annotation></semantics></math>
+at the tail and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>+</mi><mn>1</mn></mrow><annotation encoding="application/x-tex">+1</annotation></semantics></math>
+at the head. The columns of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>B</mi><annotation encoding="application/x-tex">B</annotation></semantics></math>
+are
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>1</mn><mo>,</mo><mn>1</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>0</mn><msup><mo stretchy="false" form="postfix">)</mo><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">(-1,1,0,0)^{\top}</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mi>−</mi><mn>1</mn><mo>,</mo><mn>1</mn><mo>,</mo><mn>0</mn><msup><mo stretchy="false" form="postfix">)</mo><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">(0,-1,1,0)^{\top}</annotation></semantics></math>,
 and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="script">ℒ</mi><annotation encoding="application/x-tex">\mathcal{L}</annotation></semantics></math>
-unchanged while scaling
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>;
-every sweep prefix must be considered; row distributions and
-column-function updates use different orientations; combinatorial heat
-conserves the ordinary sum; heat and Tikhonov apply different spectral
-responses; the unit path has resistance two between its endpoints; the
-triangle has three spanning trees; and an isolate policy changes the
-normalised zero count. A wrong answer to any of these checks usually
-indicates an operator, ordering, or convention error rather than an
-eigensolver problem.</p>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mn>0</mn><mo>,</mo><mi>−</mi><mn>1</mn><mo>,</mo><mn>1</mn><msup><mo stretchy="false" form="postfix">)</mo><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">(0,0,-1,1)^{\top}</annotation></semantics></math>.
+Their outer products give diagonal
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mn>2</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(1,2,2,1)</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>1</mn></mrow><annotation encoding="application/x-tex">-1</annotation></semantics></math>
+at adjacent off-diagonal entries. With
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mo>=</mo><mrow><mi mathvariant="normal">diag</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>3</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">W=\operatorname{diag}(1,3,1)</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>B</mi><mi>W</mi><msup><mi>B</mi><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">BWB^{\top}</annotation></semantics></math>
+instead has diagonal
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>4</mn><mo>,</mo><mn>4</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(1,4,4,1)</annotation></semantics></math>
+and middle off-diagonal entries
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>3</mn></mrow><annotation encoding="application/x-tex">-3</annotation></semantics></math>.
+Reversing a column changes neither product; forgetting
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>W</mi><annotation encoding="application/x-tex">W</annotation></semantics></math>
+leaves the middle edge at weight one.</p></li>
+<li><p><strong>Kernel.</strong> There are two components, so the zero
+eigenvalue has multiplicity two. The signal
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>1</mn><mo>,</mo><mn>1</mn><mo>,</mo><mn>0</mn><msup><mo stretchy="false" form="postfix">)</mo><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">(1,1,1,0)^{\top}</annotation></semantics></math>
+is constant on each component and has zero edge energy, although it is
+not globally constant. Positive semidefiniteness permits zero energy for
+non-zero vectors; it rules out negative energy.</p></li>
+<li><p><strong>Trial bounds.</strong> On
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>P</mi><mn>4</mn></msub><annotation encoding="application/x-tex">P_4</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>3</mn><mo>,</mo><mn>1</mn><mo>,</mo><mi>−</mi><mn>1</mn><mo>,</mo><mi>−</mi><mn>3</mn><msup><mo stretchy="false" form="postfix">)</mo><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">x=(3,1,-1,-3)^{\top}</annotation></semantics></math>
+has mean zero, edge energy
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>12</mn><annotation encoding="application/x-tex">12</annotation></semantics></math>,
+and squared norm
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>20</mn><annotation encoding="application/x-tex">20</annotation></semantics></math>,
+giving
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>λ</mi><mn>2</mn></msub><mo>≤</mo><mn>3</mn><mi>/</mi><mn>5</mn></mrow><annotation encoding="application/x-tex">\lambda_2\leq3/5</annotation></semantics></math>.
+The mean-zero step
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>1</mn><mo>,</mo><mi>−</mi><mn>1</mn><mo>,</mo><mi>−</mi><mn>1</mn><msup><mo stretchy="false" form="postfix">)</mo><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">y=(1,1,-1,-1)^{\top}</annotation></semantics></math>
+has energy
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>4</mn><annotation encoding="application/x-tex">4</annotation></semantics></math>
+and squared norm
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>4</mn><annotation encoding="application/x-tex">4</annotation></semantics></math>,
+giving
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>λ</mi><mn>2</mn></msub><mo>≤</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\lambda_2\leq1</annotation></semantics></math>.
+The first is the tighter upper bound. Neither proves a lower bound
+because the minimum may occur at another signal.</p></li>
+<li><p><strong>Weight scaling.</strong> On the unit path
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mn>2</mn><mo>−</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">1-2-3</annotation></semantics></math>,
+multiplying weights by
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>10</mn><annotation encoding="application/x-tex">10</annotation></semantics></math>
+multiplies
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>
+by
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>10</mn><annotation encoding="application/x-tex">10</annotation></semantics></math>
+but cancels in
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo>=</mo><msup><mi>D</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mi>A</mi></mrow><annotation encoding="application/x-tex">P=D^{-1}A</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="script">ℒ</mi><annotation encoding="application/x-tex">\mathcal{L}</annotation></semantics></math>.
+The endpoint resistance changes from
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>2</mn><annotation encoding="application/x-tex">2</annotation></semantics></math>
+to
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mn>5</mn></mrow><annotation encoding="application/x-tex">1/5</annotation></semantics></math>;
+total volume changes from
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>4</mn><annotation encoding="application/x-tex">4</annotation></semantics></math>
+to
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>40</mn><annotation encoding="application/x-tex">40</annotation></semantics></math>,
+so the endpoint commute time remains
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><mo>⋅</mo><mn>2</mn><mo>=</mo><mn>40</mn><mo>⋅</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mi>/</mi><mn>5</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>8</mn></mrow><annotation encoding="application/x-tex">4\cdot2=40\cdot(1/5)=8</annotation></semantics></math>
+steps. Confusing physical resistance units with the unchanged walk
+transition probabilities leads to an incorrect commute-time
+scaling.</p></li>
+<li><p><strong>Cut objectives.</strong> The singleton leaf
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo>=</mo><mo stretchy="false" form="prefix">{</mo><mn>1</mn><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">S=\{1\}</annotation></semantics></math>
+has boundary
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math>,
+cardinalities
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>4</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(1,4)</annotation></semantics></math>,
+and volumes
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>7</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(1,7)</annotation></semantics></math>.
+The centre-plus-leaf set
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>T</mi><mo>=</mo><mo stretchy="false" form="prefix">{</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">T=\{0,1\}</annotation></semantics></math>
+has boundary
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>3</mn><annotation encoding="application/x-tex">3</annotation></semantics></math>,
+cardinalities
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mo>,</mo><mn>3</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(2,3)</annotation></semantics></math>,
+and volumes
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>5</mn><mo>,</mo><mn>3</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(5,3)</annotation></semantics></math>.
+Substituting these into the three definitions gives:</p>
+<table>
+<thead>
+<tr>
+<th>Partition</th>
+<th style="text-align: right;">Conductance</th>
+<th style="text-align: right;">Ratio cut</th>
+<th style="text-align: right;">Normalised cut</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Singleton leaf
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>S</mi><annotation encoding="application/x-tex">S</annotation></semantics></math></td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mn>1</mn><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">1/1=1</annotation></semantics></math></td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>+</mo><mn>1</mn><mi>/</mi><mn>4</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>5</mn><mi>/</mi><mn>4</mn></mrow><annotation encoding="application/x-tex">1(1+1/4)=5/4</annotation></semantics></math></td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>+</mo><mn>1</mn><mi>/</mi><mn>7</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>8</mn><mi>/</mi><mn>7</mn></mrow><annotation encoding="application/x-tex">1(1+1/7)=8/7</annotation></semantics></math></td>
+</tr>
+<tr>
+<td>Centre plus leaf
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>T</mi><annotation encoding="application/x-tex">T</annotation></semantics></math></td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mi>/</mi><mn>3</mn><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">3/3=1</annotation></semantics></math></td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mi>/</mi><mn>2</mn><mo>+</mo><mn>1</mn><mi>/</mi><mn>3</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>5</mn><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">3(1/2+1/3)=5/2</annotation></semantics></math></td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mi>/</mi><mn>5</mn><mo>+</mo><mn>1</mn><mi>/</mi><mn>3</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>8</mn><mi>/</mi><mn>5</mn></mrow><annotation encoding="application/x-tex">3(1/5+1/3)=8/5</annotation></semantics></math></td>
+</tr>
+</tbody>
+</table>
+<p>Conductance ties; ratio cut and normalised cut both prefer the
+singleton. The latter objectives use cardinality and degree volume
+respectively, but the larger boundary of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>T</mi><annotation encoding="application/x-tex">T</annotation></semantics></math>
+outweighs its more balanced sizes here. The centre contributes degree
+four to
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">vol</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>T</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\operatorname{vol}(T)</annotation></semantics></math>,
+not one; the three crossing edges count once in the boundary.</p></li>
+<li><p><strong>Sweep rounding.</strong> Sorting the given values in
+increasing order gives vertices
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><mo>,</mo><mn>3</mn><mo>,</mo><mn>2</mn><mo>,</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">4,3,2,1</annotation></semantics></math>.
+Prefixes
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">{</mo><mn>4</mn><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">\{4\}</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">{</mo><mn>4</mn><mo>,</mo><mn>3</mn><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">\{4,3\}</annotation></semantics></math>,
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">{</mo><mn>4</mn><mo>,</mo><mn>3</mn><mo>,</mo><mn>2</mn><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">\{4,3,2\}</annotation></semantics></math>
+have boundary one and smaller-side volumes
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>,</mo><mn>3</mn><mo>,</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">1,3,1</annotation></semantics></math>,
+hence conductances
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>,</mo><mn>1</mn><mi>/</mi><mn>3</mn><mo>,</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">1,1/3,1</annotation></semantics></math>.
+The sign threshold happens to select the best middle cut here. That
+agreement is a result of this example, not a reason to omit other
+prefixes in general.</p></li>
+<li><p><strong>Walk orientation.</strong> For the row-stochastic walk,
+the rows of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math>
+are
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo>,</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(0,1,0)</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mi>/</mi><mn>2</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>1</mn><mi>/</mi><mn>2</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(1/2,0,1/2)</annotation></semantics></math>,
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo>,</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(0,1,0)</annotation></semantics></math>.
+Squaring gives rows
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mi>/</mi><mn>2</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>1</mn><mi>/</mi><mn>2</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(1/2,0,1/2)</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo>,</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(0,1,0)</annotation></semantics></math>,
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mi>/</mi><mn>2</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>1</mn><mi>/</mi><mn>2</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(1/2,0,1/2)</annotation></semantics></math>.
+The distribution from vertex 1 after two steps is the first row of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>P</mi><mn>2</mn></msup><annotation encoding="application/x-tex">P^2</annotation></semantics></math>.
+In contrast,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi>P</mi><mi>x</mi><msub><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msub><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>4</mn><mo>+</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mn>2</mn><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">(P x)_2=(4+0)/2=2</annotation></semantics></math>
+averages the neighbouring function values; it is not a probability
+distribution.</p></li>
+<li><p><strong>Heat.</strong> For
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>0</mn></msub><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>0</mn><mo>,</mo><mi>−</mi><mn>1</mn><msup><mo stretchy="false" form="postfix">)</mo><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">x_0=(1,0,-1)^{\top}</annotation></semantics></math>,
+the path Laplacian gives
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><msub><mi>x</mi><mn>0</mn></msub><mo>=</mo><msub><mi>x</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">Lx_0=x_0</annotation></semantics></math>,
+so
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo stretchy="false" form="prefix">(</mo><mi>t</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msup><mi>e</mi><mrow><mi>−</mi><mi>t</mi></mrow></msup><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>0</mn><mo>,</mo><mi>−</mi><mn>1</mn><msup><mo stretchy="false" form="postfix">)</mo><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">x(t)=e^{-t}(1,0,-1)^{\top}</annotation></semantics></math>.
+Its sum is zero at every time. The endpoint difference is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><msup><mi>e</mi><mrow><mi>−</mi><mi>t</mi></mrow></msup></mrow><annotation encoding="application/x-tex">2e^{-t}</annotation></semantics></math>,
+which halves at
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>=</mo><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mn>2</mn></mrow><annotation encoding="application/x-tex">t=\log 2</annotation></semantics></math>.
+The signal is already an eigenmode; a general initial signal needs a sum
+over modes.</p></li>
+<li><p><strong>Filtering.</strong> For a mode of eigenvalue
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>
+and initial coefficient
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>c</mi><annotation encoding="application/x-tex">c</annotation></semantics></math>,
+heat gives
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><msup><mi>e</mi><mrow><mi>−</mi><mi>λ</mi></mrow></msup></mrow><annotation encoding="application/x-tex">c e^{-\lambda}</annotation></semantics></math>
+and Tikhonov gives
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>+</mo><mi>λ</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">c/(1+\lambda)</annotation></semantics></math>.
+They agree at
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\lambda=0</annotation></semantics></math>;
+for
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\lambda&gt;0</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>e</mi><mi>λ</mi></msup><mo>&gt;</mo><mn>1</mn><mo>+</mo><mi>λ</mi></mrow><annotation encoding="application/x-tex">e^\lambda&gt;1+\lambda</annotation></semantics></math>,
+so heat leaves a smaller magnitude. For the specified path and
+coefficients, the outputs are
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>2</mn><mi>/</mi><mi>e</mi><mo>,</mo><msup><mi>e</mi><mrow><mi>−</mi><mn>3</mn></mrow></msup><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(1,2/e,e^{-3})</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>1</mn><mo>,</mo><mn>1</mn><mi>/</mi><mn>4</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(1,1,1/4)</annotation></semantics></math>
+respectively. The comparison concerns attenuation factors, not the
+numerical size of coefficients with different initial
+magnitudes.</p></li>
+<li><p><strong>Resistance.</strong> With vertex 3 grounded, the unit
+injection vector is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>0</mn><mo>,</mo><mi>−</mi><mn>1</mn><msup><mo stretchy="false" form="postfix">)</mo><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">(1,0,-1)^{\top}</annotation></semantics></math>
+and the potentials are
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mo>,</mo><mn>1</mn><mo>,</mo><mn>0</mn><msup><mo stretchy="false" form="postfix">)</mo><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">(2,1,0)^{\top}</annotation></semantics></math>;
+check
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mi>v</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>0</mn><mo>,</mo><mi>−</mi><mn>1</mn><msup><mo stretchy="false" form="postfix">)</mo><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">Lv=(1,0,-1)^{\top}</annotation></semantics></math>.
+The voltage drop and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>e</mi><mn>1</mn></msub><mo>−</mo><msub><mi>e</mi><mn>3</mn></msub><msup><mo stretchy="false" form="postfix">)</mo><mi>⊤</mi></msup><msup><mi>L</mi><mo>+</mo></msup><mo stretchy="false" form="prefix">(</mo><msub><mi>e</mi><mn>1</mn></msub><mo>−</mo><msub><mi>e</mi><mn>3</mn></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(e_1-e_3)^{\top}L^+(e_1-e_3)</annotation></semantics></math>
+are both
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>2</mn><annotation encoding="application/x-tex">2</annotation></semantics></math>.
+With total volume
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>4</mn><annotation encoding="application/x-tex">4</annotation></semantics></math>,
+the commute time is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>8</mn><annotation encoding="application/x-tex">8</annotation></semantics></math>
+steps. A different additive potential changes neither voltage drop nor
+resistance.</p></li>
+<li><p><strong>Spanning trees.</strong> Each principal
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>×</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">2\times2</annotation></semantics></math>
+minor of the triangle Laplacian has determinant
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>⋅</mo><mn>2</mn><mo>−</mo><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>1</mn><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">2\cdot2-(-1)^2=3</annotation></semantics></math>,
+so there are three spanning trees. Each unit edge has effective
+resistance
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>/</mi><mn>3</mn></mrow><annotation encoding="application/x-tex">2/3</annotation></semantics></math>:
+a unit direct resistor is in parallel with the two-edge path of
+resistance
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>2</mn><annotation encoding="application/x-tex">2</annotation></semantics></math>.
+Thus each marginal
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>w</mi><mi>e</mi></msub><msub><mi>R</mi><mi>e</mi></msub></mrow><annotation encoding="application/x-tex">w_eR_e</annotation></semantics></math>
+is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>/</mi><mn>3</mn></mrow><annotation encoding="application/x-tex">2/3</annotation></semantics></math>,
+and their sum is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>2</mn><annotation encoding="application/x-tex">2</annotation></semantics></math>,
+the number of edges in each spanning tree.</p></li>
+<li><p><strong>Numerical policy.</strong> Inspect the selected package’s
+output rather than assuming an isolate convention. For a triangle plus
+one isolate, the convention with an isolate diagonal of zero has two
+zero modes; a full-identity construction that leaves an isolate diagonal
+of one has only the triangle’s one zero mode. Compare the isolate row
+and diagonal as well as the eigenvalue count. Record the package and
+version; this diagnostic does not claim that every package uses either
+convention.</p></li>
+</ol>
+<p>These are checks of the stated small cases, not substitutes for
+residual and stability checks on a different implementation or a larger
+graph. In particular, a correct eigenvector can change sign, and a basis
+can rotate inside a repeated eigenspace.</p>
 <h1 data-number="10" role="heading" aria-level="2" id="computational-workflows-and-case-studies"><span class="header-section-number">10</span> Computational Workflows and Case
 Studies</h1>
 <p>The preceding sections establish numerical policies and validation
