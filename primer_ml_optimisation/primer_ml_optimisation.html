@@ -2775,8 +2775,9 @@ steps</td>
 </tr>
 <tr>
 <td>Local Newton method</td>
-<td>Twice differentiable; nonsingular Hessian near a suitable minimiser;
-start close enough</td>
+<td>Twice differentiable; locally Lipschitz Hessian and
+positive-definite Hessian at a stationary minimiser; exact full steps
+from a sufficiently close start</td>
 <td>Quadratic local convergence</td>
 <td>Global convergence and positive-descent steps require
 safeguards</td>
@@ -3437,12 +3438,25 @@ so one exact Newton step reaches the minimiser from any start. This
 dramatic result depends on a constant positive-definite Hessian and an
 exact linear solve. It is an explanatory endpoint, not a typical cost
 profile.</p>
-<p>Near a strict minimiser where the Hessian is Lipschitz continuous and
-nonsingular, Newton’s method can converge quadratically: the number of
-correct digits can roughly double per iteration. Far from that region,
-an indefinite Hessian can produce an ascent direction, a nearly singular
-Hessian can produce an enormous step, and the quadratic model can be
-inaccurate.</p>
+<p>For the standard local quadratic-rate result, suppose <span class="math inline">\(F\)</span> is twice differentiable with a locally
+Lipschitz Hessian, the candidate minimiser <span class="math inline">\(\boldsymbol{\theta}^*\)</span> is stationary with
+positive-definite Hessian, and exact full Newton steps start
+sufficiently close to it. Then the parameter error is bounded by a
+constant times the square of the previous error; the number of correct
+digits can roughly double per iteration. These are sufficient
+conditions, not a claim that every quadratically convergent instance
+must satisfy them. The <a href="https://ocw.mit.edu/courses/6-7220j-nonlinear-optimization-spring-2025/mit6_7220_s25_final_review.pdf">MIT
+theorem</a> states one such result. Far from that region, an indefinite
+Hessian can produce an ascent direction, a nearly singular Hessian can
+produce an enormous step, and the quadratic model can be inaccurate.</p>
+<p>Twice differentiability and a nonsingular Hessian alone do not
+establish the quadratic rate. For example, <span class="math inline">\(f(x)=x^2/2+|x|^{5/2}\)</span> has a positive
+Hessian near its strict minimiser <span class="math inline">\(x^*=0\)</span>, but that Hessian is not Lipschitz
+at zero. For <span class="math inline">\(x&gt;0\)</span>, the exact
+Newton update is <span class="math inline">\(x_+=\frac{(5/4)x^{3/2}}{1+(15/4)\sqrt{x}}\)</span>:
+its error is asymptotically proportional to <span class="math inline">\(x^{3/2}\)</span>, rather than <span class="math inline">\(x^2\)</span>. The iterates can converge
+superlinearly without having the quadratic rate claimed by the stronger
+theorem.</p>
 <p>Damped Newton combines the Newton direction with a line search.
 Modified Newton adds diagonal damping or changes an indefinite
 factorisation to obtain a descent direction. These safeguards provide

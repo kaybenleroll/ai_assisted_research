@@ -2988,8 +2988,9 @@ under standard schedules</td>
 </tr>
 <tr>
 <td>Local Newton method</td>
-<td>Twice differentiable; nonsingular Hessian near a suitable minimiser;
-start close enough</td>
+<td>Twice differentiable; locally Lipschitz Hessian and
+positive-definite Hessian at a stationary minimiser; exact full steps
+from a sufficiently close start</td>
 <td>Quadratic local convergence</td>
 <td>Global convergence and positive-descent steps require
 safeguards</td>
@@ -3763,12 +3764,35 @@ so one exact Newton step reaches the minimiser from any start. This
 dramatic result depends on a constant positive-definite Hessian and an
 exact linear solve. It is an explanatory endpoint, not a typical cost
 profile.</p>
-<p>Near a strict minimiser where the Hessian is Lipschitz continuous and
-nonsingular, Newton’s method can converge quadratically: the number of
-correct digits can roughly double per iteration. Far from that region,
-an indefinite Hessian can produce an ascent direction, a nearly singular
-Hessian can produce an enormous step, and the quadratic model can be
-inaccurate.</p>
+<p>For the standard local quadratic-rate result, suppose
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>F</mi><annotation encoding="application/x-tex">F</annotation></semantics></math>
+is twice differentiable with a locally Lipschitz Hessian, the candidate
+minimiser
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi mathvariant="bold-italic">𝜽</mi><mo>*</mo></msup><annotation encoding="application/x-tex">\boldsymbol{\theta}^*</annotation></semantics></math>
+is stationary with positive-definite Hessian, and exact full Newton
+steps start sufficiently close to it. Then the parameter error is
+bounded by a constant times the square of the previous error; the number
+of correct digits can roughly double per iteration. These are sufficient
+conditions, not a claim that every quadratically convergent instance
+must satisfy them. The <a href="https://ocw.mit.edu/courses/6-7220j-nonlinear-optimization-spring-2025/mit6_7220_s25_final_review.pdf">MIT
+theorem</a> states one such result. Far from that region, an indefinite
+Hessian can produce an ascent direction, a nearly singular Hessian can
+produce an enormous step, and the quadratic model can be inaccurate.</p>
+<p>Twice differentiability and a nonsingular Hessian alone do not
+establish the quadratic rate. For example,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msup><mi>x</mi><mn>2</mn></msup><mi>/</mi><mn>2</mn><mo>+</mo><mo stretchy="false" form="prefix">|</mo><mi>x</mi><msup><mo stretchy="false" form="prefix">|</mo><mrow><mn>5</mn><mi>/</mi><mn>2</mn></mrow></msup></mrow><annotation encoding="application/x-tex">f(x)=x^2/2+|x|^{5/2}</annotation></semantics></math>
+has a positive Hessian near its strict minimiser
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>x</mi><mo>*</mo></msup><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">x^*=0</annotation></semantics></math>,
+but that Hessian is not Lipschitz at zero. For
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">x&gt;0</annotation></semantics></math>,
+the exact Newton update is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mo>+</mo></msub><mo>=</mo><mfrac><mrow><mo stretchy="false" form="prefix">(</mo><mn>5</mn><mi>/</mi><mn>4</mn><mo stretchy="false" form="postfix">)</mo><msup><mi>x</mi><mrow><mn>3</mn><mi>/</mi><mn>2</mn></mrow></msup></mrow><mrow><mn>1</mn><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mn>15</mn><mi>/</mi><mn>4</mn><mo stretchy="false" form="postfix">)</mo><msqrt><mi>x</mi></msqrt></mrow></mfrac></mrow><annotation encoding="application/x-tex">x_+=\frac{(5/4)x^{3/2}}{1+(15/4)\sqrt{x}}</annotation></semantics></math>:
+its error is asymptotically proportional to
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>x</mi><mrow><mn>3</mn><mi>/</mi><mn>2</mn></mrow></msup><annotation encoding="application/x-tex">x^{3/2}</annotation></semantics></math>,
+rather than
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>x</mi><mn>2</mn></msup><annotation encoding="application/x-tex">x^2</annotation></semantics></math>.
+The iterates can converge superlinearly without having the quadratic
+rate claimed by the stronger theorem.</p>
 <p>Damped Newton combines the Newton direction with a line search.
 Modified Newton adds diagonal damping or changes an indefinite
 factorisation to obtain a descent direction. These safeguards provide
