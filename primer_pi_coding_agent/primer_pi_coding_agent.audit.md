@@ -1,10 +1,11 @@
 # Primer audit: Pi Coding Agent
 
 - Issue and milestone: #442; current-documentation refresh after Codex #441.
-- Audit revision: pi-current-docs-audit-v1.
-- Source revision: c193c88ce7f16a2145c4be27dd53f7feb6668422
-- Reviewed revision: c193c88ce7f16a2145c4be27dd53f7feb6668422
-- Source SHA256: 1a8edd490e0f3fb58f864a89da5a3d15b5fb3320aa2e20c7dd471a90e0ee0fd0.
+- Audit revision: pi-first-run-473-v1.
+- Audit schema: 2
+- Source revision: db93a99128b8424698f73c321d24e624d578b7ac
+- Reviewed revision: db93a99128b8424698f73c321d24e624d578b7ac
+- Source SHA256: aa9d213fd1787ea29e248c28998095dae9db76ea1ab8fee3f4f81b4dfb2b1340.
 - Tracked path: primer_pi_coding_agent/primer_pi_coding_agent.audit.md
 - Starting branch: docs/442-pi-current-refresh.
 - Reviewer(s): Codex independent content reviewer, gpt-6.1-sol/high; separate documentation researcher and publication coordinator.
@@ -13,9 +14,9 @@
 - Core-concept depth matrix: brief pi-current-docs-v1; all nine stable IDs and unchanged tiers (eight primary, one reference-only).
 - Teaching-case contract: primer_pi_coding_agent/primer_pi_coding_agent.case.md.
 - Review boundary: complete 1022-line baseline source and complete brief/case/research evidence read; complete refreshed diff, changed passages and dependent routes reviewed at 340fc52, then final three source corrections reread at c193c88. Current primary-documentation and synthetic RPC evidence supplied by separate researcher/main. No live Pi/provider, package-security or complete Rocker execution.
-- Readiness decision: ready
+- Readiness decision: not-ready; the current structural review is outstanding.
 
-**Content gate: pass. Release readiness: ready**, following the coordinator’s final verification recorded below. Earlier pending statements describe the independent reviewer’s draft checkpoint and are superseded by that verification. All eight primary routes supply actual reasoning, action, interpreted result and material limit. Source line ranges below refer to `primer_pi_coding_agent/primer_pi_coding_agent.md` at the reviewed commit. Current output checks and synthetic protocol tests do not certify live provider behaviour or execute the illustrative Rocker case.
+**Historical #442 decision: content gate passed and release readiness was ready**, following the coordinator’s verification recorded below. The current #473 structural review remains outstanding and supersedes that historical readiness decision. Earlier pending statements describe the independent reviewer’s draft checkpoint and are superseded by that verification. All eight primary routes supply actual reasoning, action, interpreted result and material limit. Source line ranges below refer to `primer_pi_coding_agent/primer_pi_coding_agent.md` at the reviewed commit. Current output checks and synthetic protocol tests do not certify live provider behaviour or execute the illustrative Rocker case.
 
 ## Whole-document review
 
@@ -192,7 +193,8 @@ The shared template/navigation/rendering components are unchanged ordinary conte
 | Handoff | ready for review | Main owns final mechanical/visual evidence and release decision. |
 
 - Content gate: **pass**
-- Release readiness: **ready**
+- Structural gate: **not-checked**; a current whole-document structural review remains outstanding.
+- Release readiness: **not-ready**
 
 ## Execution and render evidence
 
@@ -225,6 +227,11 @@ Content gate **pass** and release readiness **ready for PR review**, without a l
 The pipeline rebuild changed PDF binary bytes; pinned Poppler extraction compared byte-for-byte identical to the visually reviewed final PDF text (`cmp pi-final-pdf.txt pi-pipeline-pdf.txt`: pass). Source and HTML were unchanged. This is text-equivalence evidence, not a claim of binary or pixel identity. Final brief/audit schema, Git-backed binding/locator validation and `git diff --check` passed again after the audit results were recorded.
 
 Pre-merge editorial review, 19 November 2026: source unchanged from c193c88; independent reviewer confirmed no substantive blocker or execution overclaim. Reconciled stale pending-check wording with completed coordinator verification; no concept, route, tier, source claim or output changed.
+
+## Outline and hierarchy review
+
+- Source read coverage: 127-155
+- Rendered contents: **not-checked**; this focused review inspected the first-run section and its PDF page break, not the whole outline.
 
 ## Issue #473: first-run revision review
 
