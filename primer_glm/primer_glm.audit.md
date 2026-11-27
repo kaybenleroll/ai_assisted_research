@@ -317,7 +317,7 @@ On 25 November at commit `3986eb8`, `just primer-audit primer_glm` passed: revis
 
 - Content gate: **pass** (the former r01/c22 gap was independently reviewed after correction; the then-current source was reread and 26 concept-cell roles were inspected within the stated scope; the later correction received scoped review)
 - Structural gate: **pass** (the earlier source hierarchy, complete primary HTML contents and sampled PDF contents destinations were independently reviewed; the correction did not change the hierarchy)
-- Release readiness: **pending** current-head CI and PR review. The CI pass at `c024979` is historical; the later `190d12d` changes source and outputs. Advisory link and accessibility limitations above remain disclosed.
+- Release readiness: **not-ready** pending current-head CI and PR review. The CI pass at `c024979` is historical; the later `190d12d` changes source and outputs. Advisory link and accessibility limitations above remain disclosed.
 
 ## Pilot learning
 
