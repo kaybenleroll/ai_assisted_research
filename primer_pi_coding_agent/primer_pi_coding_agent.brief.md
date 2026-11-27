@@ -1,8 +1,8 @@
 # Primer brief: Pi Coding Agent
 
 - Issue and milestone: #442, current-documentation refresh, after Codex #441.
-- Brief revision: pi-current-docs-v1
-- Source revision: 6793909
+- Brief revision: pi-comparison-placement-v2
+- Source revision: 2459537
 - Tracked path: primer_pi_coding_agent/primer_pi_coding_agent.brief.md
 - Reader: experienced Claude Code user evaluating, configuring and supervising Pi for a bounded repository task.
 - Prerequisites: terminal, Git, repository instructions and basic Claude Code concepts; TypeScript reading helpful for extension route.
@@ -63,6 +63,8 @@
 | rocker | case-runtime | Full project inputs and current execution missing | Narrow to illustrative fixture and historical test; list missing assets explicitly | Reader understands what must be supplied to reproduce |
 
 ## Post-draft teaching-depth checkpoint
+
+The following checkpoint is historical at its stated draft revision; #475 changes the later section placement without changing route scope.
 
 - Draft source revision: c193c88ce7f16a2145c4be27dd53f7feb6668422
 - Brief revision reviewed: pi-current-docs-v1
