@@ -2,7 +2,7 @@
 
 - Issue and milestone: #442, current-documentation refresh, after Codex #441.
 - Brief revision: pi-current-docs-v1
-- Source revision: c193c88ce7f16a2145c4be27dd53f7feb6668422
+- Source revision: 6793909
 - Tracked path: primer_pi_coding_agent/primer_pi_coding_agent.brief.md
 - Reader: experienced Claude Code user evaluating, configuring and supervising Pi for a bounded repository task.
 - Prerequisites: terminal, Git, repository instructions and basic Claude Code concepts; TypeScript reading helpful for extension route.
@@ -93,3 +93,7 @@ The coordinator followed all eight primary routes against their planned traces a
 | containment | primary | trust-isolation | Authority and isolation | Choose process and container boundary | Trust gates resources; OS controls actual access | Prevent confusing prompts with enforcement | Host Pi versus restricted analysis container | `--no-mcp` and rootless mounts | Analysis isolation does not restrict host agent | Mounts, network and credentials define exposure | Supervised and unattended runs | Security, settings, containerisation docs |
 | rocker | primary | reproducible-case | Analysis acceptance | Apply fixture and validate both implementations | Contract, locked environment and independent comparison separate expectations from model output | Make results reviewable | Synthetic temperature project | Two A readings mean 5.70; B 3.40; missing-only group excluded | Expected rows are conditional on unprovided cleaners/tests | No current full case run; bootstrap and host agent remain risks | Adapt project with supplied code and locks | Rocker digest and reproducibility sources; case contract |
 | comparison | reference-only | agent-comparison | Agent lookup | Find a starting migration comparison | Products differ in bundled defaults and controls | Avoid assumed feature parity | Dated comparison table | Pi, Claude Code, Codex, OpenCode and Aider | Verify actual version and permissions | Not a benchmark or exhaustive catalogue | Select targeted official documentation | Current primary product docs |
+
+## Issue #473: first-run baseline amendment
+
+At historical source revision `629d566`, with SHA-256 `2da79108a2f215417efac09acdb315d2f0460efb96885aa8b218d44984c448c2`, retain the `first-run` / `harness-control` route and its illustrative Pi boundary. The disposable repository now starts with a committed README using a command-local identity; the reader verifies the initial commit and compares both staged and unstaged tracked changes against it, then inspects untracked files separately. The baseline and diff commands can be tested without running Pi or a provider. Earlier revision and locator references remain historical.

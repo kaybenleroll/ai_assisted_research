@@ -129,19 +129,23 @@ The commands above target macOS and Linux. Pi also documents [native Windows and
 The first session should prove the complete control loop, not demonstrate how much work Pi can do unattended. Use a disposable project:
 
 ```bash
-mkdir -p ~/tmp/pi-first-run && cd ~/tmp/pi-first-run
+project_dir=$(mktemp -d "${TMPDIR:-/tmp}/pi-first-run.XXXXXX")
+cd "$project_dir"
 git init
 printf '# Pi test project\n' > README.md
+git add README.md
+git -c user.name="Pi Example" -c user.email="pi-example@example.invalid" \
+  commit -m "Initial README"
 pi --version
 ```
 
-Then work through this sequence:
+The initial commit supplies a baseline for the diff. The one-command identity applies only to that commit and does not change your Git configuration. Then work through this sequence:
 
 1. **Authenticate and choose one model.** Use `/login` or one environment variable (see "Hosted authentication" in the next section), then `/model`. Start with one tool-capable hosted model or one already-tested local model. Do not add routing or fallbacks before the basic loop works.
 2. **Orient with restricted tools.** Start Pi with `pi --no-mcp --tools read,grep,find,ls`, then send the prompt below. This removes editing and shell tools and disables built-in MCP for the run; `--tools` alone now keeps MCP tools unless it explicitly filters them. Loaded extensions still execute with your permissions, so this is a tool-selection check, not operating-system containment.
 3. **Check what Pi loaded.** The working directory is the project: Pi discovers instructions and configuration from it and groups sessions by it. The startup header lists the context files and skills that loaded. If the folder holds `.pi/` resources or `.agents/skills`, Pi first asks whether to trust the project (see "Safety and containment").
-4. **Make one supervised change.** Restart without `--tools`. Choose a small documentation or test change. Ask Pi to explain its plan, edit only the named files, run one check, and stop.
-5. **Inspect independently.** Run `git status`, `git diff`, and the project's check command yourself. Keep or revert the change on evidence, not on Pi's confidence.
+4. **Make one supervised change.** Restart without `--tools`. Choose a small documentation or test change. Ask Pi to explain its plan, edit only the named files, make no commit, run one check, and stop.
+5. **Inspect independently.** Run `git log --oneline`, `git status --short`, and `git diff --cached -- README.md` and `git diff -- README.md` yourself; confirm the initial commit is still `HEAD`. The first diff shows staged edits against `HEAD`; the second shows unstaged edits against the index. Inspect both: opposite edits can cancel in a single diff against `HEAD`. Inspect any untracked files listed by status separately: Git diffs do not show their contents. Run the project's check command yourself if the change has one. Keep or revert the change on evidence, not on Pi's confidence.
 
 ```text
 Inspect this repository. Report the files, likely project type,
@@ -837,7 +841,7 @@ date,station_id,n_valid,mean_temp_c,min_temp_c,max_temp_c
 2026-01-01,B,1,3.40,3.40,3.40
 ```
 
-The fixture has no unknown flag or malformed date, so add those failure cases to the unit tests as small in-memory inputs. The acceptance gate is `scripts/compare_outputs.py`, which you write, not Pi. It reads `outputs/daily_summary_r.csv` and `outputs/daily_summary_py.csv`, checks each header, compares each row with the expected file (exact keys and counts, `mean_temp_c` within the tolerance), and exits non-zero on any difference. Row-by-row comparison against a sorted file also checks the sort order.
+The fixture has no unknown flag or malformed date, so add those failure cases to the unit tests as small in-memory inputs. The acceptance gate is `scripts/compare_outputs.py`, which you write, not Pi. It reads `outputs/daily_summary_r.csv` and `outputs/daily_summary_py.csv` and compares each independently with the expected file. Reject an incorrect header, row count, duplicate key, or row order; the expected rows are already sorted by date and then station ID in byte-wise order. Require UTF-8, LF line endings, no quoting, an integer count, and exactly two decimal places for each temperature. Compare the date, station ID, count, minimum, and maximum exactly against the corresponding expected row; compare the parsed mean numerically with an absolute tolerance of `0.01`. Also compare the two output means with each other using the same tolerance: two means can each be within `0.01` of expected but more than `0.01` apart. For example, if expected is `10.00`, reject output means `9.99` and `10.01`. Reject malformed or non-finite numbers and exit non-zero for any mismatch. For a negative check, change only station A's minimum from `5.10` to `5.20`: even with the correct count, mean, and maximum, the comparator must reject that row.
 
 ### Give Pi Bounded Tasks
 

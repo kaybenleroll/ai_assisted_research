@@ -365,10 +365,32 @@ class PrimerAuditTests(unittest.TestCase):
             root = Path(temporary) / "checkout"
             subprocess.run(["git", "clone", "--quiet", "--shared", str(repository), str(root)], check=True)
             self.git_repo(root)
+            # Tracked historical evidence keeps the fixed baseline available in shallow clones.
+            fixture = repository / "maintenance/tests/fixtures/pi-legacy"
+            for path in fixture.iterdir():
+                shutil.copyfile(path, root / "primer_pi_coding_agent" / path.name)
+            subprocess.run(["git", "add", "primer_pi_coding_agent"], cwd=root, check=True)
+            subprocess.run(["git", "commit", "--allow-empty", "-qm", "historical Pi fixture"],
+                           cwd=root, check=True)
+            revision = subprocess.run(["git", "rev-parse", "HEAD"], cwd=root, check=True,
+                                      text=True, capture_output=True).stdout.strip()
+            fixture_revision = revision
+            old_revision = "c193c88ce7f16a2145c4be27dd53f7feb6668422"
+            name = "primer_pi_coding_agent"
+            audit = root / name / f"{name}.audit.md"
+            brief = root / name / f"{name}.brief.md"
+            original_digest = "334eba0c311f2633530fc71f3bc5306e056007e5cc8db66110099d254a27983b"
+            self.assertEqual(hashlib.sha256(audit.read_bytes()).hexdigest(), original_digest)
+            for path in (audit, brief):
+                path.write_text(path.read_text().replace(old_revision, revision), encoding="utf-8")
+            fixture_digest = hashlib.sha256(audit.read_bytes()).hexdigest()
             checker = root / "maintenance/scripts/check/primer_audit.py"
-            shutil.copyfile(SCRIPT, checker)
+            checker.write_text(SCRIPT.read_text().replace(original_digest, fixture_digest), encoding="utf-8")
             registry = root / "maintenance/docs/primer-audit-legacy.json"
-            shutil.copyfile(repository / "maintenance/docs/primer-audit-legacy.json", registry)
+            registry.write_text((repository / "maintenance/docs/primer-audit-legacy.json").read_text().replace(
+                original_digest, fixture_digest), encoding="utf-8")
+            subprocess.run(["git", "add", str(audit), str(brief)], cwd=root, check=True)
+            subprocess.run(["git", "commit", "-qm", "bind fixture evidence"], cwd=root, check=True)
             def project(name):
                 return subprocess.run(["python3", "-I", str(checker), "--repo-root", str(root),
                                        "--project", name], text=True, capture_output=True)
@@ -394,7 +416,8 @@ class PrimerAuditTests(unittest.TestCase):
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("not in the fixed historical baseline", result.stderr)
             # A new unversioned project is discovered and rejected, even if registry-edited.
-            shutil.copyfile(repository / "maintenance/docs/primer-audit-legacy.json", registry)
+            registry.write_text((repository / "maintenance/docs/primer-audit-legacy.json").read_text().replace(
+                original_digest, fixture_digest), encoding="utf-8")
             new = root / "primer_new"
             new.mkdir()
             source = new / "primer_pi_coding_agent.md"
@@ -407,7 +430,7 @@ class PrimerAuditTests(unittest.TestCase):
             old_revision = "c193c88ce7f16a2145c4be27dd53f7feb6668422"
             for kind in ("brief", "audit"):
                 original = (root / name / f"{name}.{kind}.md").read_text()
-                (new / f"primer_new.{kind}.md").write_text(original.replace(old_revision, revision))
+                (new / f"primer_new.{kind}.md").write_text(original.replace(fixture_revision, revision))
             # Restore old project so only the new project is relevant.
             subprocess.run(["git", "checkout", "--", str(brief.relative_to(root)),
                             str(audit.relative_to(root))], cwd=root, check=True)
@@ -422,7 +445,8 @@ class PrimerAuditTests(unittest.TestCase):
             result = project("primer_new")
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("not in the fixed historical baseline", result.stderr)
-            shutil.copyfile(repository / "maintenance/docs/primer-audit-legacy.json", registry)
+            registry.write_text((repository / "maintenance/docs/primer-audit-legacy.json").read_text().replace(
+                original_digest, fixture_digest), encoding="utf-8")
             new_audit = new / "primer_new.audit.md"
             content = new_audit.read_text(encoding="utf-8")
             line_count = len(source.read_text(encoding="utf-8").splitlines())
@@ -465,6 +489,28 @@ class PrimerAuditTests(unittest.TestCase):
             ranges = MODULE.changed_ranges(root, base, source)
             self.assertEqual(ranges, [(2, 2)])
             self.assertEqual(MODULE.impacted_locators(root, audit, ranges), ["audit:2: primer.md:2"])
+
+
+class PiFirstRunTests(unittest.TestCase):
+    def test_staged_and_unstaged_edits_do_not_disappear(self):
+        with tempfile.TemporaryDirectory() as root:
+            def git(*args):
+                return subprocess.run(["git", "-C", root, *args], check=True,
+                                      text=True, capture_output=True).stdout
+
+            git("init", "-q")
+            git("config", "user.name", "Fixture")
+            git("config", "user.email", "fixture@example.org")
+            readme = Path(root) / "README.md"
+            readme.write_text("original\n")
+            git("add", "README.md")
+            git("commit", "-qm", "baseline")
+            readme.write_text("staged\n")
+            git("add", "README.md")
+            readme.write_text("original\n")
+            self.assertEqual(git("diff", "HEAD", "--", "README.md"), "")
+            self.assertIn("+staged", git("diff", "--cached", "--", "README.md"))
+            self.assertIn("+original", git("diff", "--", "README.md"))
 
 
 if __name__ == "__main__":

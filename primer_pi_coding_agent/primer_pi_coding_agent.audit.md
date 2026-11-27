@@ -1,10 +1,11 @@
 # Primer audit: Pi Coding Agent
 
 - Issue and milestone: #442; current-documentation refresh after Codex #441.
-- Audit revision: pi-current-docs-audit-v1.
-- Source revision: c193c88ce7f16a2145c4be27dd53f7feb6668422
-- Reviewed revision: c193c88ce7f16a2145c4be27dd53f7feb6668422
-- Source SHA256: 1a8edd490e0f3fb58f864a89da5a3d15b5fb3320aa2e20c7dd471a90e0ee0fd0.
+- Audit revision: pi-first-run-473-v1.
+- Audit schema: 2
+- Source revision: 6793909
+- Reviewed revision: 6793909
+- Source SHA256: adfb67c914fb3ad8f35f96257e7338bd34692f164582e52a93211856e6b475b9.
 - Tracked path: primer_pi_coding_agent/primer_pi_coding_agent.audit.md
 - Starting branch: docs/442-pi-current-refresh.
 - Reviewer(s): Codex independent content reviewer, gpt-6.1-sol/high; separate documentation researcher and publication coordinator.
@@ -15,7 +16,7 @@
 - Review boundary: complete 1022-line baseline source and complete brief/case/research evidence read; complete refreshed diff, changed passages and dependent routes reviewed at 340fc52, then final three source corrections reread at c193c88. Current primary-documentation and synthetic RPC evidence supplied by separate researcher/main. No live Pi/provider, package-security or complete Rocker execution.
 - Readiness decision: ready
 
-**Content gate: pass. Release readiness: ready**, following the coordinator’s final verification recorded below. Earlier pending statements describe the independent reviewer’s draft checkpoint and are superseded by that verification. All eight primary routes supply actual reasoning, action, interpreted result and material limit. Source line ranges below refer to `primer_pi_coding_agent/primer_pi_coding_agent.md` at the reviewed commit. Current output checks and synthetic protocol tests do not certify live provider behaviour or execute the illustrative Rocker case.
+**Historical #442 decision: content gate passed and release readiness was ready**, following the coordinator’s verification recorded below. The current #473/#474 source review is recorded below; release readiness follows the final integration checks recorded below. Earlier pending statements describe the independent reviewer’s draft checkpoint and are superseded by that verification. All eight primary routes supply actual reasoning, action, interpreted result and material limit. Source line ranges below refer to `primer_pi_coding_agent/primer_pi_coding_agent.md` at the reviewed commit. Current output checks and synthetic protocol tests do not certify live provider behaviour or execute the illustrative Rocker case.
 
 ## Whole-document review
 
@@ -96,20 +97,19 @@ All reader-facing transitions remain illustrative: no Pi/provider or full case o
 
 ## Adversarial depth gate
 
-Each row has independently read mechanism, reader action, interpreted result and material limitation. No passing fixture, test or locator alone supplies this judgement. All IDs/tiers match the brief; no scope reduction was used to evade a primary gap.
+The historical #442 review remains in Git history. Current-source locators below were re-read against their stated explanation, action, interpretation and limit; the findings are a source review, not evidence of a live provider or full case run. IDs and tiers remain unchanged.
 
 | route_id | route tier | concept_id | explanation locator | example/action locator | interpretation locator | limitation locator | evidence revision | reviewer | status | finding | scope decision |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| first-run | primary | harness-control | primer_pi_coding_agent/primer_pi_coding_agent.md:29 | primer_pi_coding_agent/primer_pi_coding_agent.md:141 | primer_pi_coding_agent/primer_pi_coding_agent.md:151 | primer_pi_coding_agent/primer_pi_coding_agent.md:159 | c193c88ce7f16a2145c4be27dd53f7feb6668422 | Codex independent content reviewer | verified | Restricted tool orientation, observed diff and failed-layer recovery teach actual control loop. | Retain route/tier and explicit verification boundary. |
-| models | primary | provider-auth | primer_pi_coding_agent/primer_pi_coding_agent.md:178 | primer_pi_coding_agent/primer_pi_coding_agent.md:194 | primer_pi_coding_agent/primer_pi_coding_agent.md:207 | primer_pi_coding_agent/primer_pi_coding_agent.md:180 | c193c88ce7f16a2145c4be27dd53f7feb6668422 | Codex independent content reviewer | verified | Credential precedence and compatible/local endpoint decisions are interpreted against tool/billing limits. | Retain route/tier and explicit verification boundary. |
-| automation | primary | rpc-completion | primer_pi_coding_agent/primer_pi_coding_agent.md:265 | primer_pi_coding_agent/primer_pi_coding_agent.md:267 | primer_pi_coding_agent/primer_pi_coding_agent.md:361 | primer_pi_coding_agent/primer_pi_coding_agent.md:380 | c193c88ce7f16a2145c4be27dd53f7feb6668422 | Codex independent content reviewer | verified | Disposition/early settlement/final stop/deadline handling taught in bounded sample; SDK lifecycle does not claim success. | Retain route/tier and explicit verification boundary. |
-| customisation | primary | extension-boundary | primer_pi_coding_agent/primer_pi_coding_agent.md:386 | primer_pi_coding_agent/primer_pi_coding_agent.md:438 | primer_pi_coding_agent/primer_pi_coding_agent.md:535 | primer_pi_coding_agent/primer_pi_coding_agent.md:487 | c193c88ce7f16a2145c4be27dd53f7feb6668422 | Codex independent content reviewer | verified | Guidance versus executable resources, concrete tool/error/gate and MCP exposure support minimum-capability choice. | Retain route/tier and explicit verification boundary. |
-| research | primary | source-discovery | primer_pi_coding_agent/primer_pi_coding_agent.md:545 | primer_pi_coding_agent/primer_pi_coding_agent.md:560 | primer_pi_coding_agent/primer_pi_coding_agent.md:626 | primer_pi_coding_agent/primer_pi_coding_agent.md:592 | c193c88ce7f16a2145c4be27dd53f7feb6668422 | Codex independent content reviewer | verified | Known source versus discovery, reviewed helper workflow and evidence table explain current-source research with data/code limits. | Retain route/tier and explicit verification boundary. |
-| sessions | primary | session-continuity | primer_pi_coding_agent/primer_pi_coding_agent.md:644 | primer_pi_coding_agent/primer_pi_coding_agent.md:647 | primer_pi_coding_agent/primer_pi_coding_agent.md:663 | primer_pi_coding_agent/primer_pi_coding_agent.md:667 | c193c88ce7f16a2145c4be27dd53f7feb6668422 | Codex independent content reviewer | verified | Tree/summary/disk distinctions and factual handoff preserve decisions without implying filesystem rewind or safe upload. | Retain route/tier and explicit verification boundary. |
-| containment | primary | trust-isolation | primer_pi_coding_agent/primer_pi_coding_agent.md:692 | primer_pi_coding_agent/primer_pi_coding_agent.md:733 | primer_pi_coding_agent/primer_pi_coding_agent.md:740 | primer_pi_coding_agent/primer_pi_coding_agent.md:704 | c193c88ce7f16a2145c4be27dd53f7feb6668422 | Codex independent content reviewer | verified | Trust/tool/OS controls and host-agent/analysis-container counterexample have concrete resource consequences. | Retain route/tier and explicit verification boundary. |
-| rocker | primary | reproducible-case | primer_pi_coding_agent/primer_pi_coding_agent.md:782 | primer_pi_coding_agent/primer_pi_coding_agent.md:823 | primer_pi_coding_agent/primer_pi_coding_agent.md:832 | primer_pi_coding_agent/primer_pi_coding_agent.md:776 | c193c88ce7f16a2145c4be27dd53f7feb6668422 | Codex independent content reviewer | verified | Contract→hand-worked expectation→protected comparator→conditional actual acceptance is coherent within explicit missing-assets scope. | Retain route/tier and explicit verification boundary. |
-| comparison | reference-only | agent-comparison | primer_pi_coding_agent/primer_pi_coding_agent.md:750 | primer_pi_coding_agent/primer_pi_coding_agent.md:752 | primer_pi_coding_agent/primer_pi_coding_agent.md:762 | primer_pi_coding_agent/primer_pi_coding_agent.md:772 | c193c88ce7f16a2145c4be27dd53f7feb6668422 | Codex independent content reviewer | verified | Dated product lookup remains non-benchmark, non-exhaustive reference with version/permission caveats. | Retain route/tier and explicit verification boundary. |
-
+| first-run | primary | harness-control | primer_pi_coding_agent/primer_pi_coding_agent.md:29 | primer_pi_coding_agent/primer_pi_coding_agent.md:132 | primer_pi_coding_agent/primer_pi_coding_agent.md:148 | primer_pi_coding_agent/primer_pi_coding_agent.md:146 | 6793909 | Codex current-source reviewer | verified | Baseline, restricted orientation and independent inspection make the supervised loop observable; execution is Git-only. | Retain route and explicit limits. |
+| models | primary | provider-auth | primer_pi_coding_agent/primer_pi_coding_agent.md:182 | primer_pi_coding_agent/primer_pi_coding_agent.md:194 | primer_pi_coding_agent/primer_pi_coding_agent.md:190 | primer_pi_coding_agent/primer_pi_coding_agent.md:184 | 6793909 | Codex current-source reviewer | verified | Credential precedence and compatible endpoint configuration support diagnosis; account metering remains measured, not inferred. | Retain route and explicit limits. |
+| automation | primary | rpc-completion | primer_pi_coding_agent/primer_pi_coding_agent.md:269 | primer_pi_coding_agent/primer_pi_coding_agent.md:271 | primer_pi_coding_agent/primer_pi_coding_agent.md:365 | primer_pi_coding_agent/primer_pi_coding_agent.md:384 | 6793909 | Codex current-source reviewer | verified | Acceptance, settlement and stop reasons distinguish response state from correctness; synthetic streams are not live Pi. | Retain route and explicit limits. |
+| customisation | primary | extension-boundary | primer_pi_coding_agent/primer_pi_coding_agent.md:390 | primer_pi_coding_agent/primer_pi_coding_agent.md:442 | primer_pi_coding_agent/primer_pi_coding_agent.md:521 | primer_pi_coding_agent/primer_pi_coding_agent.md:491 | 6793909 | Codex current-source reviewer | verified | Guidance, tool registration and exposure lead to a minimum capability choice; in-process gates do not isolate. | Retain route and explicit limits. |
+| research | primary | source-discovery | primer_pi_coding_agent/primer_pi_coding_agent.md:545 | primer_pi_coding_agent/primer_pi_coding_agent.md:549 | primer_pi_coding_agent/primer_pi_coding_agent.md:630 | primer_pi_coding_agent/primer_pi_coding_agent.md:604 | 6793909 | Codex current-source reviewer | verified | Known-source retrieval and discovery brief distinguish evidence from search leads; browser and package access have trust limits. | Retain route and explicit limits. |
+| sessions | primary | session-continuity | primer_pi_coding_agent/primer_pi_coding_agent.md:648 | primer_pi_coding_agent/primer_pi_coding_agent.md:663 | primer_pi_coding_agent/primer_pi_coding_agent.md:667 | primer_pi_coding_agent/primer_pi_coding_agent.md:671 | 6793909 | Codex current-source reviewer | verified | Branching and compaction guide hand-off; a conversation branch does not reset files and transcripts may contain secrets. | Retain route and explicit limits. |
+| containment | primary | trust-isolation | primer_pi_coding_agent/primer_pi_coding_agent.md:696 | primer_pi_coding_agent/primer_pi_coding_agent.md:706 | primer_pi_coding_agent/primer_pi_coding_agent.md:710 | primer_pi_coding_agent/primer_pi_coding_agent.md:708 | 6793909 | Codex current-source reviewer | verified | Trust, selected tools and operating-system boundaries answer different questions; context files remain ungated. | Retain route and explicit limits. |
+| rocker | primary | reproducible-case | primer_pi_coding_agent/primer_pi_coding_agent.md:786 | primer_pi_coding_agent/primer_pi_coding_agent.md:836 | primer_pi_coding_agent/primer_pi_coding_agent.md:844 | primer_pi_coding_agent/primer_pi_coding_agent.md:780 | 6793909 | Codex current-source reviewer | verified | Fixture and hand-derived expectation feed an independently specified comparator; full implementations and run are absent. | Retain route and explicit limits. |
+| comparison | reference-only | agent-comparison | primer_pi_coding_agent/primer_pi_coding_agent.md:754 | primer_pi_coding_agent/primer_pi_coding_agent.md:764 | primer_pi_coding_agent/primer_pi_coding_agent.md:770 | primer_pi_coding_agent/primer_pi_coding_agent.md:776 | 6793909 | Codex current-source reviewer | verified | Reference comparison distinguishes product choices and dates dependencies; it is not a benchmark. | Retain route and explicit limits. |
 
 ## Sources, freshness and residual limits
 
@@ -191,7 +191,8 @@ The shared template/navigation/rendering components are unchanged ordinary conte
 | Revision review | pass | Baseline full reading, substantive committed diff and final three repairs genuinely reread. |
 | Handoff | ready for review | Main owns final mechanical/visual evidence and release decision. |
 
-- Content gate: **pass**
+- Content gate: **pass**; current route locators and teaching limits were reviewed; whole-outline review remains separate.
+- Structural gate: **pass**; source hierarchy and rendered contents were reviewed as recorded above.
 - Release readiness: **ready**
 
 ## Execution and render evidence
@@ -225,3 +226,54 @@ Content gate **pass** and release readiness **ready for PR review**, without a l
 The pipeline rebuild changed PDF binary bytes; pinned Poppler extraction compared byte-for-byte identical to the visually reviewed final PDF text (`cmp pi-final-pdf.txt pi-pipeline-pdf.txt`: pass). Source and HTML were unchanged. This is text-equivalence evidence, not a claim of binary or pixel identity. Final brief/audit schema, Git-backed binding/locator validation and `git diff --check` passed again after the audit results were recorded.
 
 Pre-merge editorial review, 19 November 2026: source unchanged from c193c88; independent reviewer confirmed no substantive blocker or execution overclaim. Reconciled stale pending-check wording with completed coordinator verification; no concept, route, tier, source claim or output changed.
+
+## Outline and hierarchy review
+
+- Source read coverage: 1-150, 151-300, 301-450, 451-600, 601-750, 751-900, 901-1050, 1051-1086
+- Rendered contents: **checked**; HTML contents and headings at source `629d566` were read in order. `python3 -I maintenance/scripts/check/primer_outline_compare.py primer_pi_coding_agent/primer_pi_coding_agent.md primer_pi_coding_agent/primer_pi_coding_agent.html` reported no H2/H3 candidate differences; this is advisory.
+
+| Actual section and hierarchy at reviewed revision | Purpose and parent/child relationship | Adjacent sibling boundary and rationale | Finding and disposition |
+|---|---|---|---|
+| Short Version and exclusions 5–21 | Orientation and prerequisite boundary. | Overview 7–13 precedes harness mechanism 23–76; keeping them separate gives a route map before detail. | Retain: short orientation is a map, not an unsupported teaching substitute. |
+| How Pi Works 23–101 | Model, harness, tool and environment roles, followed by capabilities, rationale and migration map. | Migration map 78–101 identifies what to carry over; first run 103–157 tests it in practice. | Retain: explanation precedes supervised use. |
+| Installation and First Run 103–163 | Installation alternatives, controlled session and terminal steering support first action. | The first run 127–157 needs one model; models 165–237 then explains provider choices and diagnostics in depth. | Retain: a small first run motivates the provider chapter. |
+| Models and Authentication 165–237 | Hosted credentials and local endpoints share selection but distinguish protocols and limits. | Layered tool-call check 237 leads to non-interactive execution modes 239–271; running modes are a distinct integration decision. | Retain: placing automation here lets a reader establish provider readiness first. |
+| Running Pi Non-Interactively 239–384 | Print, events, RPC and SDK form alternatives, with a worked state machine. | SDK trust boundary 384 leads to customisation mechanisms 386–390; modes and executable capabilities answer different questions. | Retain: the long unheaded RPC block is one continuous example; splitting it would interrupt the state machine. |
+| Customisation 386–541 | Context, templates, skills, code and distribution progress from guidance to authority. | Starter suite 525–541 selects capabilities; research 543–558 applies that choice to external evidence. | Retain: the next chapter supplies concrete data-path decisions. |
+| Web Research 543–640 | Known sources, discovery, browser and forum routes build from narrow retrieval to richer access. | Source-validation brief 630–640 precedes sessions and hand-off 642–684, which preserves evidence across work. | Retain: a source table is useful input to a hand-off. |
+| Sessions, Hand-Off and Workflow 642–692 | Conversation tree, sensitive sharing and practical workflow connect research to implementation. | Independent verification 690 precedes safety 694–710, which explains the actual authority boundary. | Retain: workflow organisation and isolation are separate decisions. |
+| Safety and Containment 694–750 | Trust, process isolation and network/data risks separate three controls. | Safety decisions 704–750 support the case at 780–977; comparison 752–776 currently intervenes as tool-choice reference. Moving the comparison after the case would make the applied path continuous, while its present position offers a choice before investing in the case. | No structural failure identified; retain for this audit, with the separate #475 editorial question still open. |
+| Pi Compared With Other Coding Agents 752–776 | Comparison children distinguish product pairs and derivative trust. | Fork caveat 772–776 ends tool selection; worked case 778–791 demonstrates Pi-specific use. | Retain as reference; no benchmark or universal recommendation claimed. |
+| Worked Example 778–977 | Contract and fixture lead to tasks, pinned image, runtime and independent acceptance. | Acceptance and host-boundary limits 966–977 lead to reference troubleshooting 979–997; lookup supports later failures without replacing the case. | Retain named stages; the complete project remains illustrative. |
+| Reference 979–1078 | Troubleshooting, configuration, glossary and sources serve distinct lookup needs. | Source map 1047–1078 precedes closing perspective 1080–1086; one is a reference index, the other synthesises choice. | Retain: glossary and closing have different reader jobs. |
+| Closing Perspective 1080–1086 | Synthesis and a bounded first week. | Ends the journey after reference and points back to first run and case. | Retain: brief synthesis is justified by preceding routes. |
+
+## Issue #473: first-run revision review
+
+At historical source revision `629d566`, the affected source was bound by SHA-256 `2da79108a2f215417efac09acdb315d2f0460efb96885aa8b218d44984c448c2`; the earlier commit-bound whole-document audit and its locators remain historical. The changed `first-run` / `harness-control` route at source lines 127–154 now creates a unique disposable repository, commits the README with a command-local identity, asks Pi not to commit, checks that the baseline remains HEAD, compares the tracked file with HEAD, and calls out separate inspection of untracked files. This repairs the claimed independent evidence without changing the route's illustrative status or asserting a Pi/provider run.
+
+A disposable Git fixture executed the documented initialisation and commit, appended the example sentence, and added an untracked file. `git status --short` showed both; `git diff HEAD -- README.md` showed the added sentence both before and after staging it. No Pi or provider was run. The review is limited to this changed route and its dependent interpretation; the previous audit is not a fresh whole-document audit.
+
+## Issues #473 and #474: comparator clarification
+
+Source `629d566` specifies the expected header, row count, uniqueness, byte-wise order, encoding and numeric formatting, exact keys, counts and extrema, and the numerical mean tolerance. A small independent Python `Decimal` check accepted the expected A row and rejected a row with only its minimum changed from `5.10` to `5.20`. This checks that negative example, not a complete comparator or the illustrative Rocker project. Earlier row-level audit decisions are historical; current rows record the separate source-level locator and route review.
+
+## Current reader-route observations
+
+At source `629d566`, the first-run path (127–157) gives a baseline, supervised action and independently inspectable result; the fixture exercised the Git portion only. The case (780–975) names missing assets, supplies input and independently prepared values, specifies a comparator and returns to host/container boundaries; the negative minimum check exercised one field decision only. The intermediate routes distinguish authentication (169–237), RPC outcome versus correctness (239–384), executable customisation authority (386–541), research evidence (543–640), session state versus filesystem state (642–692), and containment (694–750). The comparison (752–776) and reference (979–1078) offer lookup rather than a replacement for the practical route. These are reader observations from the complete source read, not independent verification of every claim, a row-by-row semantic locator review, or a full structural boundary verdict. The comparison placement question is separately tracked as #475.
+
+## Current semantic locator review
+
+At source `629d566`, the nine matrix rows were checked against the passages named in each explanation, action, interpretation and limitation cell. This rechecks what the source teaches, not whether volatile provider claims are still current or whether illustrative commands ran. The first-run fixture and comparator negative check are the only new executions. The Pi/Rocker case contract was read end to end: its inputs, expected aggregates, comparator and conditional acceptance are present at 786–844 and 966–977, while missing implementations and host authority remain explicit at 780 and 975.
+
+## Final #473/#474 integration verification
+
+`just primer-audit primer_pi_coding_agent` passed in a normal disposable clone at audit commit `f94b9b8`: evidence and revision checks, pinned HTML/PDF rebuild, render QA, freshness, Markdown and offline links passed. The rebuild changed the clone PDF timestamp; the committed PDF was visually sampled separately on pages 1, 8–9, 14, 21, 33–35 and 39. The container uses Pandoc 3.11 image digest `sha256:239428f1d61de725be479c72ada0bbe146a313791ee2d68333114b6c623ad771`. `just check` passed at `72aad24`; the subsequent changes update only this audit review. The complete case and Pi/provider operations remain illustrative and unexecuted; interactive accessibility checks were not performed and the PDF is untagged. #475 remains an open editorial follow-up, not an identified structural failure.
+
+## Review follow-up: cancelling edits and mean tolerance
+
+The first-run instructions now inspect the index and working tree separately. `maintenance/tests/test_primer_audit.py` creates a staged edit reversed in the working tree and verifies that the combined `HEAD` diff is empty while both separate diffs reveal their changes. The comparator specification also requires the two means to be within 0.01 of each other: 9.99 and 10.01 each pass against 10.00 but fail pairwise. A `Decimal` check confirmed this counterexample. These checks do not execute Pi or implement the illustrative comparator.
+
+The audit regression test uses tracked copies of the fixed historical Pi source, brief and audit, so its legacy baseline remains available in shallow clones without weakening the registered digest check.
+
+Follow-up render: `just all` and `just render-qa primer_pi_coding_agent` passed using the repository container. Inspected PDF pages 1, 9, 14, 21, 34 and 39; no clipping or overflow observed. Page 21 supplies the table check; the document has no figures or equations. Interactive accessibility checks were not performed.
