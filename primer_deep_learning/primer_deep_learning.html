@@ -2868,16 +2868,18 @@ typically 32K to 100K tokens, and stop.</p>
 # Next &quot;l o&quot; -&gt; &quot;lo&quot;, then &quot;lo w&quot; -&gt; &quot;low&quot;, and so on.
 # Frequent substrings become single tokens; rare ones stay fragmented.</code></pre>
 <p>A couple of close relatives are worth knowing by name.
-<strong>WordPiece</strong>, used by BERT, follows the same merge-driven
-structure but chooses each merge to maximise the likelihood of the
-training data under a simple language model, rather than picking the
-merge by raw frequency. In practice the vocabularies look similar; the
-selection criterion differs. <strong>SentencePiece</strong> is a toolkit
-that can train BPE or unigram subword models directly on raw sentences,
-treating whitespace as a symbol rather than requiring an external word
-tokenizer. Pre-tokenisation is a design choice of a pipeline, not a
-requirement of the BPE algorithm. Byte-level BPE is another approach
-that can represent text across writing systems. See <a href="https://arxiv.org/abs/1808.06226">SentencePiece</a> and <a href="https://arxiv.org/abs/1909.03341">byte-level subwords</a>.</p>
+<strong>WordPiece</strong>, used by BERT, also uses a subword
+vocabulary; in BERT-style tokenisation, a word is segmented using
+longest available matches, with an unknown-token fallback when it cannot
+be represented. Training and pre-tokenisation details depend on the
+implementation. See <a href="https://arxiv.org/abs/2012.15524">Fast
+WordPiece Tokenization</a> for the tokenisation procedure.
+<strong>SentencePiece</strong> is a toolkit that can train BPE or
+unigram subword models directly on raw sentences, treating whitespace as
+a symbol rather than requiring an external word tokenizer.
+Pre-tokenisation is a design choice of a pipeline, not a requirement of
+the BPE algorithm. Byte-level BPE is another approach that can represent
+text across writing systems. See <a href="https://arxiv.org/abs/1808.06226">SentencePiece</a> and <a href="https://arxiv.org/abs/1909.03341">byte-level subwords</a>.</p>
 <p>Here is the consequence that bites people. The model never sees your
 text. It sees token IDs, and those IDs are an artefact of whatever the
 tokeniser decided. Token segmentation is one factor that can make
