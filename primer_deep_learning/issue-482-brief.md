@@ -2,9 +2,12 @@
 
 - Issue and milestone: #482; depends on #476 and its draft PR #516.
 - Brief revision: `482-brief-v1`.
-- Source revision: `bda64e7666f2c228de6f12b87c9beeaa36831076`, before this revision.
+- Source revision: `2f4f2cba6b5cb8860b64033f3ddbcf1966bd202c`
+- Historical baseline: `bda64e7666f2c228de6f12b87c9beeaa36831076`
+- Reviewed revision: `2f4f2cba6b5cb8860b64033f3ddbcf1966bd202c`
 - Tracked path: `primer_deep_learning/issue-482-brief.md`.
-- Reader and prerequisites: A practitioner familiar with classical ML, basic matrix multiplication and derivatives, but new to neural networks.
+- Reader: A practitioner familiar with classical ML but new to neural networks.
+- Prerequisites: Classical ML, basic matrix multiplication and derivatives.
 - Problem and motivation: Connect architectural mechanisms to training, generation and practical model choice without treating them as black boxes.
 - Intended outcome: Explain core computations and failure modes, follow worked calculations, and make a conditional baseline decision.
 - Scope: Neural networks, optimisation, CNNs, RNNs, attention, LLMs, VAEs, GANs, diffusion, framework and model selection. Retain existing cases, code, figures, equations and links.

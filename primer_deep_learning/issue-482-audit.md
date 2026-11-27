@@ -3,13 +3,15 @@
 - Issue and milestone: #482; depends on #476 / PR #516.
 - Audit revision: `482-audit-draft-v1`.
 - Audit schema: 2
-- Source revision: `2f4f2cba6b5cb8860b64033f3ddbcf1966bd202c`.
+- Source revision: `2f4f2cba6b5cb8860b64033f3ddbcf1966bd202c`
 - Tracked path: `primer_deep_learning/issue-482-audit.md`.
 - Starting branch: `docs/482-deep-learning-audit`.
-- Reviewer: Codex.
+- Reviewer(s): Codex.
 - Date: 2026-11-27.
-- Reviewed revision: `bda64e7666f2c228de6f12b87c9beeaa36831076` for the continuous pre-revision review; post-change revision `2f4f2cba6b5cb8860b64033f3ddbcf1966bd202c` has not received a complete audit.
+- Reviewed revision: `2f4f2cba6b5cb8860b64033f3ddbcf1966bd202c`
+- Historical review: the full continuous pre-revision read was at `bda64e7666f2c228de6f12b87c9beeaa36831076`; the current revision has not received a complete audit.
 - Brief reviewed: `primer_deep_learning/issue-482-brief.md`, `482-brief-v1`.
+- Readiness decision: not-ready
 - Review boundary: Full source read and provisional outline decisions at the pre-revision revision; changed passages and numeric arithmetic sampled after revision. Source claims, all route transitions, and post-change outline and depth gates remain incomplete.
 - Teaching-case contract: Separate mathematical worked threads and an explicitly illustrative decision case are planned in the brief.
 - Core-concept depth matrix: Brief `482-brief-v1`; rows below are deliberately not checked until post-change review is completed.
@@ -25,21 +27,41 @@ The pre-revision observations, boundary proposals, exact locators, independent c
 
 The full read recorded in the proposal applies to `bda64e7`, not the changed source. A fresh continuous reader review and explicit boundary/child decisions at `2f4f2cb` are required. Moving notation preserves its `notation` HTML fragment and the parent chapter numbering, but this does not prove interactive navigation.
 
+## Adversarial depth gate
+
+All nine primary concepts below remain not-checked; no route passes until its transitions and limitations have been reviewed.
+
 ## Core-concept depth matrix
 
 | route_id | route tier | concept_id | explanation locator | example/action locator | interpretation locator | limitation locator | evidence revision | reviewer | status | finding | scope decision |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| foundations | primary | network_update | primer_deep_learning.md:202 | primer_deep_learning.md:261 | primer_deep_learning.md:261 | primer_deep_learning.md:261 | 2f4f2cb | Codex | not-checked | Full route and dependent transitions not re-audited | retain pending review |
-| spatial | primary | cnn_features | primer_deep_learning.md:361 | primer_deep_learning.md:385 | primer_deep_learning.md:405 | primer_deep_learning.md:442 | 2f4f2cb | Codex | not-checked | Locators and route not semantically rechecked | retain pending review |
-| recurrent | primary | state_gradients | primer_deep_learning.md:526 | primer_deep_learning.md:564 | primer_deep_learning.md:576 | primer_deep_learning.md:580 | 2f4f2cb | Codex | not-checked | Changed Jacobian and state path need full review | retain pending review |
-| attention | primary | attention_weights | primer_deep_learning.md:700 | primer_deep_learning.md:714 | primer_deep_learning.md:714 | primer_deep_learning.md:714 | 2f4f2cb | Codex | not-checked | Worked arithmetic sampled; route not fully audited | retain pending review |
-| language | primary | language_training | primer_deep_learning.md:881 | primer_deep_learning.md:900 | primer_deep_learning.md:920 | primer_deep_learning.md:960 | 2f4f2cb | Codex | not-checked | Claims and locators need verification | retain pending review |
-| variational | primary | elbo | primer_deep_learning.md:1008 | primer_deep_learning.md:1010 | primer_deep_learning.md:1016 | primer_deep_learning.md:1058 | 2f4f2cb | Codex | not-checked | Derivation sampled; full transition needs review | retain pending review |
-| adversarial | primary | wasserstein | primer_deep_learning.md:1098 | primer_deep_learning.md:1104 | primer_deep_learning.md:1110 | primer_deep_learning.md:1110 | 2f4f2cb | Codex | not-checked | Constraint correction needs independent review | retain pending review |
-| diffusion | primary | score | primer_deep_learning.md:1168 | primer_deep_learning.md:1168 | primer_deep_learning.md:1168 | primer_deep_learning.md:1168 | 2f4f2cb | Codex | not-checked | Conditional expectation derivation needs independent source review | retain pending review |
-| selection | primary | model_choice | primer_deep_learning.md:1360 | primer_deep_learning.md:1404 | primer_deep_learning.md:1404 | primer_deep_learning.md:1404 | 2f4f2cb | Codex | not-checked | Illustrative scenario and strong surrounding recommendations need review | retain pending review |
+| foundations | primary | network_update | primer_deep_learning.md:202 | primer_deep_learning.md:261 | primer_deep_learning.md:261 | primer_deep_learning.md:261 | 2f4f2cba6b5cb8860b64033f3ddbcf1966bd202c | Codex | not-checked | Full route and dependent transitions not re-audited | retain pending review |
+| spatial | primary | cnn_features | primer_deep_learning.md:361 | primer_deep_learning.md:385 | primer_deep_learning.md:405 | primer_deep_learning.md:442 | 2f4f2cba6b5cb8860b64033f3ddbcf1966bd202c | Codex | not-checked | Locators and route not semantically rechecked | retain pending review |
+| recurrent | primary | state_gradients | primer_deep_learning.md:526 | primer_deep_learning.md:564 | primer_deep_learning.md:576 | primer_deep_learning.md:580 | 2f4f2cba6b5cb8860b64033f3ddbcf1966bd202c | Codex | not-checked | Changed Jacobian and state path need full review | retain pending review |
+| attention | primary | attention_weights | primer_deep_learning.md:700 | primer_deep_learning.md:714 | primer_deep_learning.md:714 | primer_deep_learning.md:714 | 2f4f2cba6b5cb8860b64033f3ddbcf1966bd202c | Codex | not-checked | Worked arithmetic sampled; route not fully audited | retain pending review |
+| language | primary | language_training | primer_deep_learning.md:881 | primer_deep_learning.md:900 | primer_deep_learning.md:920 | primer_deep_learning.md:960 | 2f4f2cba6b5cb8860b64033f3ddbcf1966bd202c | Codex | not-checked | Claims and locators need verification | retain pending review |
+| variational | primary | elbo | primer_deep_learning.md:1008 | primer_deep_learning.md:1010 | primer_deep_learning.md:1016 | primer_deep_learning.md:1058 | 2f4f2cba6b5cb8860b64033f3ddbcf1966bd202c | Codex | not-checked | Derivation sampled; full transition needs review | retain pending review |
+| adversarial | primary | wasserstein | primer_deep_learning.md:1098 | primer_deep_learning.md:1104 | primer_deep_learning.md:1110 | primer_deep_learning.md:1110 | 2f4f2cba6b5cb8860b64033f3ddbcf1966bd202c | Codex | not-checked | Constraint correction needs independent review | retain pending review |
+| diffusion | primary | score | primer_deep_learning.md:1168 | primer_deep_learning.md:1168 | primer_deep_learning.md:1168 | primer_deep_learning.md:1168 | 2f4f2cba6b5cb8860b64033f3ddbcf1966bd202c | Codex | not-checked | Conditional expectation derivation needs independent source review | retain pending review |
+| selection | primary | model_choice | primer_deep_learning.md:1360 | primer_deep_learning.md:1404 | primer_deep_learning.md:1404 | primer_deep_learning.md:1404 | 2f4f2cba6b5cb8860b64033f3ddbcf1966bd202c | Codex | not-checked | Illustrative scenario and strong surrounding recommendations need review | retain pending review |
 
 These line references are candidates, not verified semantic mappings; review every locator and the input-to-result, interpretation and limit transitions before changing any status. A primary `not-checked` row blocks content readiness.
+
+## Route transition evidence
+
+The following placeholders mark unreviewed transitions, not verified teaching. Complete each route from input to interpreted result and limit before readiness.
+
+| route_id | concept_id(s) | transition (from to) | linked input and reader operation | intermediate reasoning or decision | result | interpretation | material limitation | execution status | gap and reader consequence |
+|---|---|---|---|---|---|---|---|---|---|
+| foundations | network_update | input to interpretation | Not yet reviewed | Not yet reviewed | Not yet reviewed | Not yet reviewed | Not yet reviewed | not-checked | Reader path remains unverified |
+| spatial | cnn_features | input to interpretation | Not yet reviewed | Not yet reviewed | Not yet reviewed | Not yet reviewed | Not yet reviewed | not-checked | Reader path remains unverified |
+| recurrent | state_gradients | input to interpretation | Not yet reviewed | Not yet reviewed | Not yet reviewed | Not yet reviewed | Not yet reviewed | not-checked | Reader path remains unverified |
+| attention | attention_weights | input to interpretation | Not yet reviewed | Not yet reviewed | Not yet reviewed | Not yet reviewed | Not yet reviewed | not-checked | Reader path remains unverified |
+| language | language_training | input to interpretation | Not yet reviewed | Not yet reviewed | Not yet reviewed | Not yet reviewed | Not yet reviewed | not-checked | Reader path remains unverified |
+| variational | elbo | input to interpretation | Not yet reviewed | Not yet reviewed | Not yet reviewed | Not yet reviewed | Not yet reviewed | not-checked | Reader path remains unverified |
+| adversarial | wasserstein | input to interpretation | Not yet reviewed | Not yet reviewed | Not yet reviewed | Not yet reviewed | Not yet reviewed | not-checked | Reader path remains unverified |
+| diffusion | score | input to interpretation | Not yet reviewed | Not yet reviewed | Not yet reviewed | Not yet reviewed | Not yet reviewed | not-checked | Reader path remains unverified |
+| selection | model_choice | input to interpretation | Not yet reviewed | Not yet reviewed | Not yet reviewed | Not yet reviewed | Not yet reviewed | not-checked | Reader path remains unverified |
 
 ## Verification and readiness
 
