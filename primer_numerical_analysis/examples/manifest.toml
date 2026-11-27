@@ -17,3 +17,21 @@ id = "linear-solve-julia"
 language = "julia"
 script = "examples/linear_solve.jl"
 profile = "julia"
+
+[[examples]]
+id = "root-solvers-python"
+language = "python"
+script = "examples/root_solvers.py"
+profile = "python-base"
+
+[[examples]]
+id = "root-solvers-r"
+language = "r"
+script = "examples/root_solvers.R"
+profile = "r"
+
+[[examples]]
+id = "root-solvers-julia"
+language = "julia"
+script = "examples/root_solvers.jl"
+profile = "julia"
