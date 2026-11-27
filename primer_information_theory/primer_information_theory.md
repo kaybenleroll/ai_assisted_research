@@ -1606,23 +1606,23 @@ A logger stores a binary warning flag with prevalence $P(X=1)=0.08$. Compare the
 
 ### Exercise 12: Gaussian Rate–Distortion
 
-An iid Gaussian source has variance $\sigma^2=9$ and squared-error distortion is allowed up to $D=1$ per sample.
+An iid Gaussian source has known mean $\mu$ and variance $\sigma^2=9$; squared-error distortion is allowed up to $D=1$ per sample.
 
 1. Find the asymptotic rate–distortion bound.
 2. What rate suffices for $D\geq9$?
 3. Why can the rate not be read as an exact finite-file size?
 
-**Outline Solution.** $R(1)=\frac12\log_2(9)\approx1.585$ bits per sample. For $D\geq9$, outputting the mean zero requires no bits and meets the expected distortion target. The theorem is asymptotic for iid Gaussian samples under squared error; finite block coding, overhead, and a particular sample realisation affect actual file length and distortion.
+**Outline Solution.** $R(1)=\frac12\log_2(9)\approx1.585$ bits per sample. For $D\geq9$, outputting the known mean $\mu$ requires no bits and meets the expected distortion target. The theorem is asymptotic for iid Gaussian samples under squared error; finite block coding, overhead, and a particular sample realisation affect actual file length and distortion.
 
 ### Exercise 13: Entropy Bias and a Sparse Table
 
 You observe 25 pairs of categorical variables, each with 10 possible categories, but only 13 joint cells are occupied. The plug-in mutual information is 0.42 bits.
 
-1. Is 0.42 an unbiased estimate of population MI?
+1. Can you conclude that the plug-in MI estimator is unbiased for this population?
 2. Name two useful diagnostics or uncertainty procedures.
 3. Explain why permuting one variable answers a different question from bootstrapping paired observations.
 
-**Outline Solution.** No. Plug-in MI is generally positively biased under independence, particularly with sparse tables and many possible cells. Report support and cell counts, compare against a permutation null if pairings are exchangeable, and bootstrap pairs or clusters to assess sampling variation. Permutation estimates a reference distribution under a null of no association while retaining marginals; bootstrap estimates sampling variability around the observed joint distribution. Neither procedure repairs absent support automatically.
+**Outline Solution.** No conclusion about unbiasedness follows from this observed value alone: bias is the estimator's expected value over repeated samples minus the population MI, under a specified sampling law. Under independence, plug-in MI is generally positively biased, particularly with sparse tables and many possible cells; that null-specific result does not establish its bias for an unspecified joint law. For example, if $X=Y$ is uniform on ten categories, plug-in MI equals plug-in entropy, which is downward-biased in finite samples. Report support and cell counts, compare against a permutation null if pairings are exchangeable, and bootstrap pairs or clusters to assess sampling variation. Permutation estimates a reference distribution under a null of no association while retaining marginals; bootstrap estimates sampling variability around the observed joint distribution. Neither procedure repairs absent support automatically.
 
 ### Exercise 14: KL Direction and Prediction
 

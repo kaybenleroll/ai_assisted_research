@@ -4232,9 +4232,8 @@ changes. This zero-rate decision alone does not determine the
 positive-rate curve.</p>
 <h2 data-number="10.12" role="heading" aria-level="3" id="exercise-12-gaussian-ratedistortion"><span class="header-section-number">10.12</span> Exercise 12: Gaussian
 Rate–Distortion</h2>
-<p>An iid Gaussian source has variance <span class="math inline">\(\sigma^2=9\)</span> and squared-error distortion
-is allowed up to <span class="math inline">\(D=1\)</span> per
-sample.</p>
+<p>An iid Gaussian source has known mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\sigma^2=9\)</span>; squared-error distortion is
+allowed up to <span class="math inline">\(D=1\)</span> per sample.</p>
 <ol type="1">
 <li>Find the asymptotic rate–distortion bound.</li>
 <li>What rate suffices for <span class="math inline">\(D\geq9\)</span>?</li>
@@ -4242,29 +4241,37 @@ sample.</p>
 </ol>
 <p><strong>Outline Solution.</strong> <span class="math inline">\(R(1)=\frac12\log_2(9)\approx1.585\)</span> bits
 per sample. For <span class="math inline">\(D\geq9\)</span>, outputting
-the mean zero requires no bits and meets the expected distortion target.
-The theorem is asymptotic for iid Gaussian samples under squared error;
-finite block coding, overhead, and a particular sample realisation
-affect actual file length and distortion.</p>
+the known mean <span class="math inline">\(\mu\)</span> requires no bits
+and meets the expected distortion target. The theorem is asymptotic for
+iid Gaussian samples under squared error; finite block coding, overhead,
+and a particular sample realisation affect actual file length and
+distortion.</p>
 <h2 data-number="10.13" role="heading" aria-level="3" id="exercise-13-entropy-bias-and-a-sparse-table"><span class="header-section-number">10.13</span> Exercise 13: Entropy Bias and
 a Sparse Table</h2>
 <p>You observe 25 pairs of categorical variables, each with 10 possible
 categories, but only 13 joint cells are occupied. The plug-in mutual
 information is 0.42 bits.</p>
 <ol type="1">
-<li>Is 0.42 an unbiased estimate of population MI?</li>
+<li>Can you conclude that the plug-in MI estimator is unbiased for this
+population?</li>
 <li>Name two useful diagnostics or uncertainty procedures.</li>
 <li>Explain why permuting one variable answers a different question from
 bootstrapping paired observations.</li>
 </ol>
-<p><strong>Outline Solution.</strong> No. Plug-in MI is generally
-positively biased under independence, particularly with sparse tables
-and many possible cells. Report support and cell counts, compare against
-a permutation null if pairings are exchangeable, and bootstrap pairs or
-clusters to assess sampling variation. Permutation estimates a reference
-distribution under a null of no association while retaining marginals;
-bootstrap estimates sampling variability around the observed joint
-distribution. Neither procedure repairs absent support
+<p><strong>Outline Solution.</strong> No conclusion about unbiasedness
+follows from this observed value alone: bias is the estimator’s expected
+value over repeated samples minus the population MI, under a specified
+sampling law. Under independence, plug-in MI is generally positively
+biased, particularly with sparse tables and many possible cells; that
+null-specific result does not establish its bias for an unspecified
+joint law. For example, if <span class="math inline">\(X=Y\)</span> is
+uniform on ten categories, plug-in MI equals plug-in entropy, which is
+downward-biased in finite samples. Report support and cell counts,
+compare against a permutation null if pairings are exchangeable, and
+bootstrap pairs or clusters to assess sampling variation. Permutation
+estimates a reference distribution under a null of no association while
+retaining marginals; bootstrap estimates sampling variability around the
+observed joint distribution. Neither procedure repairs absent support
 automatically.</p>
 <h2 data-number="10.14" role="heading" aria-level="3" id="exercise-14-kl-direction-and-prediction"><span class="header-section-number">10.14</span> Exercise 14: KL Direction and
 Prediction</h2>
