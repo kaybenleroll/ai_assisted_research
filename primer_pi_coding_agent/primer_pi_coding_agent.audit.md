@@ -229,8 +229,8 @@ Pre-merge editorial review, 19 November 2026: source unchanged from c193c88; ind
 
 ## Outline and hierarchy review
 
-- Source read coverage: 127-155
-- Rendered contents: **not-checked**; this focused review inspected the first-run section and its PDF page break, not the whole outline.
+- Source read coverage: 1-150, 151-300, 301-450, 451-600, 601-750, 751-900, 901-1050, 1051-1086
+- Rendered contents: **not-checked**; opening and selected PDF pages were inspected, but the whole outline and each boundary have not yet been independently assessed. `python3 -I maintenance/scripts/check/primer_outline_compare.py primer_pi_coding_agent/primer_pi_coding_agent.md primer_pi_coding_agent/primer_pi_coding_agent.html` reported no H2/H3 candidate differences; this is advisory.
 
 ## Issue #473: first-run revision review
 
@@ -241,3 +241,7 @@ A disposable Git fixture executed the documented initialisation and commit, appe
 ## Issues #473 and #474: comparator clarification
 
 Source `629d566` specifies the expected header, row count, uniqueness, byte-wise order, encoding and numeric formatting, exact keys, counts and extrema, and the numerical mean tolerance. A small independent Python `Decimal` check accepted the expected A row and rejected a row with only its minimum changed from `5.10` to `5.20`. This checks that negative example, not a complete comparator or the illustrative Rocker project. Earlier row-level audit decisions are historical; the current rows are marked not-checked pending semantic locator and depth review.
+
+## Current reader-route observations
+
+At source `629d566`, the first-run path (127–157) gives a baseline, supervised action and independently inspectable result; the fixture exercised the Git portion only. The case (780–975) names missing assets, supplies input and independently prepared values, specifies a comparator and returns to host/container boundaries; the negative minimum check exercised one field decision only. The intermediate routes distinguish authentication (169–237), RPC outcome versus correctness (239–384), executable customisation authority (386–541), research evidence (543–640), session state versus filesystem state (642–692), and containment (694–750). The comparison (752–776) and reference (979–1078) offer lookup rather than a replacement for the practical route. These are reader observations from the complete source read, not independent verification of every claim, a row-by-row semantic locator review, or a full structural boundary verdict. The comparison placement question is separately tracked as #475.
