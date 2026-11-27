@@ -1,6 +1,7 @@
 # Scoped R projection review trial
 
-This record supports [#490](https://github.com/kaybenleroll/ai_assisted_research/issues/490).
+This record addresses [#500](https://github.com/kaybenleroll/ai_assisted_research/issues/500)
+and supports the wider calibration in [#490](https://github.com/kaybenleroll/ai_assisted_research/issues/490).
 On 27 November 2026 a fresh reviewer examined a real primer's alternative
 reader route. This was unblinded: the repository, key material and network
 were accessible. It was not a complete audit, a fixture accuracy test, or a
