@@ -841,7 +841,7 @@ date,station_id,n_valid,mean_temp_c,min_temp_c,max_temp_c
 2026-01-01,B,1,3.40,3.40,3.40
 ```
 
-The fixture has no unknown flag or malformed date, so add those failure cases to the unit tests as small in-memory inputs. The acceptance gate is `scripts/compare_outputs.py`, which you write, not Pi. It reads `outputs/daily_summary_r.csv` and `outputs/daily_summary_py.csv`, checks each header, compares each row with the expected file (exact keys and counts, `mean_temp_c` within the tolerance), and exits non-zero on any difference. Row-by-row comparison against a sorted file also checks the sort order.
+The fixture has no unknown flag or malformed date, so add those failure cases to the unit tests as small in-memory inputs. The acceptance gate is `scripts/compare_outputs.py`, which you write, not Pi. It reads `outputs/daily_summary_r.csv` and `outputs/daily_summary_py.csv` and compares each independently with the expected file. Reject an incorrect header, row count, duplicate key, or row order; the expected rows are already sorted by date and then station ID in byte-wise order. Require UTF-8, LF line endings, no quoting, an integer count, and exactly two decimal places for each temperature. Compare the date, station ID, count, minimum, and maximum exactly against the corresponding expected row; compare the parsed mean numerically with an absolute tolerance of `0.01`. Reject malformed or non-finite numbers and exit non-zero for any mismatch. For a negative check, change only station A's minimum from `5.10` to `5.20`: even with the correct count, mean, and maximum, the comparator must reject that row.
 
 ### Give Pi Bounded Tasks
 

@@ -2522,11 +2522,18 @@ statistics are 3.40. Write the expected rows by hand:</p>
 failure cases to the unit tests as small in-memory inputs. The
 acceptance gate is <code>scripts/compare_outputs.py</code>, which you
 write, not Pi. It reads <code>outputs/daily_summary_r.csv</code> and
-<code>outputs/daily_summary_py.csv</code>, checks each header, compares
-each row with the expected file (exact keys and counts,
-<code>mean_temp_c</code> within the tolerance), and exits non-zero on
-any difference. Row-by-row comparison against a sorted file also checks
-the sort order.</p>
+<code>outputs/daily_summary_py.csv</code> and compares each
+independently with the expected file. Reject an incorrect header, row
+count, duplicate key, or row order; the expected rows are already sorted
+by date and then station ID in byte-wise order. Require UTF-8, LF line
+endings, no quoting, an integer count, and exactly two decimal places
+for each temperature. Compare the date, station ID, count, minimum, and
+maximum exactly against the corresponding expected row; compare the
+parsed mean numerically with an absolute tolerance of <code>0.01</code>.
+Reject malformed or non-finite numbers and exit non-zero for any
+mismatch. For a negative check, change only station A’s minimum from
+<code>5.10</code> to <code>5.20</code>: even with the correct count,
+mean, and maximum, the comparator must reject that row.</p>
 <h2 data-number="11.2" role="heading" aria-level="3" id="give-pi-bounded-tasks"><span class="header-section-number">11.2</span> Give Pi Bounded Tasks</h2>
 <p>Use a separate, named session for each phase. The fixture, expected
 output, and comparison script are committed before the implementation
