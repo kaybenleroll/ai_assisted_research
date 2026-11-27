@@ -1597,33 +1597,48 @@ understanding backprop — it is backprop, automated. When a gradient is
 zero where it should not be, or explodes to infinity, the explanation is
 always somewhere in the chain of local derivatives you just saw, and
 knowing that chain is how you debug it.</p>
-<p>A small scalar update makes the direction concrete. Let
+<p>A small numerical network makes the direction concrete. Let
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">x=2</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>w</mi><mo>=</mo><mn>0.5</mn></mrow><annotation encoding="application/x-tex">w=0.5</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">b=0</annotation></semantics></math>,
-prediction
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>y</mi><mo accent="true">̂</mo></mover><mo>=</mo><mi>w</mi><mi>x</mi><mo>+</mo><mi>b</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\hat y=wx+b=1</annotation></semantics></math>
-and target
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">y=3</annotation></semantics></math>.
-With
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo stretchy="false" form="prefix">(</mo><mover><mi>y</mi><mo accent="true">̂</mo></mover><mo>−</mo><mi>y</mi><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">L=\frac12(\hat y-y)^2=2</annotation></semantics></math>,
-the chain rule gives
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∂</mi><mi>L</mi><mi>/</mi><mi>∂</mi><mi>w</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mover><mi>y</mi><mo accent="true">̂</mo></mover><mo>−</mo><mi>y</mi><mo stretchy="false" form="postfix">)</mo><mi>x</mi><mo>=</mo><mi>−</mi><mn>4</mn></mrow><annotation encoding="application/x-tex">\partial L/\partial w=(\hat y-y)x=-4</annotation></semantics></math>
+hidden activation
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mo>=</mo><mrow><mi mathvariant="normal">ReLU</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>w</mi><mn>1</mn></msub><mi>x</mi><mo>+</mo><msub><mi>b</mi><mn>1</mn></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">h=\operatorname{ReLU}(w_1x+b_1)</annotation></semantics></math>,
+output
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>y</mi><mo accent="true">̂</mo></mover><mo>=</mo><msub><mi>w</mi><mn>2</mn></msub><mi>h</mi><mo>+</mo><msub><mi>b</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">\hat y=w_2h+b_2</annotation></semantics></math>,
+target
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><mn>1.5</mn></mrow><annotation encoding="application/x-tex">y=1.5</annotation></semantics></math>,
+and initially
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>w</mi><mn>1</mn></msub><mo>=</mo><msub><mi>w</mi><mn>2</mn></msub><mo>=</mo><mn>0.5</mn></mrow><annotation encoding="application/x-tex">w_1=w_2=0.5</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>b</mi><mn>1</mn></msub><mo>=</mo><msub><mi>b</mi><mn>2</mn></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">b_1=b_2=0</annotation></semantics></math>.
+The forward pass gives
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">h=1</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>y</mi><mo accent="true">̂</mo></mover><mo>=</mo><mn>0.5</mn></mrow><annotation encoding="application/x-tex">\hat y=0.5</annotation></semantics></math>
+and squared loss
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo stretchy="false" form="prefix">(</mo><mover><mi>y</mi><mo accent="true">̂</mo></mover><mo>−</mo><mi>y</mi><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup><mo>=</mo><mn>0.5</mn></mrow><annotation encoding="application/x-tex">L=\frac12(\hat y-y)^2=0.5</annotation></semantics></math>.
+At the output,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∂</mi><mi>L</mi><mi>/</mi><mi>∂</mi><mover><mi>y</mi><mo accent="true">̂</mo></mover><mo>=</mo><mi>−</mi><mn>1</mn></mrow><annotation encoding="application/x-tex">\partial L/\partial \hat y=-1</annotation></semantics></math>,
+so
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∂</mi><mi>L</mi><mi>/</mi><mi>∂</mi><msub><mi>w</mi><mn>2</mn></msub><mo>=</mo><mi>−</mi><mn>1</mn></mrow><annotation encoding="application/x-tex">\partial L/\partial w_2=-1</annotation></semantics></math>
 and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∂</mi><mi>L</mi><mi>/</mi><mi>∂</mi><mi>b</mi><mo>=</mo><mover><mi>y</mi><mo accent="true">̂</mo></mover><mo>−</mo><mi>y</mi><mo>=</mo><mi>−</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">\partial L/\partial b=\hat y-y=-2</annotation></semantics></math>.
-At learning rate
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∂</mi><mi>L</mi><mi>/</mi><mi>∂</mi><msub><mi>b</mi><mn>2</mn></msub><mo>=</mo><mi>−</mi><mn>1</mn></mrow><annotation encoding="application/x-tex">\partial L/\partial b_2=-1</annotation></semantics></math>.
+The hidden pre-activation is positive, so the ReLU derivative is 1;
+propagating through
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>w</mi><mn>2</mn></msub><annotation encoding="application/x-tex">w_2</annotation></semantics></math>
+gives
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∂</mi><mi>L</mi><mi>/</mi><mi>∂</mi><msub><mi>w</mi><mn>1</mn></msub><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="prefix">(</mo><mn>0.5</mn><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>−</mi><mn>1</mn></mrow><annotation encoding="application/x-tex">\partial L/\partial w_1=(-1)(0.5)(1)(2)=-1</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∂</mi><mi>L</mi><mi>/</mi><mi>∂</mi><msub><mi>b</mi><mn>1</mn></msub><mo>=</mo><mi>−</mi><mn>0.5</mn></mrow><annotation encoding="application/x-tex">\partial L/\partial b_1=-0.5</annotation></semantics></math>.
+With learning rate
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.1</mn><annotation encoding="application/x-tex">0.1</annotation></semantics></math>,
-gradient descent gives
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>w</mi><mo>′</mo></msup><mo>=</mo><mn>0.9</mn></mrow><annotation encoding="application/x-tex">w&#39;=0.9</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>b</mi><mo>′</mo></msup><mo>=</mo><mn>0.2</mn></mrow><annotation encoding="application/x-tex">b&#39;=0.2</annotation></semantics></math>.
-The new prediction is
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>2</mn><annotation encoding="application/x-tex">2</annotation></semantics></math>
-and the loss is
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.5</mn><annotation encoding="application/x-tex">0.5</annotation></semantics></math>.
-The negative gradient increases both parameters here; a different input,
-target or step size can change that direction or even increase loss.
-This scalar example uses squared error rather than the softmax loss
-above, but the same local chain-rule composition applies.</p>
+update all four parameters simultaneously to
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>w</mi><mn>1</mn></msub><mo>,</mo><msub><mi>b</mi><mn>1</mn></msub><mo>,</mo><msub><mi>w</mi><mn>2</mn></msub><mo>,</mo><msub><mi>b</mi><mn>2</mn></msub><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>0.6</mn><mo>,</mo><mn>0.05</mn><mo>,</mo><mn>0.6</mn><mo>,</mo><mn>0.1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(w_1,b_1,w_2,b_2)=(0.6,0.05,0.6,0.1)</annotation></semantics></math>.
+A second forward pass gives
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mo>=</mo><mn>1.25</mn></mrow><annotation encoding="application/x-tex">h=1.25</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>y</mi><mo accent="true">̂</mo></mover><mo>=</mo><mn>0.85</mn></mrow><annotation encoding="application/x-tex">\hat y=0.85</annotation></semantics></math>
+and loss
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.21125</mn><annotation encoding="application/x-tex">0.21125</annotation></semantics></math>.
+The loss falls on this example; a different input, activation region or
+step size can change the result. This uses squared error and a linear
+output rather than the softmax loss above, but the same chain-rule
+composition applies.</p>
 <h2 data-number="4.3" role="heading" aria-level="3" id="vanishing-and-exploding-gradients"><span class="header-section-number">4.3</span> Vanishing and Exploding
 Gradients</h2>
 <p>The backward pass just described has a built-in danger, and it is
@@ -2503,6 +2518,28 @@ can preserve that direct gradient contribution for longer. This does not
 guarantee successful learning over arbitrary spans. The gate gives the
 network direct control over its own memory’s gradient flow, which is
 what vanilla RNNs lacked.</p>
+<p>A scalar gate calculation shows the direct path. Let
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.8</mn></mrow><annotation encoding="application/x-tex">c_{t-1}=0.8</annotation></semantics></math>,
+forget gate
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mi>t</mi></msub><mo>=</mo><mn>0.9</mn></mrow><annotation encoding="application/x-tex">f_t=0.9</annotation></semantics></math>,
+input gate
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>i</mi><mi>t</mi></msub><mo>=</mo><mn>0.2</mn></mrow><annotation encoding="application/x-tex">i_t=0.2</annotation></semantics></math>
+and candidate
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>c</mi><mo accent="true">̃</mo></mover><mi>t</mi></msub><mo>=</mo><mn>0.5</mn></mrow><annotation encoding="application/x-tex">\tilde c_t=0.5</annotation></semantics></math>.
+Then
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mi>t</mi></msub><mo>=</mo><mn>0.9</mn><mo stretchy="false" form="prefix">(</mo><mn>0.8</mn><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mn>0.2</mn><mo stretchy="false" form="prefix">(</mo><mn>0.5</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0.82</mn></mrow><annotation encoding="application/x-tex">c_t=0.9(0.8)+0.2(0.5)=0.82</annotation></semantics></math>:
+the old state contributes
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.72</mn><annotation encoding="application/x-tex">0.72</annotation></semantics></math>
+and the new candidate
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.10</mn><annotation encoding="application/x-tex">0.10</annotation></semantics></math>.
+Holding the gates and candidate fixed to isolate the direct path, its
+derivative with respect to the previous cell state is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.9</mn><annotation encoding="application/x-tex">0.9</annotation></semantics></math>;
+two such steps retain a factor
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>0.9</mn><mn>2</mn></msup><mo>=</mo><mn>0.81</mn></mrow><annotation encoding="application/x-tex">0.9^2=0.81</annotation></semantics></math>.
+The complete derivative includes other paths because gates depend on the
+recurrent state, so this calculation is not a guarantee that the total
+gradient will remain near one.</p>
 <h2 data-number="6.5" role="heading" aria-level="3" id="gru"><span class="header-section-number">6.5</span> GRU</h2>
 <p>The Gated Recurrent Unit, or GRU (Cho et al., 2014), is a streamlined
 relative of the LSTM. It keeps the gating idea but uses only two gates
