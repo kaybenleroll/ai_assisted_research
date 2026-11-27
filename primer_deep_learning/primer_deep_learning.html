@@ -1334,13 +1334,18 @@ run.</p>
 <h2 data-number="3.5" role="heading" aria-level="3" id="the-universal-approximation-theorem"><span class="header-section-number">3.5</span> The Universal Approximation
 Theorem</h2>
 <p>A natural question is how much an MLP can actually represent. The
-universal approximation theorem gives a striking answer. Informally: a
-feedforward network with a single hidden layer, a nonlinear activation,
-and enough hidden units can approximate any continuous function on a
-closed, bounded domain to any desired precision. There is no continuous
-function it fundamentally cannot get arbitrarily close to. In that sense
-the MLP is a universal function approximator, and this result is often
-invoked as the reason neural networks are so powerful.</p>
+universal approximation theorem gives a striking answer. Informally: for
+a suitable activation such as sigmoid or ReLU, a feedforward network
+with one hidden layer, biases and enough hidden units can approximate
+any continuous function on a closed, bounded domain to any desired
+precision. The activation hypothesis matters: with the quadratic
+activation <span class="math inline">\(\sigma(z)=z^2\)</span>, a
+one-hidden-layer network remains a quadratic function regardless of
+width and cannot approximate every continuous target arbitrarily
+closely. See <a href="https://archive.nyu.edu/handle/2451/14329">Leshno
+and colleagues</a> for conditions on the activation and biases. In that
+sense the MLP is a universal function approximator, and this result is
+often invoked as the reason neural networks are so powerful.</p>
 <p>It is worth being precise about what it does and does not say,
 because it is easily oversold. The theorem is a statement of existence.
 It guarantees that some set of weights makes the network approximate
@@ -1354,9 +1359,10 @@ the width required may be utterly impractical, whereas a deep network —
 through the function composition discussed earlier — often represents
 the same function with a fraction of the parameters. So the universal
 approximation theorem explains why neural networks can approximate many
-functions, but it does not explain why deep networks work. The reason
-depth wins in practice is efficiency, not representability: practical
-depth beats impractical width.</p>
+functions, but it does not explain why deep networks work. For some
+function families, depth can represent a given function more compactly;
+whether a deeper network is more efficient in a particular task also
+depends on training, architecture and hardware.</p>
 <h1 data-number="4" role="heading" aria-level="2" id="training-deep-networks"><span class="header-section-number">4</span>
 Training Deep Networks</h1>
 <p>A network’s weights start as random numbers, and the forward pass on
