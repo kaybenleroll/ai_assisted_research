@@ -1394,19 +1394,19 @@ If you want ordinary text completion, streaming output, and the broadest serving
 
 ### Compute and Data Requirements
 
-It helps to have a rough sense of what each architecture costs to train from scratch, because the numbers are what make the "use a pretrained model" advice concrete rather than abstract. The table below retains rough illustrative scales for contrasting workloads, not minimum data requirements or current cost quotations. Dataset composition, objectives, hardware, optimisation and the desired quality change the figures substantially; check original training reports and measure the intended setup before budgeting.
+Training cost depends on the model, dataset, objective, hardware, implementation and target quality. The table contrasts named published settings with smaller model families; the reported quantities are examples, not minimum requirements or prices for a new project. A parameter count alone does not tell you training time: sequence length, batch size and the number of updates also matter.
 
-| Architecture | Illustrative data scale | Typical parameters | Illustrative training compute |
-|---|---|---|---|
-| Small MLP | 1K–10K examples | 10K–10M | CPU feasible |
-| CNN (ResNet-50 from scratch) | 100K+ images | 25M | Multi-GPU days |
-| LSTM | 100K+ sequences | 1M–100M | Single GPU hours |
-| BERT-base from scratch | 1B+ tokens | 110M | TPU weeks |
-| GPT-3 from scratch | 300B tokens | 175B | ~$10M compute |
-| Diffusion (DDPM, CIFAR) | 50K images | 35M | Single GPU day |
-| Stable Diffusion from scratch | LAION-5B (billions of images) | 890M | GPU months (~150K A100-hours) |
+| Setting | Data and model scale | Reported compute or practical implication |
+|---|---|---|
+| Small MLP | Width, depth and dataset size are task-dependent. | A small model can be feasible on a CPU; measure your own run. |
+| LSTM | Sequence length, hidden size and dataset size are task-dependent. | Recurrent steps limit parallelism across time; measure the chosen workload. |
+| [ResNet-50](https://arxiv.org/abs/1512.03385) | The ImageNet experiment used 1.28 million training images; the [TorchVision ResNet-50 variant](https://docs.pytorch.org/vision/stable/models/generated/torchvision.models.resnet50.html) has about 25.6 million parameters. | The paper reports batch size 256 and up to 600,000 training iterations for its ImageNet setup; this is a setting, not a minimum. |
+| [BERT-base](https://arxiv.org/abs/1810.04805) | 110 million parameters; the paper describes BooksCorpus and English Wikipedia totalling 3.3 billion words. | Pretraining and downstream fine-tuning are different costs; measure both for the chosen setup. |
+| [GPT-3](https://arxiv.org/abs/2005.14165) | The largest model has 175 billion parameters; the reported training run processed 300 billion tokens. | The paper's model and training scale do not by themselves establish a current monetary price. |
+| [DDPM on CIFAR-10](https://arxiv.org/abs/2006.11239) | The paper's CIFAR model has 35.7 million parameters; [CIFAR-10](https://www.cs.toronto.edu/~kriz/cifar.html) has 50,000 training images. | The authors report 10.6 hours for 800,000 steps on a TPU v3-8, with batch size 128. |
+| [Latent diffusion](https://arxiv.org/abs/2112.10752) | The data and parameter count depend on the specific autoencoder and denoiser. | Latent-space training reduces spatial computation relative to the pixel-space approach studied in the paper; training and sampling costs still need measurement. |
 
-Read down the right-hand column and the practical lesson is obvious: the gap between "CPU feasible" and "TPU months" is the gap between a weekend project and a budget that only a handful of organisations can field.
+These comparisons explain why pretraining can be attractive, but they do not imply that every new task needs a model trained at the largest published scale.
 
 Consider a manufacturer with 2,000 labelled inspection images. Before fitting, split by production batch into 1,200 training, 400 validation and 400 untouched test images so near-duplicates do not leak across splits. Suppose the validation set contains 120 defective and 280 good items, and the operating requirement is at least 90% defect recall, at most 20 false alarms on these 280 good items, and at most 50 ms per image on the target device. These figures are illustrative assumptions, not benchmark results.
 

@@ -4389,78 +4389,80 @@ than assuming that parallel token prediction means faster
 generation.</p>
 <h2 data-number="13.5" role="heading" aria-level="3" id="compute-and-data-requirements"><span class="header-section-number">13.5</span> Compute and Data
 Requirements</h2>
-<p>It helps to have a rough sense of what each architecture costs to
-train from scratch, because the numbers are what make the “use a
-pretrained model” advice concrete rather than abstract. The table below
-retains rough illustrative scales for contrasting workloads, not minimum
-data requirements or current cost quotations. Dataset composition,
-objectives, hardware, optimisation and the desired quality change the
-figures substantially; check original training reports and measure the
-intended setup before budgeting.</p>
+<p>Training cost depends on the model, dataset, objective, hardware,
+implementation and target quality. The table contrasts named published
+settings with smaller model families; the reported quantities are
+examples, not minimum requirements or prices for a new project. A
+parameter count alone does not tell you training time: sequence length,
+batch size and the number of updates also matter.</p>
 <table>
 <colgroup>
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
 </colgroup>
 <thead>
 <tr>
-<th>Architecture</th>
-<th>Illustrative data scale</th>
-<th>Typical parameters</th>
-<th>Illustrative training compute</th>
+<th>Setting</th>
+<th>Data and model scale</th>
+<th>Reported compute or practical implication</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>Small MLP</td>
-<td>1K–10K examples</td>
-<td>10K–10M</td>
-<td>CPU feasible</td>
-</tr>
-<tr>
-<td>CNN (ResNet-50 from scratch)</td>
-<td>100K+ images</td>
-<td>25M</td>
-<td>Multi-GPU days</td>
+<td>Width, depth and dataset size are task-dependent.</td>
+<td>A small model can be feasible on a CPU; measure your own run.</td>
 </tr>
 <tr>
 <td>LSTM</td>
-<td>100K+ sequences</td>
-<td>1M–100M</td>
-<td>Single GPU hours</td>
+<td>Sequence length, hidden size and dataset size are
+task-dependent.</td>
+<td>Recurrent steps limit parallelism across time; measure the chosen
+workload.</td>
 </tr>
 <tr>
-<td>BERT-base from scratch</td>
-<td>1B+ tokens</td>
-<td>110M</td>
-<td>TPU weeks</td>
+<td><a href="https://arxiv.org/abs/1512.03385">ResNet-50</a></td>
+<td>The ImageNet experiment used 1.28 million training images; the <a href="https://docs.pytorch.org/vision/stable/models/generated/torchvision.models.resnet50.html">TorchVision
+ResNet-50 variant</a> has about 25.6 million parameters.</td>
+<td>The paper reports batch size 256 and up to 600,000 training
+iterations for its ImageNet setup; this is a setting, not a
+minimum.</td>
 </tr>
 <tr>
-<td>GPT-3 from scratch</td>
-<td>300B tokens</td>
-<td>175B</td>
-<td>~$10M compute</td>
+<td><a href="https://arxiv.org/abs/1810.04805">BERT-base</a></td>
+<td>110 million parameters; the paper describes BooksCorpus and English
+Wikipedia totalling 3.3 billion words.</td>
+<td>Pretraining and downstream fine-tuning are different costs; measure
+both for the chosen setup.</td>
 </tr>
 <tr>
-<td>Diffusion (DDPM, CIFAR)</td>
-<td>50K images</td>
-<td>35M</td>
-<td>Single GPU day</td>
+<td><a href="https://arxiv.org/abs/2005.14165">GPT-3</a></td>
+<td>The largest model has 175 billion parameters; the reported training
+run processed 300 billion tokens.</td>
+<td>The paper’s model and training scale do not by themselves establish
+a current monetary price.</td>
 </tr>
 <tr>
-<td>Stable Diffusion from scratch</td>
-<td>LAION-5B (billions of images)</td>
-<td>890M</td>
-<td>GPU months (~150K A100-hours)</td>
+<td><a href="https://arxiv.org/abs/2006.11239">DDPM on CIFAR-10</a></td>
+<td>The paper’s CIFAR model has 35.7 million parameters; <a href="https://www.cs.toronto.edu/~kriz/cifar.html">CIFAR-10</a> has
+50,000 training images.</td>
+<td>The authors report 10.6 hours for 800,000 steps on a TPU v3-8, with
+batch size 128.</td>
+</tr>
+<tr>
+<td><a href="https://arxiv.org/abs/2112.10752">Latent diffusion</a></td>
+<td>The data and parameter count depend on the specific autoencoder and
+denoiser.</td>
+<td>Latent-space training reduces spatial computation relative to the
+pixel-space approach studied in the paper; training and sampling costs
+still need measurement.</td>
 </tr>
 </tbody>
 </table>
-<p>Read down the right-hand column and the practical lesson is obvious:
-the gap between “CPU feasible” and “TPU months” is the gap between a
-weekend project and a budget that only a handful of organisations can
-field.</p>
+<p>These comparisons explain why pretraining can be attractive, but they
+do not imply that every new task needs a model trained at the largest
+published scale.</p>
 <p>Consider a manufacturer with 2,000 labelled inspection images. Before
 fitting, split by production batch into 1,200 training, 400 validation
 and 400 untouched test images so near-duplicates do not leak across
