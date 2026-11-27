@@ -1617,11 +1617,12 @@ Gradients</h2>
 important enough that several later architectures are designed
 specifically to escape it. Look again at how the error propagates: at
 each layer it is multiplied by a weight matrix and by an activation
-derivative. Repeat that multiplication across many layers and the
-gradient’s magnitude is the product of all those per-layer factors.
-Products of many numbers behave violently — if the factors are
-consistently below 1 the product collapses towards zero, and if they are
-consistently above 1 it blows up.</p>
+derivative. Across many layers the gradient is acted on by a product of
+Jacobian matrices. Scalar products give useful intuition, but matrix
+products also depend on direction and cannot generally be reduced to a
+product of magnitudes. Uniform bounds on the relevant Jacobian norms can
+establish decay; growth requires care about the directions being
+propagated.</p>
 <p>The vanishing gradient problem is the collapse case. Suppose each
 layer multiplies the gradient by a factor of about 0.01 — entirely
 plausible with a saturating activation like sigmoid, whose derivative
@@ -1631,12 +1632,11 @@ layers the gradient reaching the earliest weights is scaled by
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>0.01</mn><mi>L</mi></msup><annotation encoding="application/x-tex">0.01^L</annotation></semantics></math>.
 With ten layers that is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>0.01</mn><mn>10</mn></msup><mo>=</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>20</mn></mrow></msup></mrow><annotation encoding="application/x-tex">0.01^{10} = 10^{-20}</annotation></semantics></math>,
-effectively zero. The early layers receive no usable gradient signal, so
-they never learn — the network is deep on paper but only its last few
-layers actually train. This is the concrete reason sigmoid and tanh
-stall deep networks, and the reason ReLU, whose positive-region
-derivative is exactly 1, was such a decisive fix: a factor of 1 does not
-shrink the product.</p>
+effectively zero. In this scalar example the early layers receive almost
+no usable gradient signal. Saturated sigmoid and tanh units can
+contribute to this difficulty. ReLU has derivative 1 on its positive
+side, avoiding attenuation by that local activation derivative there,
+but weights and inactive units still affect the full gradient.</p>
 <p>The numbers are sobering even without a pathologically small factor.
 The sigmoid derivative is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>σ</mi><mo>′</mo></msup><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>σ</mi><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>σ</mi><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\sigma&#39;(z) = \sigma(z)(1 - \sigma(z))</annotation></semantics></math>,
@@ -2418,18 +2418,18 @@ above. Each Jacobian
 folds in the derivative of the
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="normal">tanh</mi><annotation encoding="application/x-tex">\tanh</annotation></semantics></math>,
 whose maximum value is 1 and is typically well below that, multiplied by
-the recurrent weight matrix. Multiply
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>T</mi><annotation encoding="application/x-tex">T</annotation></semantics></math>
-such factors together and, unless they sit in a narrow band right around
-magnitude 1, the product moves exponentially: factors below 1 drive it
-towards zero (vanishing), factors above 1 blow it up (exploding). For a
-sequence of length 100 you are multiplying roughly a hundred of these
-terms, and the result almost always vanishes.</p>
+the recurrent weight matrix. The product depends on both the recurrent
+weights and the activation derivatives, as well as the directions
+propagated through the matrices. When the Jacobian norms are uniformly
+bounded below 1, the corresponding long-range contribution decays
+exponentially; large factors can contribute to explosion, but do not
+alone guarantee it in every direction. See <a href="https://arxiv.org/abs/1211.5063">Pascanu, Mikolov and
+Bengio</a>.</p>
 <p>The practical consequence is sharp. The gradient that should teach
 the network how step 100 depends on step 1 arrives at step 1 effectively
-as zero, so the connection is never learned. Vanilla RNNs in practice
-cannot learn dependencies spanning more than about 10 to 20 steps — they
-have a short memory, regardless of how long the sequence actually is.
+as zero, so the connection is never learned. Vanilla RNNs can struggle
+to learn long dependencies; the effective span depends on the task,
+parameters and training procedure, not a universal number of steps.
 Exploding gradients, the other half of the same coin, are easier to
 patch with gradient clipping (cap the gradient norm), but vanishing
 gradients need an architectural fix. That fix is gating.</p>
@@ -2475,8 +2475,8 @@ network learning how much of each. The <strong>output gate</strong>
 then decides how much of the (now updated) cell state to expose as the
 hidden state that the rest of the network sees and that feeds the next
 step.</p>
-<p>The reason this defeats the vanishing gradient is the additive cell
-update. Look again at
+<p>The additive cell update gives a direct path that can mitigate
+vanishing gradients. Look again at
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">𝒄</mi><mi>t</mi></msub><mo>=</mo><msub><mi mathvariant="bold-italic">𝒇</mi><mi>t</mi></msub><mo>⊙</mo><msub><mi mathvariant="bold-italic">𝒄</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><msub><mi mathvariant="bold-italic">𝒊</mi><mi>t</mi></msub><mo>⊙</mo><msub><mover><mi mathvariant="bold-italic">𝒄</mi><mo accent="true">̃</mo></mover><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">\mathbf{c}_t = \mathbf{f}_t \odot \mathbf{c}_{t-1} + \mathbf{i}_t \odot \tilde{\mathbf{c}}_t</annotation></semantics></math>.
 When the forget gate is near 1, the cell state is carried forward almost
 unchanged, and the gradient flowing backward through
@@ -2486,10 +2486,11 @@ is multiplied by roughly
 at each step rather than by a shrinking
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="normal">tanh</mi><annotation encoding="application/x-tex">\tanh</annotation></semantics></math>
 derivative. The network can <em>learn</em> to hold the forget gate open
-exactly when it needs to preserve information over a long span, keeping
-the gradient highway clear for as many steps as the task demands. The
-gate gives the network direct control over its own memory’s gradient
-flow, which is what vanilla RNNs lacked.</p>
+exactly when it needs to preserve information over a long span, which
+can preserve that direct gradient contribution for longer. This does not
+guarantee successful learning over arbitrary spans. The gate gives the
+network direct control over its own memory’s gradient flow, which is
+what vanilla RNNs lacked.</p>
 <h2 data-number="6.5" role="heading" aria-level="3" id="gru"><span class="header-section-number">6.5</span> GRU</h2>
 <p>The Gated Recurrent Unit, or GRU (Cho et al., 2014), is a streamlined
 relative of the LSTM. It keeps the gating idea but uses only two gates
@@ -3421,8 +3422,9 @@ If this story is right and we know the prior, generation is trivial:
 sample
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝒛</mi><annotation encoding="application/x-tex">\mathbf{z}</annotation></semantics></math>
 from the prior, decode, done. The prior is something we <em>can</em>
-sample from, so the holes problem vanishes by construction — there are
-no holes in a Gaussian.</p>
+sample from. Its continuous support does not by itself guarantee that a
+finite trained decoder produces useful samples everywhere: training must
+connect the prior mass to the data.</p>
 <p>The probability the model assigns to a real data point is then the
 marginal likelihood, integrating over every latent that could have
 produced it:</p>
@@ -3530,13 +3532,14 @@ you have to sample
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝒛</mi><annotation encoding="application/x-tex">\mathbf{z}</annotation></semantics></math>
 from
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>q</mi><mi>ϕ</mi></msub><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒛</mi><mo>∣</mo><mi mathvariant="bold-italic">𝒙</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">q_\phi(\mathbf{z} \mid \mathbf{x})</annotation></semantics></math>
-and then decode. But sampling is not a differentiable operation. You
-cannot backpropagate through a random draw — there is no derivative of
-“drew this particular sample” with respect to the parameters of the
-distribution it was drawn from. And
+and then decode. A naive random draw does not provide an ordinary
+pathwise derivative with respect to the distribution parameters, while
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ϕ</mi><annotation encoding="application/x-tex">\phi</annotation></semantics></math>,
-the encoder’s parameters, are upstream of exactly that draw. Without a
-gradient path through the sample, the encoder cannot learn.</p>
+the encoder’s parameters, are upstream of that draw. Other estimators,
+such as score-function estimators, can estimate the gradient but may
+have high variance. Reparameterisation supplies a useful pathwise
+estimator for suitable continuous distributions, as explained in <a href="https://arxiv.org/abs/1312.6114">Auto-Encoding Variational
+Bayes</a>.</p>
 <p>The <strong>reparameterisation trick</strong> moves the randomness
 out of the path that needs gradients. Instead of drawing
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝒛</mi><annotation encoding="application/x-tex">\mathbf{z}</annotation></semantics></math>
@@ -3607,10 +3610,10 @@ closed-form KL), and backpropagate.</p>
 <p>To <em>generate</em> after training, you throw the encoder away.
 Sample
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒛</mi><mo>∼</mo><mi mathvariant="script">𝒩</mi><mo stretchy="false" form="prefix">(</mo><mn mathvariant="bold">𝟎</mn><mo>,</mo><mi mathvariant="bold-italic">𝑰</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\mathbf{z} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})</annotation></semantics></math>
-straight from the prior and decode — and because the KL term forced the
-training-time posteriors to cover that prior, the decoder produces
-something coherent rather than garbage. This is the gap from the start
-of the section, closed.</p>
+straight from the prior and decode — and the KL term encourages the
+training-time posteriors to overlap the prior. Whether the decoder
+produces coherent samples must still be checked empirically; finite
+optimisation and model capacity can leave poorly modelled regions.</p>
 <p>The same regularity makes interpolation work, which is the cleanest
 demonstration that the latent space is now well-behaved. Encode two
 images to codes
@@ -3809,11 +3812,12 @@ did.</p>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>f</mi><annotation encoding="application/x-tex">f</annotation></semantics></math>
 be 1-Lipschitz has to be enforced somehow, and how you do it matters.
 The original WGAN clipped the critic’s weights to a small range, which
-is crude and causes its own problems. The standard improvement,
-<strong>WGAN-GP</strong>, enforces the Lipschitz condition with a
-gradient penalty instead: a differentiable 1-Lipschitz critic has
-gradient norm at most 1, not necessarily equal to 1 everywhere. The
-proposed penalty instead encourages norm 1 at selected points,</p>
+is crude and causes its own problems. The proposed
+<strong>WGAN-GP</strong> approach instead uses a gradient penalty as a
+soft approximation to the Lipschitz constraint: a differentiable
+1-Lipschitz critic has gradient norm at most 1, not necessarily equal to
+1 everywhere. The proposed penalty instead encourages norm 1 at selected
+points,</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="script">ℒ</mi><mrow><mi mathvariant="normal">G</mi><mi mathvariant="normal">P</mi></mrow></msub><mo>=</mo><mi>λ</mi><mspace width="0.167em"></mspace><msub><mi mathvariant="double-struck">𝔼</mi><mover><mi mathvariant="bold-italic">𝒙</mi><mo accent="true">̂</mo></mover></msub><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">[</mo><mo stretchy="false" form="prefix">(</mo><mo stretchy="false" form="postfix">∥</mo><msub><mi>∇</mi><mover><mi mathvariant="bold-italic">𝒙</mi><mo accent="true">̂</mo></mover></msub><mi>D</mi><mo stretchy="false" form="prefix">(</mo><mover><mi mathvariant="bold-italic">𝒙</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="postfix">)</mo><msub><mo stretchy="false" form="postfix">∥</mo><mn>2</mn></msub><mo>−</mo><mn>1</mn><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">]</mo><mo>,</mo></mrow><annotation encoding="application/x-tex">\mathcal{L}_{\mathrm{GP}} = \lambda \, \mathbb{E}_{\hat{\mathbf{x}}}\big[(\|\nabla_{\hat{\mathbf{x}}} D(\hat{\mathbf{x}})\|_2 - 1)^2\big],</annotation></semantics></math></p>
 <p>evaluated at points
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi mathvariant="bold-italic">𝒙</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat{\mathbf{x}}</annotation></semantics></math>
