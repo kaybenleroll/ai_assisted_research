@@ -103,6 +103,70 @@ def locator_findings(root: Path, audit: Path) -> list[str]:
     return errors
 
 
+def case_findings(root: Path, source: Path, case: Path) -> list[str]:
+    """Validate an explicitly bound case; unbound legacy cases are unchanged."""
+    if not case.is_file():
+        return []
+    text = case.read_text(encoding="utf-8")
+    fields = {}
+    for name in ("Current source revision", "Current source SHA-256"):
+        fields[name] = [m.group(1).strip().strip("`") for m in re.finditer(
+            rf"^- {re.escape(name)}:\s*(.*?)\s*$", text, re.M)]
+    start, end = "<!-- current locators: start -->", "<!-- current locators: end -->"
+    if not any(fields.values()) and start not in text and end not in text:
+        return []
+    errors = []
+    if any(len(values) != 1 for values in fields.values()):
+        errors.append("case: exactly one current source revision and SHA-256 are required")
+    else:
+        revision, digest = fields["Current source revision"][0], fields["Current source SHA-256"][0]
+        if not re.fullmatch(r"[0-9a-f]{64}", digest) or digest != source_hash(source):
+            errors.append("case: current source SHA-256 is invalid or differs from working source")
+        try:
+            resolved = resolve_revision(root, revision)
+            relative = source.relative_to(root).as_posix()
+            result = subprocess.run(["git", "show", f"{resolved}:{relative}"], cwd=root, capture_output=True)
+            if result.returncode or result.stdout != source.read_bytes():
+                errors.append("case: source is absent at current revision or differs from working source")
+        except (RuntimeError, ValueError) as exc:
+            errors.append(f"case: current revision: {exc}")
+    active = False
+    regions = 0
+    locators = 0
+    range_re = re.compile(r"(?<![A-Za-z0-9_/.-])(?P<path>[A-Za-z0-9_.-]+(?:/[A-Za-z0-9_.-]+)*\.(?:md|py|R|json|toml|txt|html|pdf)):(?P<line>[0-9]+)(?:[-–](?P<end>[0-9]+))?")
+    for number, line in enumerate(text.splitlines(), 1):
+        if line.strip() == start:
+            if active:
+                errors.append(f"case:{number}: nested current locator marker")
+            active = True
+            regions += 1
+        elif line.strip() == end:
+            if not active:
+                errors.append(f"case:{number}: unmatched current locator end")
+            active = False
+        elif active:
+            for match in range_re.finditer(line):
+                locators += 1
+                relative = Path(match.group("path"))
+                target = (root / relative).resolve()
+                try:
+                    target.relative_to(root.resolve())
+                    if not target.is_file():
+                        raise ValueError("file does not exist")
+                    count = len(target.read_text(encoding="utf-8").splitlines())
+                    first = int(match.group("line"))
+                    last = int(match.group("end") or first)
+                    if first < 1 or last < first or last > count:
+                        raise ValueError(f"line range is outside file ({count} lines)")
+                except (ValueError, OSError, UnicodeError) as exc:
+                    errors.append(f"case:{number}: invalid current locator {match.group(0)}: {exc}")
+    if active:
+        errors.append("case: unclosed current locator marker")
+    if not regions or not locators:
+        errors.append("case: bound case requires marked current locators")
+    return errors
+
+
 def revision_findings(root: Path, source: Path, brief: Path, audit: Path) -> tuple[list[str], str, str]:
     errors = []
     brief_meta = metadata(brief.read_text(encoding="utf-8"))
@@ -417,6 +481,7 @@ def validate(root: Path, source: Path, brief: Path, audit: Path) -> list[str]:
     if errors:
         return errors
     errors.extend(locator_findings(root, audit))
+    errors.extend(case_findings(root, source_path(root, source), source.with_suffix(".case.md")))
     revision_errors, reviewed_source, digest = revision_findings(root, source_path(root, source), brief, audit)
     errors.extend(revision_errors)
     audit_text = audit.read_text(encoding="utf-8")

@@ -173,6 +173,34 @@ class PrimerAuditTests(unittest.TestCase):
             self.assertTrue(any("working source differs" in error
                                 for error in MODULE.validate(root, source, brief, audit)))
 
+    def test_current_case_binding_and_historical_locators(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            self.git_repo(root)
+            source = root / "primer.md"
+            source.write_text("one\ntwo\n", encoding="utf-8")
+            revision = self.commit(root, "source")
+            digest = hashlib.sha256(source.read_bytes()).hexdigest()
+            case = root / "primer.case.md"
+            def write(rev=revision, sha=digest, locator="primer.md:1–2"):
+                case.write_text(
+                    f"- Current source revision: {rev}\n- Current source SHA-256: {sha}\n"
+                    "Historical missing.md:999\n<!-- current locators: start -->\n"
+                    f"{locator}\n<!-- current locators: end -->\n", encoding="utf-8")
+            write()
+            self.assertEqual(MODULE.case_findings(root, source, case), [])
+            for kwargs in ({"rev": "abcdef123456789"}, {"sha": "0" * 64},
+                           {"locator": "missing.md:1"}, {"locator": "primer.md:0"},
+                           {"locator": "primer.md:1–3"}, {"locator": "primer.md:2–1"}):
+                with self.subTest(kwargs=kwargs):
+                    write(**kwargs)
+                    self.assertTrue(MODULE.case_findings(root, source, case))
+            write()
+            source.write_text("changed\ntwo\n", encoding="utf-8")
+            self.assertTrue(MODULE.case_findings(root, source, case))
+            case.write_text("Legacy historical missing.md:999\n", encoding="utf-8")
+            self.assertEqual(MODULE.case_findings(root, source, case), [])
+
     def test_opt_in_source_read_coverage_ranges_and_gate(self):
         def audit(coverage, gate="pass", release="ready"):
             return ("- Audit schema: 2\n" + OUTLINE + (f"- Source read coverage: {coverage}\n" if coverage is not None else "")

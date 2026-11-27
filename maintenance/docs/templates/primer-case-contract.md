@@ -34,3 +34,18 @@ are explicit.
 
 The contract is complete only when a reader can follow the case from its input
 to an interpreted output and can see where the method stops applying.
+
+## Binding current evidence after implementation
+
+When a case records current source evidence, opt into mechanical checks with
+exactly one `- Current source revision: <commit>` and one
+`- Current source SHA-256: <64 lowercase hexadecimal digits>`. The revision
+must resolve to a commit containing the same source bytes as the working tree;
+the digest must match those bytes. Surround each group of current trace
+locators with standalone `<!-- current locators: start -->` and
+`<!-- current locators: end -->` lines. Use repository-relative `path:line`
+or `path:first–last` locators; at least one is required. The audit gate checks
+file existence and line bounds inside these regions. Historical references
+outside them are not checked as current. Existing cases without the fields or
+markers remain unbound. These checks establish mechanical consistency, not
+whether the evidence supports the teaching claim.
