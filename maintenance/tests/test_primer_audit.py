@@ -365,10 +365,11 @@ class PrimerAuditTests(unittest.TestCase):
             root = Path(temporary) / "checkout"
             subprocess.run(["git", "clone", "--quiet", "--shared", str(repository), str(root)], check=True)
             self.git_repo(root)
-            # Use the fixed historical Pi snapshot, even after the live audit migrates.
-            legacy_revision = "d3f76649bfe51d5465fd999c49c45ac74ad98fe8"
-            subprocess.run(["git", "checkout", legacy_revision, "--", "primer_pi_coding_agent"],
-                           cwd=root, check=True)
+            # Tracked historical evidence keeps the fixed baseline available in shallow clones.
+            fixture = repository / "maintenance/tests/fixtures/pi-legacy"
+            for path in fixture.iterdir():
+                shutil.copyfile(path, root / "primer_pi_coding_agent" / path.name)
+            subprocess.run(["git", "add", "primer_pi_coding_agent"], cwd=root, check=True)
             subprocess.run(["git", "commit", "--allow-empty", "-qm", "historical Pi fixture"],
                            cwd=root, check=True)
             checker = root / "maintenance/scripts/check/primer_audit.py"
@@ -471,6 +472,28 @@ class PrimerAuditTests(unittest.TestCase):
             ranges = MODULE.changed_ranges(root, base, source)
             self.assertEqual(ranges, [(2, 2)])
             self.assertEqual(MODULE.impacted_locators(root, audit, ranges), ["audit:2: primer.md:2"])
+
+
+class PiFirstRunTests(unittest.TestCase):
+    def test_staged_and_unstaged_edits_do_not_disappear(self):
+        with tempfile.TemporaryDirectory() as root:
+            def git(*args):
+                return subprocess.run(["git", "-C", root, *args], check=True,
+                                      text=True, capture_output=True).stdout
+
+            git("init", "-q")
+            git("config", "user.name", "Fixture")
+            git("config", "user.email", "fixture@example.org")
+            readme = Path(root) / "README.md"
+            readme.write_text("original\n")
+            git("add", "README.md")
+            git("commit", "-qm", "baseline")
+            readme.write_text("staged\n")
+            git("add", "README.md")
+            readme.write_text("original\n")
+            self.assertEqual(git("diff", "HEAD", "--", "README.md"), "")
+            self.assertIn("+staged", git("diff", "--cached", "--", "README.md"))
+            self.assertIn("+original", git("diff", "--", "README.md"))
 
 
 if __name__ == "__main__":

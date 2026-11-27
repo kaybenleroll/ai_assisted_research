@@ -269,3 +269,11 @@ At source `629d566`, the nine matrix rows were checked against the passages name
 ## Final #473/#474 integration verification
 
 `just primer-audit primer_pi_coding_agent` passed in a normal disposable clone at audit commit `f94b9b8`: evidence and revision checks, pinned HTML/PDF rebuild, render QA, freshness, Markdown and offline links passed. The rebuild changed the clone PDF timestamp; the committed PDF was visually sampled separately on pages 1, 8–9, 14, 21, 33–35 and 39. The container uses Pandoc 3.11 image digest `sha256:239428f1d61de725be479c72ada0bbe146a313791ee2d68333114b6c623ad771`. `just check` passed at `72aad24`; the subsequent changes update only this audit review. The complete case and Pi/provider operations remain illustrative and unexecuted; interactive accessibility checks were not performed and the PDF is untagged. #475 remains an open editorial follow-up, not an identified structural failure.
+
+## Review follow-up: cancelling edits and mean tolerance
+
+The first-run instructions now inspect the index and working tree separately. `maintenance/tests/test_primer_audit.py` creates a staged edit reversed in the working tree and verifies that the combined `HEAD` diff is empty while both separate diffs reveal their changes. The comparator specification also requires the two means to be within 0.01 of each other: 9.99 and 10.01 each pass against 10.00 but fail pairwise. A `Decimal` check confirmed this counterexample. These checks do not execute Pi or implement the illustrative comparator.
+
+The audit regression test uses tracked copies of the fixed historical Pi source, brief and audit, so its legacy baseline remains available in shallow clones without weakening the registered digest check.
+
+Follow-up render: `just all` and `just render-qa primer_pi_coding_agent` passed using the repository container. Inspected PDF pages 1, 9, 14, 21, 34 and 39; no clipping or overflow observed. Page 21 supplies the table check; the document has no figures or equations. Interactive accessibility checks were not performed.

@@ -1131,13 +1131,15 @@ Pi to explain its plan, edit only the named files, make no commit, run
 one check, and stop.</li>
 <li><strong>Inspect independently.</strong> Run
 <code>git log --oneline</code>, <code>git status --short</code>, and
-<code>git diff HEAD -- README.md</code> yourself; confirm the initial
-commit is still <code>HEAD</code>. The diff compares the tracked README
-with the initial commit, including staged and unstaged edits. Inspect
-any untracked files listed by status separately: Git diffs do not show
-their contents. Run the project’s check command yourself if the change
-has one. Keep or revert the change on evidence, not on Pi’s
-confidence.</li>
+<code>git diff --cached -- README.md</code> and
+<code>git diff -- README.md</code> yourself; confirm the initial commit
+is still <code>HEAD</code>. The first diff shows staged edits against
+<code>HEAD</code>; the second shows unstaged edits against the index.
+Inspect both: opposite edits can cancel in a single diff against
+<code>HEAD</code>. Inspect any untracked files listed by status
+separately: Git diffs do not show their contents. Run the project’s
+check command yourself if the change has one. Keep or revert the change
+on evidence, not on Pi’s confidence.</li>
 </ol>
 <pre class="text"><code>Inspect this repository. Report the files, likely project type,
 and three useful next checks.</code></pre>
@@ -2530,10 +2532,15 @@ endings, no quoting, an integer count, and exactly two decimal places
 for each temperature. Compare the date, station ID, count, minimum, and
 maximum exactly against the corresponding expected row; compare the
 parsed mean numerically with an absolute tolerance of <code>0.01</code>.
-Reject malformed or non-finite numbers and exit non-zero for any
-mismatch. For a negative check, change only station A’s minimum from
-<code>5.10</code> to <code>5.20</code>: even with the correct count,
-mean, and maximum, the comparator must reject that row.</p>
+Also compare the two output means with each other using the same
+tolerance: two means can each be within <code>0.01</code> of expected
+but more than <code>0.01</code> apart. For example, if expected is
+<code>10.00</code>, reject output means <code>9.99</code> and
+<code>10.01</code>. Reject malformed or non-finite numbers and exit
+non-zero for any mismatch. For a negative check, change only station A’s
+minimum from <code>5.10</code> to <code>5.20</code>: even with the
+correct count, mean, and maximum, the comparator must reject that
+row.</p>
 <h2 data-number="11.2" role="heading" aria-level="3" id="give-pi-bounded-tasks"><span class="header-section-number">11.2</span> Give Pi Bounded Tasks</h2>
 <p>Use a separate, named session for each phase. The fixture, expected
 output, and comparison script are committed before the implementation
