@@ -14,7 +14,7 @@
 - Core-concept depth matrix: brief pi-current-docs-v1; all nine stable IDs and unchanged tiers (eight primary, one reference-only).
 - Teaching-case contract: primer_pi_coding_agent/primer_pi_coding_agent.case.md.
 - Review boundary: complete 1022-line baseline source and complete brief/case/research evidence read; complete refreshed diff, changed passages and dependent routes reviewed at 340fc52, then final three source corrections reread at c193c88. Current primary-documentation and synthetic RPC evidence supplied by separate researcher/main. No live Pi/provider, package-security or complete Rocker execution.
-- Readiness decision: not-ready; the current structural review is outstanding.
+- Readiness decision: not-ready
 
 **Historical #442 decision: content gate passed and release readiness was ready**, following the coordinator’s verification recorded below. The current #473 structural review remains outstanding and supersedes that historical readiness decision. Earlier pending statements describe the independent reviewer’s draft checkpoint and are superseded by that verification. All eight primary routes supply actual reasoning, action, interpreted result and material limit. Source line ranges below refer to `primer_pi_coding_agent/primer_pi_coding_agent.md` at the reviewed commit. Current output checks and synthetic protocol tests do not certify live provider behaviour or execute the illustrative Rocker case.
 
