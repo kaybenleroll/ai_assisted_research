@@ -334,6 +334,7 @@ Training rarely goes smoothly the first time, and most failures announce themsel
 - **Loss decreasing but painfully slowly.** Often a learning rate that is too small, or the wrong optimiser — switching plain SGD to Adam frequently fixes this on its own.
 
 The habit that makes all of this manageable is to watch the training and validation loss curves together from the first epoch. Their relative behaviour — both falling, one diverging from the other, either flatlining or spiking — points directly at which failure mode you are in, and which knob to turn.
+
 ## Convolutional Neural Networks
 
 Suppose you want to classify a 224×224 RGB image with an ordinary MLP. The input layer alone needs $224 \times 224 \times 3 = 150{,}528$ neurons, one per colour channel per pixel. If your first hidden layer is a modest 4096 units, that single layer has $150{,}528 \times 4096 \approx 616$ million weights. Before you have done anything interesting, you are already carrying more parameters than most complete models you will ever train. And the absurd part is that those parameters buy you almost nothing useful, because the MLP treats the image as a flat vector of 150,528 unrelated numbers. The pixel at position $(100, 100)$ and the pixel right next to it at $(100, 101)$ are, as far as the network is concerned, two arbitrary coordinates in a long list. The fact that they are physically adjacent — that together they might form part of an edge, a corner, a whisker — is information the architecture throws away on the first line.
