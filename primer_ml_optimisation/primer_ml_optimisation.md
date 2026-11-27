@@ -156,7 +156,7 @@ Normalising by $\sum_i w_i$ keeps the data term invariant if every weight is mul
 
 Not every training objective is a separable average. Pairwise ranking losses couple two examples; contrastive losses can couple every item in a batch through a shared denominator; normalisation layers can make one example's contribution depend on the other examples in the batch. In those cases, "the mini-batch gradient is an unbiased estimate of the full gradient" needs proof for the implemented batching scheme. It is not implied by the presence of a data loader.
 
-The regulariser also has an averaging convention. If a program adds $\lambda R$ once per batch and then averages those batch losses over an epoch, the effective penalty depends on the number of batches unless the bookkeeping is correct. A robust objective test duplicates the data, changes the batch partition while preserving the same examples, and checks whether the intended mathematical objective and its full gradient remain unchanged.
+The regulariser also has an aggregation convention. At fixed parameters, averaging batch objectives that each include $\lambda R$ includes the penalty once; summing them without rescaling counts it once per batch. The data terms need batch-size weights when batches have unequal sizes. Sequential parameter updates are different: parameters change between batches, so their trajectory cannot be inferred from an average evaluated at one fixed point. A robust objective test duplicates the data, changes the batch partition while preserving the same examples, and checks whether the intended mathematical objective and its full gradient remain unchanged.
 
 ### Parameters, Hyperparameters, and State
 
@@ -552,7 +552,7 @@ F(\boldsymbol{\theta})
 \qquad W=\sum_{i=1}^{n}w_{y_i}.
 $$
 
-Its data gradient is divided by $W$, while the regularisation gradient is $\lambda\boldsymbol{\theta}$. If a mini-batch is sampled uniformly, the weighted batch sum needs a scaling rule whose expectation matches the full weighted average. If examples are sampled with probabilities proportional to their class weights, an uncorrected batch average estimates a different objective. Both procedures may be useful, but they are not two implementations of the same formula.
+Its data gradient is divided by $W$, while the regularisation gradient is $\lambda\boldsymbol{\theta}$. Under uniform independent sampling, multiply the batch mean of weighted per-example gradients by $n/W$ to estimate the weighted data gradient. Alternatively, sample example $i$ with probability $w_{y_i}/W$ and average its unweighted gradient: this has the same expectation. Weighting those sampled gradients again generally targets a different objective. Add the regularisation gradient once in either estimator. For two examples with weights 1 and 3 and data gradients 0 and 4, the weighted gradient is $(1(0)+3(4))/4=3$; sampling with probabilities $1/4$ and $3/4$ gives the same expected unweighted gradient.
 
 The audit now has concrete tests. Multiplying both class weights by ten should leave the normalised data term unchanged. Duplicating every observation should also leave it unchanged. Setting $w_+=w_-$ should recover the ordinary empirical mean. Setting $\lambda=0$ should remove both the penalty value and its gradient. Reordering examples must not change a deterministic full-batch result. If any test fails, optimiser comparisons are premature.
 
@@ -1177,7 +1177,7 @@ Method names are less informative than problem classes. A guarantee has four par
 
 An unconstrained smooth problem has a differentiable objective and no explicit feasible set. A constrained problem restricts $\boldsymbol{\theta}$ to $\mathcal{C}$ or imposes equalities and inequalities. A composite problem has a smooth part plus a simple non-smooth part, such as an $\ell_1$ penalty. A stochastic problem exposes only noisy objective or gradient estimates. These categories overlap.
 
-Convexity means that the line segment between two points lies above the graph's supporting chord:
+Convexity means that the graph between two points lies on or below the chord joining them:
 
 $$
 F(t\mathbf{u}+(1-t)\mathbf{v})
@@ -1467,10 +1467,12 @@ $$
 \mathbf{g}_k
 =\nabla f_{i_k}(\boldsymbol{\theta}_k)
 -\nabla f_{i_k}(\tilde{\boldsymbol{\theta}})
-+\nabla F(\tilde{\boldsymbol{\theta}}).
++\nabla F(\tilde{\boldsymbol{\theta}})
++\lambda\left[\nabla R(\boldsymbol{\theta}_k)
+-\nabla R(\tilde{\boldsymbol{\theta}})\right].
 $$
 
-The estimator is unbiased under uniform sampling, and its variance shrinks as the current iterate approaches the reference point. SAGA uses a table of stored component gradients instead of periodic full-gradient snapshots. SARAH-like estimators update a recursive gradient estimate and can be biased conditionally while retaining useful convergence properties under their own analyses.
+For the earlier objective $F=n^{-1}\sum_i f_i+\lambda R$ with differentiable $R$, the last term updates the exact regularisation gradient from the reference point to the current point. Under uniform independent sampling, the component-gradient difference has expectation $n^{-1}\sum_i[\nabla f_i(\boldsymbol{\theta}_k)-\nabla f_i(\tilde{\boldsymbol{\theta}})]$, so the whole estimator has expectation $\nabla F(\boldsymbol{\theta}_k)$. Omitting the correction would retain the penalty gradient at the reference point. Equivalently, absorb the same smooth penalty into each component. A non-smooth penalty calls for an appropriate proximal variance-reduced method instead. The sampling variance shrinks as the current iterate approaches the reference point. SAGA uses a table of stored component gradients instead of periodic full-gradient snapshots. SARAH-like estimators update a recursive gradient estimate and can be biased conditionally while retaining useful convergence properties under their own analyses.
 
 These methods can recover linear convergence on smooth strongly convex finite sums while using fewer component-gradient evaluations than repeated full-gradient descent. Their costs differ: SVRG needs snapshot passes, SAGA needs memory proportional to the number of components unless structure reduces it, and recursive methods require careful restart logic. They are attractive when the data set is finite and revisited many times, gradients are not dominated by hardware throughput considerations, and high training accuracy matters. They are less compelling in a streaming setting where examples do not recur.
 

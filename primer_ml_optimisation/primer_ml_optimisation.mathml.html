@@ -1395,14 +1395,17 @@ example’s contribution depend on the other examples in the batch. In
 those cases, “the mini-batch gradient is an unbiased estimate of the
 full gradient” needs proof for the implemented batching scheme. It is
 not implied by the presence of a data loader.</p>
-<p>The regulariser also has an averaging convention. If a program adds
+<p>The regulariser also has an aggregation convention. At fixed
+parameters, averaging batch objectives that each include
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mi>R</mi></mrow><annotation encoding="application/x-tex">\lambda R</annotation></semantics></math>
-once per batch and then averages those batch losses over an epoch, the
-effective penalty depends on the number of batches unless the
-bookkeeping is correct. A robust objective test duplicates the data,
-changes the batch partition while preserving the same examples, and
-checks whether the intended mathematical objective and its full gradient
-remain unchanged.</p>
+includes the penalty once; summing them without rescaling counts it once
+per batch. The data terms need batch-size weights when batches have
+unequal sizes. Sequential parameter updates are different: parameters
+change between batches, so their trajectory cannot be inferred from an
+average evaluated at one fixed point. A robust objective test duplicates
+the data, changes the batch partition while preserving the same
+examples, and checks whether the intended mathematical objective and its
+full gradient remain unchanged.</p>
 <h2 data-number="2.2" role="heading" aria-level="3" id="parameters-hyperparameters-and-state"><span class="header-section-number">2.2</span> Parameters, Hyperparameters,
 and State</h2>
 <p>Parameters are variables changed by the inner optimiser, such as
@@ -1873,12 +1876,24 @@ F(\boldsymbol{\theta})
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>W</mi><annotation encoding="application/x-tex">W</annotation></semantics></math>,
 while the regularisation gradient is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mi mathvariant="bold-italic">𝜽</mi></mrow><annotation encoding="application/x-tex">\lambda\boldsymbol{\theta}</annotation></semantics></math>.
-If a mini-batch is sampled uniformly, the weighted batch sum needs a
-scaling rule whose expectation matches the full weighted average. If
-examples are sampled with probabilities proportional to their class
-weights, an uncorrected batch average estimates a different objective.
-Both procedures may be useful, but they are not two implementations of
-the same formula.</p>
+Under uniform independent sampling, multiply the batch mean of weighted
+per-example gradients by
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mi>/</mi><mi>W</mi></mrow><annotation encoding="application/x-tex">n/W</annotation></semantics></math>
+to estimate the weighted data gradient. Alternatively, sample example
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>
+with probability
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>w</mi><msub><mi>y</mi><mi>i</mi></msub></msub><mi>/</mi><mi>W</mi></mrow><annotation encoding="application/x-tex">w_{y_i}/W</annotation></semantics></math>
+and average its unweighted gradient: this has the same expectation.
+Weighting those sampled gradients again generally targets a different
+objective. Add the regularisation gradient once in either estimator. For
+two examples with weights 1 and 3 and data gradients 0 and 4, the
+weighted gradient is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mn>3</mn><mo stretchy="false" form="prefix">(</mo><mn>4</mn><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mn>4</mn><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">(1(0)+3(4))/4=3</annotation></semantics></math>;
+sampling with probabilities
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mn>4</mn></mrow><annotation encoding="application/x-tex">1/4</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mi>/</mi><mn>4</mn></mrow><annotation encoding="application/x-tex">3/4</annotation></semantics></math>
+gives the same expected unweighted gradient.</p>
 <p>The audit now has concrete tests. Multiplying both class weights by
 ten should leave the normalised data term unchanged. Duplicating every
 observation should also leave it unchanged. Setting
@@ -2766,8 +2781,8 @@ part plus a simple non-smooth part, such as an
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>ℓ</mi><mn>1</mn></msub><annotation encoding="application/x-tex">\ell_1</annotation></semantics></math>
 penalty. A stochastic problem exposes only noisy objective or gradient
 estimates. These categories overlap.</p>
-<p>Convexity means that the line segment between two points lies above
-the graph’s supporting chord:</p>
+<p>Convexity means that the graph between two points lies on or below
+the chord joining them:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi><mo stretchy="false" form="prefix">(</mo><mi>t</mi><mi mathvariant="bold-italic">𝒖</mi><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>t</mi><mo stretchy="false" form="postfix">)</mo><mi mathvariant="bold-italic">𝒗</mi><mo stretchy="false" form="postfix">)</mo><mo>≤</mo><mi>t</mi><mi>F</mi><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒖</mi><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>t</mi><mo stretchy="false" form="postfix">)</mo><mi>F</mi><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒗</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">
 F(t\mathbf{u}+(1-t)\mathbf{v})
 \leq tF(\mathbf{u})+(1-t)F(\mathbf{v})
@@ -3329,18 +3344,33 @@ component gradient with stored or periodically refreshed information. A
 representative SVRG estimator uses a reference point
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi mathvariant="bold-italic">𝜽</mi><mo accent="true">̃</mo></mover><annotation encoding="application/x-tex">\tilde{\boldsymbol{\theta}}</annotation></semantics></math>
 and its full gradient:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">𝒈</mi><mi>k</mi></msub><mo>=</mo><mi>∇</mi><msub><mi>f</mi><msub><mi>i</mi><mi>k</mi></msub></msub><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝜽</mi><mi>k</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mi>∇</mi><msub><mi>f</mi><msub><mi>i</mi><mi>k</mi></msub></msub><mo stretchy="false" form="prefix">(</mo><mover><mi mathvariant="bold-italic">𝜽</mi><mo accent="true">̃</mo></mover><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mi>∇</mi><mi>F</mi><mo stretchy="false" form="prefix">(</mo><mover><mi mathvariant="bold-italic">𝜽</mi><mo accent="true">̃</mo></mover><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">𝒈</mi><mi>k</mi></msub><mo>=</mo><mi>∇</mi><msub><mi>f</mi><msub><mi>i</mi><mi>k</mi></msub></msub><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝜽</mi><mi>k</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mi>∇</mi><msub><mi>f</mi><msub><mi>i</mi><mi>k</mi></msub></msub><mo stretchy="false" form="prefix">(</mo><mover><mi mathvariant="bold-italic">𝜽</mi><mo accent="true">̃</mo></mover><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mi>∇</mi><mi>F</mi><mo stretchy="false" form="prefix">(</mo><mover><mi mathvariant="bold-italic">𝜽</mi><mo accent="true">̃</mo></mover><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mi>λ</mi><mrow><mo stretchy="true" form="prefix">[</mo><mi>∇</mi><mi>R</mi><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝜽</mi><mi>k</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mi>∇</mi><mi>R</mi><mo stretchy="false" form="prefix">(</mo><mover><mi mathvariant="bold-italic">𝜽</mi><mo accent="true">̃</mo></mover><mo stretchy="false" form="postfix">)</mo><mo stretchy="true" form="postfix">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">
 \mathbf{g}_k
 =\nabla f_{i_k}(\boldsymbol{\theta}_k)
 -\nabla f_{i_k}(\tilde{\boldsymbol{\theta}})
-+\nabla F(\tilde{\boldsymbol{\theta}}).
++\nabla F(\tilde{\boldsymbol{\theta}})
++\lambda\left[\nabla R(\boldsymbol{\theta}_k)
+-\nabla R(\tilde{\boldsymbol{\theta}})\right].
 </annotation></semantics></math></p>
-<p>The estimator is unbiased under uniform sampling, and its variance
-shrinks as the current iterate approaches the reference point. SAGA uses
-a table of stored component gradients instead of periodic full-gradient
-snapshots. SARAH-like estimators update a recursive gradient estimate
-and can be biased conditionally while retaining useful convergence
-properties under their own analyses.</p>
+<p>For the earlier objective
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi><mo>=</mo><msup><mi>n</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><msub><mo>∑</mo><mi>i</mi></msub><msub><mi>f</mi><mi>i</mi></msub><mo>+</mo><mi>λ</mi><mi>R</mi></mrow><annotation encoding="application/x-tex">F=n^{-1}\sum_i f_i+\lambda R</annotation></semantics></math>
+with differentiable
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>R</mi><annotation encoding="application/x-tex">R</annotation></semantics></math>,
+the last term updates the exact regularisation gradient from the
+reference point to the current point. Under uniform independent
+sampling, the component-gradient difference has expectation
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>n</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><msub><mo>∑</mo><mi>i</mi></msub><mo stretchy="false" form="prefix">[</mo><mi>∇</mi><msub><mi>f</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝜽</mi><mi>k</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mi>∇</mi><msub><mi>f</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">(</mo><mover><mi mathvariant="bold-italic">𝜽</mi><mo accent="true">̃</mo></mover><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">n^{-1}\sum_i[\nabla f_i(\boldsymbol{\theta}_k)-\nabla f_i(\tilde{\boldsymbol{\theta}})]</annotation></semantics></math>,
+so the whole estimator has expectation
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∇</mi><mi>F</mi><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝜽</mi><mi>k</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\nabla F(\boldsymbol{\theta}_k)</annotation></semantics></math>.
+Omitting the correction would retain the penalty gradient at the
+reference point. Equivalently, absorb the same smooth penalty into each
+component. A non-smooth penalty calls for an appropriate proximal
+variance-reduced method instead. The sampling variance shrinks as the
+current iterate approaches the reference point. SAGA uses a table of
+stored component gradients instead of periodic full-gradient snapshots.
+SARAH-like estimators update a recursive gradient estimate and can be
+biased conditionally while retaining useful convergence properties under
+their own analyses.</p>
 <p>These methods can recover linear convergence on smooth strongly
 convex finite sums while using fewer component-gradient evaluations than
 repeated full-gradient descent. Their costs differ: SVRG needs snapshot
