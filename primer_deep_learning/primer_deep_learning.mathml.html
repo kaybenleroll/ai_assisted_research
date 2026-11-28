@@ -3901,6 +3901,26 @@ critic trained for finitely many steps only approximates the dual
 optimum, so its loss is not automatically the exact Wasserstein
 distance. See <a href="https://proceedings.mlr.press/v70/arjovsky17a.html">WGAN</a> and
 <a href="https://arxiv.org/abs/1704.00028">WGAN-GP</a>.</p>
+<p>A one-dimensional example makes both qualifications concrete. Put all
+real mass at
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">x=1</annotation></semantics></math>
+and all generated mass at
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">x=0</annotation></semantics></math>.
+The 1-Lipschitz critic
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>x</mi></mrow><annotation encoding="application/x-tex">f(x)=x</annotation></semantics></math>
+gives an objective of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mn>0</mn><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">1-0=1</annotation></semantics></math>,
+equal to the cost of transporting the unit mass one unit; the dual
+constraint prevents any critic from assigning a larger difference. As
+the generated point moves towards 1, this particular critic gives a
+smaller difference, but a trained finite critic need not find that
+optimum. Conversely, the constant critic
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">f(x)=0</annotation></semantics></math>
+is also 1-Lipschitz: its gradient norm is zero, so it illustrates why
+the Lipschitz condition requires a norm <em>at most</em> one, rather
+than exactly one. The WGAN-GP penalty would penalise this constant
+critic at sampled interpolants; that penalty is a training choice, not
+the definition of the constraint.</p>
 <h2 data-number="10.4" role="heading" aria-level="3" id="architecture-variants"><span class="header-section-number">10.4</span> Architecture Variants</h2>
 <p>Several variants are worth recognising. <strong>DCGAN</strong> was
 the one that made GANs work reliably on images: build both networks from
