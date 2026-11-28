@@ -3,16 +3,16 @@
 - Issue and milestone: #482; depends on #476 / PR #516.
 - Audit revision: `482-audit-draft-v1`.
 - Audit schema: 2
-- Source revision: `14aada35a41183c337721a3cf3a0919c91dd2636`
+- Source revision: `78edc97f19c0223a395b6f38f8044002cc039498`
 - Tracked path: `primer_deep_learning/primer_deep_learning.audit.md`.
 - Starting branch: `docs/482-deep-learning-audit`.
 - Reviewer(s): Codex.
 - Date: 2026-11-27.
-- Reviewed revision: `14aada35a41183c337721a3cf3a0919c91dd2636`
+- Reviewed revision: `78edc97f19c0223a395b6f38f8044002cc039498`
 - Historical review: the full continuous pre-revision read was at `bda64e7666f2c228de6f12b87c9beeaa36831076`; a subsequent continuous reread covered lines 1–1424 at `538fa40`, with lines 1–184 carried from the identical pre-correction text and lines 185–200 reread after that correction; the changed passages at the current revision have been sampled but have not received a complete audit.
 - Brief reviewed: `primer_deep_learning/primer_deep_learning.brief.md`, `482-brief-v1`.
 - Readiness decision: not-ready
-- Review boundary: Continuous source read at `2ee1e86` and provisional outline decisions at the pre-revision revision. Source claims, all route transitions, post-change outline and depth gates remain incomplete; subsequent source corrections require a revision-bound re-review.
+- Review boundary: Continuous source read at `76fe772`, followed by changed-passage review at `78edc97`. Several source claims, individual child boundaries and depth gates remain incomplete; see the current-revision reconciliation below.
 - Teaching-case contract: Separate mathematical worked threads and an explicitly illustrative decision case are planned in the brief.
 - Core-concept depth matrix: Brief `482-brief-v1`; rows below are deliberately not checked until post-change review is completed.
 
@@ -31,27 +31,27 @@ The continuous source read at `2ee1e86` is complete. Explicit boundary and child
 
 ## Adversarial depth gate
 
-Eight primary concepts remain not-checked and the spatial concept is a gap below until the remaining claim review is complete. The current reader paths and corrected semantic mappings are recorded separately; no route is passed solely by rebinding locators.
+All nine primary concepts remain not-checked pending the remaining claim review. The spatial equivariance defect was corrected and is no longer an open gap. The current reader paths and corrected semantic mappings are recorded separately; no route is passed solely by rebinding locators.
 
 ## Core-concept depth matrix
 
 | route_id | route tier | concept_id | explanation locator | example/action locator | interpretation locator | limitation locator | evidence revision | reviewer | status | finding | scope decision |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| foundations | primary | network_update | primer_deep_learning.md:222 | primer_deep_learning.md:263 | primer_deep_learning.md:263 | primer_deep_learning.md:263 | 14aada35a41183c337721a3cf3a0919c91dd2636 | Codex | not-checked | Reader path traced; broader training claims remain under review. | retain pending full claim review |
-| spatial | primary | cnn_features | primer_deep_learning.md:371 | primer_deep_learning.md:383 | primer_deep_learning.md:408 | primer_deep_learning.md:446 | 14aada35a41183c337721a3cf3a0919c91dd2636 | Codex | gap | Lines 377–379 assert unqualified translation equivariance, although finite boundaries and stride limit it; readers could infer a one-pixel shift always produces an equal shifted map. | retain; qualify boundary and stride conditions |
-| recurrent | primary | state_gradients | primer_deep_learning.md:536 | primer_deep_learning.md:566 | primer_deep_learning.md:566 | primer_deep_learning.md:582 | 14aada35a41183c337721a3cf3a0919c91dd2636 | Codex | not-checked | State and direct gradient paths traced; deployment claims require review. | retain pending full claim review |
-| attention | primary | attention_weights | primer_deep_learning.md:706 | primer_deep_learning.md:718 | primer_deep_learning.md:718 | primer_deep_learning.md:718 | 14aada35a41183c337721a3cf3a0919c91dd2636 | Codex | not-checked | Lookup traced; position and architecture claims require review. | retain pending full claim review |
-| language | primary | language_training | primer_deep_learning.md:918 | primer_deep_learning.md:924 | primer_deep_learning.md:930 | primer_deep_learning.md:912 | 14aada35a41183c337721a3cf3a0919c91dd2636 | Codex | not-checked | Corrected objective interpretation locator; adaptation is a separate example and claim review remains open. | retain pending full claim review |
-| variational | primary | elbo | primer_deep_learning.md:1012 | primer_deep_learning.md:1012 | primer_deep_learning.md:1020 | primer_deep_learning.md:1068 | 14aada35a41183c337721a3cf3a0919c91dd2636 | Codex | not-checked | Likelihood scaling corrected and derivation traced; complete claim review remains open. | retain pending full claim review |
-| adversarial | primary | wasserstein | primer_deep_learning.md:1104 | primer_deep_learning.md:1114 | primer_deep_learning.md:1114 | primer_deep_learning.md:1112 | 14aada35a41183c337721a3cf3a0919c91dd2636 | Codex | not-checked | New critic example addresses the former missing comparison; full claim review remains open. | retain pending full claim review |
-| diffusion | primary | score | primer_deep_learning.md:1177 | primer_deep_learning.md:1158 | primer_deep_learning.md:1177 | primer_deep_learning.md:1177 | 14aada35a41183c337721a3cf3a0919c91dd2636 | Codex | not-checked | Corrected score explanation locator; forward noise example and symbolic score derivation are distinct. | retain pending full claim review |
-| selection | primary | model_choice | primer_deep_learning.md:1375 | primer_deep_learning.md:1413 | primer_deep_learning.md:1415 | primer_deep_learning.md:1415 | 14aada35a41183c337721a3cf3a0919c91dd2636 | Codex | not-checked | Scenario traced; unsupported VAE-axis and unconditional adaptation claims corrected. | retain pending full claim review |
+| foundations | primary | network_update | primer_deep_learning.md:222 | primer_deep_learning.md:263 | primer_deep_learning.md:263 | primer_deep_learning.md:263 | 78edc97f19c0223a395b6f38f8044002cc039498 | Codex | not-checked | Reader path traced; broader training claims remain under review. | retain pending full claim review |
+| spatial | primary | cnn_features | primer_deep_learning.md:371 | primer_deep_learning.md:383 | primer_deep_learning.md:408 | primer_deep_learning.md:377 | 78edc97f19c0223a395b6f38f8044002cc039498 | Codex | not-checked | Earlier equivariance defect corrected; baseline transfer claims and complete route judgement remain open. | retain pending claim review |
+| recurrent | primary | state_gradients | primer_deep_learning.md:536 | primer_deep_learning.md:566 | primer_deep_learning.md:566 | primer_deep_learning.md:582 | 78edc97f19c0223a395b6f38f8044002cc039498 | Codex | not-checked | State and direct gradient paths traced; deployment claims require review. | retain pending full claim review |
+| attention | primary | attention_weights | primer_deep_learning.md:706 | primer_deep_learning.md:718 | primer_deep_learning.md:718 | primer_deep_learning.md:718 | 78edc97f19c0223a395b6f38f8044002cc039498 | Codex | not-checked | Lookup traced; position and architecture claims require review. | retain pending full claim review |
+| language | primary | language_training | primer_deep_learning.md:918 | primer_deep_learning.md:924 | primer_deep_learning.md:930 | primer_deep_learning.md:912 | 78edc97f19c0223a395b6f38f8044002cc039498 | Codex | not-checked | Corrected objective interpretation locator; adaptation is a separate example and claim review remains open. | retain pending full claim review |
+| variational | primary | elbo | primer_deep_learning.md:1012 | primer_deep_learning.md:1012 | primer_deep_learning.md:1020 | primer_deep_learning.md:1068 | 78edc97f19c0223a395b6f38f8044002cc039498 | Codex | not-checked | Likelihood scaling corrected and derivation traced; complete claim review remains open. | retain pending full claim review |
+| adversarial | primary | wasserstein | primer_deep_learning.md:1104 | primer_deep_learning.md:1114 | primer_deep_learning.md:1114 | primer_deep_learning.md:1112 | 78edc97f19c0223a395b6f38f8044002cc039498 | Codex | not-checked | New critic example addresses the former missing comparison; full claim review remains open. | retain pending full claim review |
+| diffusion | primary | score | primer_deep_learning.md:1177 | primer_deep_learning.md:1177 | primer_deep_learning.md:1177 | primer_deep_learning.md:1177 | 78edc97f19c0223a395b6f38f8044002cc039498 | Codex | not-checked | Corrected score explanation locator; forward noise example and symbolic score derivation are distinct. | retain pending full claim review |
+| selection | primary | model_choice | primer_deep_learning.md:1375 | primer_deep_learning.md:1413 | primer_deep_learning.md:1415 | primer_deep_learning.md:1415 | 78edc97f19c0223a395b6f38f8044002cc039498 | Codex | not-checked | Scenario traced; unsupported VAE-axis and unconditional adaptation claims corrected. | retain pending full claim review |
 
 The 36 current locator roles were reconciled against `d6b664f` on 28 November 2026 and carried forward to `14aada3` after checking the two changed paragraphs and their adjacent routes using the continuous source read, the changed-passage re-review, and the current reader-path trace below. The language interpretation, diffusion explanation, critic example and shifted selection mappings were corrected. Locator meaning and reachability do not establish the truth of every surrounding claim, so the rows remain `not-checked` pending the broader review. A primary `gap` or `not-checked` row blocks content readiness.
 
 ## Route transition evidence
 
-The following placeholders mark unreviewed transitions, not verified teaching. Complete each route from input to interpreted result and limit before readiness.
+The following transition traces record evidence provenance, not a passed depth judgement. Reconcile their open findings before readiness.
 
 | route_id | concept_id(s) | transition (from to) | linked input and reader operation | intermediate reasoning or decision | result | interpretation | material limitation | execution status | gap and reader consequence |
 |---|---|---|---|---|---|---|---|---|---|
@@ -61,7 +61,7 @@ The following placeholders mark unreviewed transitions, not verified teaching. C
 | attention | attention_weights | query and keys to output | q=1, keys 0 and log 3, values 2 and 10 at line 718 | softmax of the two scores | weights 1/4 and 3/4, output 8 | second value dominates; q=0 gives 6 | chosen scalar projections | executed | Scaling assumption checked against the original paper; full transformer route remains to be reviewed. |
 | language | language_training | tokens to adaptation | tokenisation and BERT objective at lines 892–931 | corrupt selected positions and predict originals | contextual representations; low-rank adaptation at lines 940–948 | training objective shapes model use | tokenizer and model assumptions differ | illustrative | No end-to-end worked input through objective and adaptation; full language-model route remains to be reviewed. |
 | variational | elbo | marginal to lower bound | joint density and variational posterior at lines 1002–1020 | insert posterior and apply Jensen | ELBO and KL gap | reconstruction and regularisation terms | support and tractability assumptions | illustrative | Independent full derivation and transition review still required. |
-| adversarial | wasserstein | distributions to critic | real and generated distributions at lines 1098–1113 | optimise approximate critic with sampled gradient penalty | critic objective and generator signal | distance estimate is approximate | sampled penalty does not establish a global constraint | illustrative | No concrete distribution pair and numeric critic comparison. |
+| adversarial | wasserstein | distributions to critic | real and generated distributions at lines 1098–1113 | optimise approximate critic with sampled gradient penalty | critic objective and generator signal | distance estimate is approximate | sampled penalty does not establish a global constraint | illustrative | The concrete unit-mass critic comparison at line 1114 resolves the earlier missing comparison; broader review remains open. |
 | diffusion | score | clean sample to noise estimate | x0 and noise at lines 1126–1163 | construct xt and predict sampled noise | per-image coefficients and noise estimate | score is conditional expected noise scaled at line 1175 | finite network approximates optimum | executed | Broadcast only executed; score derivation and full training transition not independently reproduced. |
 | selection | model_choice | inspection data to model comparison | 2,000 labelled images and explicit thresholds at line 1411 | compare validation recall, false alarms and target-device latency | 75%, 95% and 90% recalls with stated constraints at line 1413 | compressed candidate meets thresholds provisionally | hypothetical results and shift risk; test set remains untouched | illustrative | The complete decision route and other recommendations remain unverified. |
 
@@ -213,6 +213,34 @@ Codex compared source revision `14aada3` with `76fe772` on 28 November 2026 and 
 Two further claims were corrected at `76fe772`: flattening retains pixel values and their ordering but a dense layer has no built-in local connectivity bias (line 365); stride two samples every other position but its output size also depends on kernel and padding (line 379). For example, the stated formula gives two positions for input size 5, kernel 3, zero padding and stride 2, rather than exactly half of five. The worked stride-one calculation and diagram remain unchanged. The comparison does not establish the truth of every CNN or transfer-learning claim; the `spatial` primary route remains not checked at the current revision pending the complete route, semantic locator and claims review. Other route evidence remains at its recorded earlier revision and has not been renewed by this scoped review.
 
 `just deep-learning-all`, `just render-qa primer_deep_learning`, `just lint-links primer_deep_learning/primer_deep_learning.html primer_deep_learning/primer_deep_learning.mathjax.html primer_deep_learning/primer_deep_learning.mathml.html`, and `git diff --check` passed for this change. The first build and link attempts were blocked by sandbox Podman permissions; the same commands passed outside that restriction. Codex inspected PDF pages 26 and 27, including the changed paragraphs and diagram, with no clipping observed. These samples do not replace the outstanding full release review.
+
+## Current-revision reconciliation at `78edc97`
+
+Codex read lines 1–1435 of source revision `76fe772` in the consecutive, inclusive ranges 1–150, 151–300, 301–450, 451–600, 601–750, 751–900, 901–1050, 1051–1200, 1201–1350 and 1351–1435 on 28 November 2026. The source at `78edc97` differs only at lines 325, 623, 783, 970 and 1181; Codex reviewed each changed paragraph in its context, with the dependent training, recurrent, attention, language and diffusion discussions. No unchanged passages or line numbers shifted. This is a continuous reader review of `76fe772` plus a scoped comparison to `78edc97`, not a claim of a fresh complete source read at the latter revision.
+
+The matrix locators were semantically inspected against the current source and the previous route traces; the spatial limitation now points to line 377 and the score action to its symbolic derivation at line 1177. The case at lines 1413–1415 preserves its declared inputs, validation decisions, stipulated outcomes and next test; it is illustrative. The matrix is rebound to `78edc97` for those mappings, but all rows remain `not-checked`: a mapping review does not itself complete factual verification or the route-depth judgement. Historic executions and evidence in the earlier sections retain their original revisions; no numerical execution is newly claimed here. The prior spatial equivariance finding is addressed, not carried forward as a current defect.
+
+Risk-selected corrections at `78edc97`: line 325 distinguishes L2 penalties and decoupled weight decay for Adam, checked against [Loshchilov and Hutter](https://arxiv.org/abs/1711.05101); line 623 recognises linear attention alongside recurrence, checked against [Katharopoulos and colleagues](https://proceedings.mlr.press/v119/katharopoulos20a.html); line 783 applies the chain rule to the displayed post-LN expression, so the residual route still passes through normalisation; line 970 limits the claim for a KL penalty to mitigation and calls for independent evaluation, consistent with [InstructGPT](https://arxiv.org/abs/2203.02155); line 1181 distinguishes deterministic DDIM from the broader stochastic family, checked against [Song and colleagues](https://arxiv.org/abs/2010.02502). These checks do not verify every claim in those sections.
+
+The continuous read also identified unresolved claims that can affect a reader's decisions: the activation discussion at lines 161–174 treats zero-centred tanh output and GELU's advantage as unconditional; lines 309–327 overstate guarantees of initialisation and dropout; lines 619–625 imply recurrent architectures categorically beat alternatives in several deployment settings; lines 938–970 make broad claims about compute-optimal training and guarantees of policy behaviour; and lines 1059–1068 describe VAE interpolation and blur too categorically. The responsible content reviewer must check and qualify these against appropriate primary evidence, then reassess the affected `foundations`, `recurrent`, `language` and `variational` routes. These are current review findings, not claims that every listed statement has been independently disproved.
+
+`just deep-learning-all`, `just render-qa primer_deep_learning`, scoped offline `just lint-links` for the three HTML variants, and `git diff --check` passed at the source revision. Codex inspected changed PDF pages 22, 38, 44, 53 and 67; no clipping was seen. The automated QA does not establish interactive accessibility or content correctness.
+
+## Diffusion child boundaries at `78edc97`
+
+The adjacent boundaries below were reviewed individually against the source, extending the earlier grouped review. Retaining them provides useful return points; the equations and transfer between them remain the substantive judgement, not the number of headings.
+
+| Boundary and evidence | Reader task and decision |
+|---|---|
+| Forward / reverse, 1128–1144 / 1146–1173 | Construct a noisy observation, then train and apply the inverse estimate. Retain: the second operation depends on the first but is separately consulted. |
+| Reverse / score, 1169–1173 / 1175–1177 | The sampling update precedes the density-gradient interpretation. Retain: folding the short bridge into reverse would improve flow slightly but hide a distinct theoretical link. |
+| Score / DDIM, 1177 / 1179–1191 | The identity relates the predictor to density; DDIM changes the sampler and latency. Retain because the latter is an operational choice. |
+| DDIM / guidance, 1181–1191 / 1193–1201 | DDIM selects a trajectory; guidance changes conditioning. Retain: merging would obscure independent settings. |
+| Guidance / latent diffusion, 1195–1201 / 1203–1209 | Guidance combines predictions; latent diffusion changes representation and cost. Retain as different decisions. |
+| Latent diffusion / beyond images, 1205–1209 / 1211–1229 | The image pipeline motivates the move to other state spaces, including discrete text. Retain so readers can find the separate modality comparison. |
+| Beyond images / family comparison, 1219–1229 / 1231–1243 | Text models are one application; the final table compares three model families. Retain as a synthesis, although the text-conditioning row still needs claim adjudication. |
+
+Other parents' individual sibling boundaries remain unreviewed, and the structural gate remains not-checked.
 
 ## Release readiness checklist
 
