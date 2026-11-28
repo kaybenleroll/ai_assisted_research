@@ -2038,9 +2038,11 @@ downsampling as it goes. <strong>Padding</strong> is how you handle the
 edges. Without padding, the kernel cannot be centred on border pixels,
 so the output map shrinks slightly with every conv layer — stack enough
 of them and the spatial dimensions vanish. Zero-padding the input
-(adding a border of zeros) lets you control the output size, and “same”
-padding is the common choice that keeps the output the same spatial size
-as the input. The general formula for the output size along one
+(adding a border of zeros) lets you control the output size. With stride
+1, “same” padding keeps the spatial size; for larger strides,
+implementations that support it typically produce
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">⌈</mo><mi>n</mi><mi>/</mi><mi>s</mi><mo stretchy="false" form="postfix">⌉</mo></mrow><annotation encoding="application/x-tex">\lceil n/s\rceil</annotation></semantics></math>
+positions instead. The general formula for the output size along one
 dimension is</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo stretchy="true" form="prefix">⌊</mo><mfrac><mrow><mi>n</mi><mo>−</mo><mi>k</mi><mo>+</mo><mn>2</mn><mi>p</mi></mrow><mi>s</mi></mfrac><mo stretchy="true" form="postfix">⌋</mo></mrow><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\left\lfloor \frac{n - k + 2p}{s} \right\rfloor + 1</annotation></semantics></math></p>
 <p>where
