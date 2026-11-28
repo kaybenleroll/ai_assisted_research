@@ -2073,13 +2073,15 @@ when Jacobian evaluations are expensive.</p>
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> <span class="fu">nlsolve</span>(F!, [<span class="fl">1.0</span>, <span class="fl">1.5</span>])</span>
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">&quot;solution: &quot;</span>, result.zero)</span>
 <span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">&quot;residual norm: &quot;</span>, result.residual_norm)</span></code></pre></div>
-<p>All three converge to approximately
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1.932</mn><mo>,</mo><mn>0.518</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(1.932, 0.518)</annotation></semantics></math>
-and its symmetric counterpart. <code>scipy.optimize.fsolve</code> uses a
-MINPACK hybrid solver with step controls, <code>nleqslv</code> defaults
-to Newton with a line search, and <code>NLsolve.jl</code> also defaults
-to Newton, with the Jacobian estimated by finite differences unless you
-provide it analytically.</p>
+<p>These starting values converge to approximately
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1.932</mn><mo>,</mo><mn>0.518</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(1.932, 0.518)</annotation></semantics></math>;
+the system also has a symmetric counterpart.
+<code>scipy.optimize.fsolve</code> uses a MINPACK hybrid solver with
+step controls. <a href="https://cran.r-project.org/web/packages/nleqslv/refman/nleqslv.html">R’s
+<code>nleqslv</code></a> defaults to Broyden’s method with a
+double-dogleg trust-region strategy, while <a href="https://github.com/JuliaNLSolvers/NLsolve.jl#fine-tunings"><code>NLsolve.jl</code></a>
+defaults to a trust-region method. Both can estimate the Jacobian
+numerically when one is not supplied.</p>
 <h2 data-number="5.7" role="heading" aria-level="3" id="shared-example-find-root-of-fxcosx-x"><span class="header-section-number">5.7</span> Shared Example: Find Root of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mrow><mi mathvariant="normal">cos</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mi>x</mi></mrow><annotation encoding="application/x-tex">f(x)=\cos(x)-x</annotation></semantics></math></h2>
 <p>This function has a root near
@@ -2435,18 +2437,23 @@ documentation</a>.</p>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> <span class="fu">spdiagm</span>(<span class="op">-</span><span class="fl">1</span> <span class="op">=&gt;</span> <span class="fu">fill</span>(<span class="op">-</span><span class="fl">1.0</span>, n<span class="op">-</span><span class="fl">1</span>), <span class="fl">0</span> <span class="op">=&gt;</span> <span class="fu">fill</span>(<span class="fl">2.0</span>, n), <span class="fl">1</span> <span class="op">=&gt;</span> <span class="fu">fill</span>(<span class="op">-</span><span class="fl">1.0</span>, n<span class="op">-</span><span class="fl">1</span>))</span>
 <span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>rhs <span class="op">=</span> h<span class="op">^</span><span class="fl">2</span> <span class="op">*</span> <span class="fu">ones</span>(n)</span>
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Julia&#39;s \ detects sparsity and SPD structure, calls CHOLMOD for SPD sparse</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co"># For this symmetric positive definite matrix, Julia 1.12.7 uses CHOLMOD</span></span>
 <span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>u <span class="op">=</span> A <span class="op">\</span> rhs</span>
 <span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Factor explicitly for multiple solves</span></span>
 <span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>F <span class="op">=</span> <span class="fu">cholesky</span>(A)</span>
 <span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>u2 <span class="op">=</span> F <span class="op">\</span> rhs</span>
 <span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>u3 <span class="op">=</span> F <span class="op">\</span> (<span class="fl">2</span> <span class="op">*</span> rhs)</span></code></pre></div>
-<p>For symmetric positive definite sparse matrices Julia’s
-<code>cholesky</code> calls CHOLMOD, which includes reordering (AMD by
-default, with nested dissection via METIS available when enabled) and
-delivers competitive fill-in on 2D and 3D grid problems without any
-explicit reordering call from your code.</p>
+<p>In Julia 1.12.7, the sparse <code>Float64</code> matrix and dense
+right-hand side above take a symmetry check followed by a CHOLMOD
+Cholesky attempt; if that attempt fails, this solver path falls back to
+sparse LU. This is behaviour of these matrix and argument types, not a
+promise for every sparse matrix or Julia version. Explicit
+<code>cholesky(A)</code> requests a Cholesky factorisation and reports
+failure if its positive-definiteness assumption fails. CHOLMOD includes
+reordering (AMD by default, with nested dissection via METIS available
+when enabled) and delivers competitive fill-in on 2D and 3D grid
+problems without any explicit reordering call from your code.</p>
 <h2 data-number="6.2" role="heading" aria-level="3" id="factorisation-choices"><span class="header-section-number">6.2</span> Factorisation Choices</h2>
 <p>Not all factorisations are created equal, and the choice matters for
 both efficiency and numerical conditioning.</p>
@@ -3047,10 +3054,11 @@ grows. Restarting with a compressed basis keeps memory bounded while
 retaining convergence progress. ARPACK has been the workhorse for large
 sparse eigenvalue computations for decades. When you call
 <code>scipy.sparse.linalg.eigs</code> in Python, you are calling ARPACK.
-When you use <code>Arpack.eigs</code> in Julia, same thing. In R, the
-base <code>eigen()</code> function only handles dense matrices; for
-large sparse problems, the <code>RSpectra</code> package wraps ARPACK
-cleanly.</p>
+When you use <code>Arpack.eigs</code> in Julia, same thing. In R, base
+<code>eigen()</code> handles dense matrices; for large sparse problems,
+<a href="https://cran.r-project.org/web/packages/RSpectra/RSpectra.pdf"><code>RSpectra</code></a>
+interfaces with the Spectra library, a separate implementation of
+related iterative methods.</p>
 <p>The practical usage pattern is: specify how many eigenvalues you want
 (<code>k</code>), which ones (largest magnitude, smallest real part,
 near a shift
@@ -3153,10 +3161,10 @@ stable:</p>
 <span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;generalised eigenvalues:&quot;</span>, eigenvalues)</span></code></pre></div>
 <p><strong>R:</strong></p>
 <p>R’s base <code>eigen()</code> handles dense matrices. For large
-sparse problems, <code>RSpectra</code> wraps ARPACK and is the standard
-choice:</p>
+sparse problems, <code>RSpectra</code> provides an interface to
+Spectra:</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Matrix)    <span class="co"># sparse matrix support</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RSpectra)  <span class="co"># ARPACK wrapper for large sparse eigenproblems</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RSpectra)  <span class="co"># Spectra interface for large sparse eigenproblems</span></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Dense symmetric matrix</span></span>
 <span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">0</span>,</span>

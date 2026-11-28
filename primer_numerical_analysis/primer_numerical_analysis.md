@@ -518,7 +518,7 @@ println("solution: ", result.zero)
 println("residual norm: ", result.residual_norm)
 ```
 
-All three converge to approximately $(1.932, 0.518)$ and its symmetric counterpart. `scipy.optimize.fsolve` uses a MINPACK hybrid solver with step controls, `nleqslv` defaults to Newton with a line search, and `NLsolve.jl` also defaults to Newton, with the Jacobian estimated by finite differences unless you provide it analytically.
+These starting values converge to approximately $(1.932, 0.518)$; the system also has a symmetric counterpart. `scipy.optimize.fsolve` uses a MINPACK hybrid solver with step controls. [R’s `nleqslv`](https://cran.r-project.org/web/packages/nleqslv/refman/nleqslv.html) defaults to Broyden’s method with a double-dogleg trust-region strategy, while [`NLsolve.jl`](https://github.com/JuliaNLSolvers/NLsolve.jl#fine-tunings) defaults to a trust-region method. Both can estimate the Jacobian numerically when one is not supplied.
 
 ### Shared Example: Find Root of $f(x)=\cos(x)-x$
 
@@ -791,7 +791,7 @@ h = 1.0 / (n + 1)
 A = spdiagm(-1 => fill(-1.0, n-1), 0 => fill(2.0, n), 1 => fill(-1.0, n-1))
 rhs = h^2 * ones(n)
 
-# Julia's \ detects sparsity and SPD structure, calls CHOLMOD for SPD sparse
+# For this symmetric positive definite matrix, Julia 1.12.7 uses CHOLMOD
 u = A \ rhs
 
 # Factor explicitly for multiple solves
@@ -800,7 +800,7 @@ u2 = F \ rhs
 u3 = F \ (2 * rhs)
 ```
 
-For symmetric positive definite sparse matrices Julia's `cholesky` calls CHOLMOD, which includes reordering (AMD by default, with nested dissection via METIS available when enabled) and delivers competitive fill-in on 2D and 3D grid problems without any explicit reordering call from your code.
+In Julia 1.12.7, the sparse `Float64` matrix and dense right-hand side above take a symmetry check followed by a CHOLMOD Cholesky attempt; if that attempt fails, this solver path falls back to sparse LU. This is behaviour of these matrix and argument types, not a promise for every sparse matrix or Julia version. Explicit `cholesky(A)` requests a Cholesky factorisation and reports failure if its positive-definiteness assumption fails. CHOLMOD includes reordering (AMD by default, with nested dissection via METIS available when enabled) and delivers competitive fill-in on 2D and 3D grid problems without any explicit reordering call from your code.
 
 ### Factorisation Choices
 
@@ -1081,7 +1081,7 @@ The key point is that you never need to store or factorise **A** explicitly. You
 
 **Arnoldi iteration** (for general non-symmetric matrices) builds the same Krylov subspace but the recurrence is longer — each new basis vector must be orthogonalised against all previous ones, which is more expensive. The projected matrix is upper Hessenberg. GMRES (which you met in the linear systems section) is actually Arnoldi applied to the residual minimisation problem, so there is a deep algorithmic connection between large-scale eigensolvers and large-scale linear solvers.
 
-**ARPACK** (ARnoldi PACKage) is the standard implementation of the implicitly restarted Arnoldi method, which addresses a practical problem: a full Krylov basis of dimension $m$ requires storing $m$ vectors of length $n$ and $O(m^2)$ orthogonalisation work, which gets expensive as $m$ grows. Restarting with a compressed basis keeps memory bounded while retaining convergence progress. ARPACK has been the workhorse for large sparse eigenvalue computations for decades. When you call `scipy.sparse.linalg.eigs` in Python, you are calling ARPACK. When you use `Arpack.eigs` in Julia, same thing. In R, the base `eigen()` function only handles dense matrices; for large sparse problems, the `RSpectra` package wraps ARPACK cleanly.
+**ARPACK** (ARnoldi PACKage) is the standard implementation of the implicitly restarted Arnoldi method, which addresses a practical problem: a full Krylov basis of dimension $m$ requires storing $m$ vectors of length $n$ and $O(m^2)$ orthogonalisation work, which gets expensive as $m$ grows. Restarting with a compressed basis keeps memory bounded while retaining convergence progress. ARPACK has been the workhorse for large sparse eigenvalue computations for decades. When you call `scipy.sparse.linalg.eigs` in Python, you are calling ARPACK. When you use `Arpack.eigs` in Julia, same thing. In R, base `eigen()` handles dense matrices; for large sparse problems, [`RSpectra`](https://cran.r-project.org/web/packages/RSpectra/RSpectra.pdf) interfaces with the Spectra library, a separate implementation of related iterative methods.
 
 The practical usage pattern is: specify how many eigenvalues you want (`k`), which ones (largest magnitude, smallest real part, near a shift $\sigma$), and supply either a sparse matrix or a function that computes matrix-vector products. The solver handles everything else. Shift-and-invert is again your friend here: to find eigenvalues near a target $\sigma$ in a large sparse problem, use `sigma=sigma` in `scipy.sparse.linalg.eigs`, which internally factors $(\mathbf{A} - \sigma \mathbf{I})$ and applies shift-and-invert.
 
@@ -1158,11 +1158,11 @@ print("generalised eigenvalues:", eigenvalues)
 
 **R:**
 
-R's base `eigen()` handles dense matrices. For large sparse problems, `RSpectra` wraps ARPACK and is the standard choice:
+R's base `eigen()` handles dense matrices. For large sparse problems, `RSpectra` provides an interface to Spectra:
 
 ```r
 library(Matrix)    # sparse matrix support
-library(RSpectra)  # ARPACK wrapper for large sparse eigenproblems
+library(RSpectra)  # Spectra interface for large sparse eigenproblems
 
 # Dense symmetric matrix
 A <- matrix(c(4, 1, 0,
