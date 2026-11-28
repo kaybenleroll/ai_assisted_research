@@ -2630,7 +2630,7 @@ Run the trapezoidal rule at $n = 100, 200, 400, 800, 1600$ and record the result
 Look at consecutive differences: $|I_{2n} - I_n|$ should shrink by about 4 each time. If that pattern holds, you are in the asymptotic regime and your extrapolation is on solid ground. If it does not, either the grid is missing important structure or the implementation needs another look.
 
 
-Here is the refinement study in code. The target is $I = \int_0^1 e^{-x^2}\, dx$; the true value is available from `scipy.integrate.quad` (Python), `integrate` (R), or `quadgk` (Julia) at near-machine-precision accuracy.
+Here is the refinement study in code. The target is $I = \int_0^1 e^{-x^2}\, dx$. Each implementation compares the trapezoidal estimates with a separately computed adaptive quadrature reference and reports the integrator’s estimated absolute error. This estimate is diagnostic, not a proof of the reference error; differences smaller than it, or comparable with floating-point rounding, are not reliable error measurements.
 
 **Python:**
 
@@ -2645,32 +2645,32 @@ def trapezoid(f, a, b, n):
     return h * (y[0]/2 + np.sum(y[1:-1]) + y[-1]/2)
 
 f = lambda x: np.exp(-x**2)
-true_val, _ = quad(f, 0, 1)
+reference, ref_error = quad(f, 0, 1, epsabs=1e-13, epsrel=1e-13)
+print(f"Reference: {reference:.15f}; estimated absolute error: {ref_error:.3e}")
 
-h0 = 0.1
 print(f"{'h':>10}  {'T(h)':>18}  {'Error':>12}  {'Ratio':>8}")
 prev_err = None
 T_prev = None
 for k in range(5):
-    n = int(1 / (h0 / 2**k))
+    n = 100 * 2**k
     T = trapezoid(f, 0, 1, n)
-    err = abs(T - true_val)
+    err = abs(T - reference)
     ratio = prev_err / err if prev_err else float('nan')
-    print(f"{h0/2**k:>10.5f}  {T:>18.15f}  {err:>12.3e}  {ratio:>8.2f}")
+    print(f"{1/n:>10.5f}  {T:>18.15f}  {err:>12.3e}  {ratio:>8.2f}")
     prev_err = err
     T_prev2, T_prev = T_prev, T
 
 # Richardson extrapolation
 T_rich = T_prev + (T_prev - T_prev2) / 3
 print(f"\nRichardson extrapolation: {T_rich:.15f}")
-print(f"Richardson error:         {abs(T_rich - true_val):.3e}")
+print(f"Richardson difference:    {abs(T_rich - reference):.3e}")
 ```
 
 The ratio column should converge towards 4, confirming second-order convergence. Richardson extrapolation takes two consecutive estimates $T(h)$ and $T(h/2)$ and cancels the leading $O(h^2)$ error term:
 
 $$T^* = T(h/2) + \frac{T(h/2) - T(h)}{3}$$
 
-The factor of 3 comes from the fact that halving $h$ reduces the leading error term by 4, so $T(h/2) = I + c(h/2)^2 + \cdots$ and $T(h) = I + ch^2 + \cdots$, giving $T^* = T(h/2) + (T(h/2) - T(h))/3 = I + O(h^4)$. Richardson extrapolation cancels the second-order error term, giving a fourth-order estimate from two second-order estimates; the error typically drops by a factor of 16 or more beyond what the finest grid alone achieves.
+The factor of 3 comes from the fact that halving $h$ reduces the leading error term by 4, so $T(h/2) = I + c(h/2)^2 + \cdots$ and $T(h) = I + ch^2 + \cdots$, giving $T^* = T(h/2) + (T(h/2) - T(h))/3 = I + O(h^4)$. Richardson extrapolation cancels the second-order error term, giving a fourth-order estimate from two second-order estimates for this smooth integrand, until rounding and reference uncertainty dominate.
 
 **R:**
 
@@ -2683,20 +2683,21 @@ trapezoid <- function(f, a, b, n) {
 }
 
 f <- function(x) exp(-x^2)
-true_val <- integrate(f, 0, 1)$value
+ref <- integrate(f, 0, 1, rel.tol = 1e-13, abs.tol = 1e-13)
+reference <- ref$value
+cat(sprintf("Reference: %.15f; estimated absolute error: %.3e\n", reference, ref$abs.error))
 
-h0 <- 0.1
 cat(sprintf("%10s  %18s  %12s  %8s\n", "h", "T(h)", "Error", "Ratio"))
 prev_err <- NULL
 T_prev <- NULL
 T_prev2 <- NULL
 
 for (k in seq(0, 4)) {
-  n <- as.integer(1 / (h0 / 2^k))
+  n <- 100 * 2^k
   T <- trapezoid(f, 0, 1, n)
-  err <- abs(T - true_val)
+  err <- abs(T - reference)
   ratio <- if (!is.null(prev_err)) prev_err / err else NaN
-  cat(sprintf("%10.5f  %18.15f  %12.3e  %8.2f\n", h0/2^k, T, err, ratio))
+  cat(sprintf("%10.5f  %18.15f  %12.3e  %8.2f\n", 1/n, T, err, ratio))
   prev_err <- err
   T_prev2 <- T_prev
   T_prev <- T
@@ -2704,7 +2705,7 @@ for (k in seq(0, 4)) {
 
 T_rich <- T_prev + (T_prev - T_prev2) / 3
 cat(sprintf("\nRichardson extrapolation: %.15f\n", T_rich))
-cat(sprintf("Richardson error:         %.3e\n", abs(T_rich - true_val)))
+cat(sprintf("Richardson difference:    %.3e\n", abs(T_rich - reference)))
 ```
 
 **Julia:**
@@ -2722,36 +2723,39 @@ function trapezoid(f, a, b, n)
     return h * s
 end
 
-f(x) = exp(-x^2)
-true_val, _ = quadgk(f, 0.0, 1.0; rtol=1e-14)
+function run_study()
+    f(x) = exp(-x^2)
+    reference, ref_error = quadgk(f, 0.0, 1.0; rtol=1e-13, atol=1e-13)
+    @printf("Reference: %.15f; estimated absolute error: %.3e\n", reference, ref_error)
 
-h0 = 0.1
-@printf("%10s  %18s  %12s  %8s\n", "h", "T(h)", "Error", "Ratio")
-prev_err = NaN
-T_prev2 = NaN
-T_prev = NaN
+    @printf("%10s  %18s  %12s  %8s\n", "h", "T(h)", "Error", "Ratio")
+    prev_err = NaN
+    T_prev2 = NaN
+    T_prev = NaN
 
-for k in 0:4
-    n = Int(round(1 / (h0 / 2^k)))
-    T = trapezoid(f, 0.0, 1.0, n)
-    err = abs(T - true_val)
-    ratio = isnan(prev_err) ? NaN : prev_err / err
-    @printf("%10.5f  %18.15f  %12.3e  %8.2f\n", h0/2^k, T, err, ratio)
-    prev_err = err
-    T_prev2 = T_prev
-    T_prev = T
+    for k in 0:4
+        n = 100 * 2^k
+        T = trapezoid(f, 0.0, 1.0, n)
+        err = abs(T - reference)
+        ratio = isnan(prev_err) ? NaN : prev_err / err
+        @printf("%10.5f  %18.15f  %12.3e  %8.2f\n", 1/n, T, err, ratio)
+        prev_err = err
+        T_prev2 = T_prev
+        T_prev = T
+    end
+
+    T_rich = T_prev + (T_prev - T_prev2) / 3
+    @printf("\nRichardson extrapolation: %.15f\n", T_rich)
+    @printf("Richardson difference:    %.3e\n", abs(T_rich - reference))
 end
-
-T_rich = T_prev + (T_prev - T_prev2) / 3
-@printf("\nRichardson extrapolation: %.15f\n", T_rich)
-@printf("Richardson error:         %.3e\n", abs(T_rich - true_val))
+run_study()
 ```
 
-All three implementations should produce the same convergence table. The ratio column landing near 4.00 for each halving is your convergence confirmation. The Richardson extrapolation result should be accurate to near machine precision, demonstrating that two second-order estimates, properly combined, can match what a much finer grid would achieve directly.
+The tables should agree up to rounding and the reference integrators’ uncertainty. Ratios near 4 support second-order convergence over these grids; they do not prove it for every grid. Compare the Richardson difference with the displayed reference error estimate and floating-point precision before interpreting its last digits. For example, one Python run gives a Richardson difference of $8.9\times 10^{-16}$ against a reference error estimate of $8.3\times 10^{-15}$; the difference is too small to establish the true error. Results can vary between languages and runtimes.
 
 ### Cross-Check
 
-Cross-check your trapezoidal estimate against an adaptive library integrator: `scipy.integrate.quad` in Python, `integrate` in R, or `quadgk` in Julia. Since these use different algorithms, a big mismatch is a useful warning sign. For this smooth, bounded integrand on a finite interval, they should agree to near machine precision.
+Cross-check your trapezoidal estimate against an adaptive library integrator: `scipy.integrate.quad` in Python, `integrate` in R, or `quadgk` in Julia. Since these use different algorithms, a mismatch larger than the expected trapezoidal error and the adaptive integrator’s error estimate is a useful warning sign. Agreement alone does not prove that either result is exact.
 
 ### Conditioning Note
 
