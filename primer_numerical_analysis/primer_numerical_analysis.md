@@ -2813,7 +2813,7 @@ Numerical code that has never been checked against a known answer can be quietly
 
 Goal: solve an ODE, then fit a simple model to noisy observations generated from that solution.
 
-This example is compact, but it mirrors real work: simulation followed by parameter estimation.
+This example is compact, but it mirrors real work: simulation followed by parameter estimation. For this particular ODE the independent solution is $y(t)=2e^{-kt}$. Compare the forward solve with it, inspect the solver and optimiser statuses and residuals, and repeat the fitted forward solve at tighter tolerances. These checks diagnose numerical errors; they do not quantify the uncertainty in $k$ caused by noisy observations.
 
 ### Problem Setup
 
@@ -2824,6 +2824,8 @@ $$
 Generate noisy observations at fixed times, then estimate $k$ from those observations.
 
 ### Python
+
+Check the integration results before interpreting the fitted parameter.
 
 ```python
 import numpy as np
@@ -2840,21 +2842,36 @@ def rhs(t, y, k):
 # Simulate ground truth
 obs_t = np.linspace(0, 4, 9)
 sol = solve_ivp(lambda t, y: rhs(t, y, true_k), (0, 4), [2.0], t_eval=obs_t)
+if not sol.success:
+    raise RuntimeError(sol.message)
 y_clean = sol.y[0]
+print("forward maximum error:", np.max(np.abs(y_clean - 2 * np.exp(-true_k * obs_t))))
 y_obs = y_clean + rng.normal(0.0, 0.03, size=y_clean.shape)
 
 # Fit parameter k by least squares
 def residuals(p):
     k = p[0]
-    pred = solve_ivp(lambda t, y: rhs(t, y, k), (0, 4), [2.0], t_eval=obs_t).y[0]
-    return pred - y_obs
+    sol = solve_ivp(lambda t, y: rhs(t, y, k), (0, 4), [2.0], t_eval=obs_t)
+    if not sol.success:
+        raise RuntimeError(sol.message)
+    return sol.y[0] - y_obs
 
 fit = least_squares(residuals, x0=np.array([0.5]))
 print("true k:", true_k)
 print("estimated k:", fit.x[0])
+print("fit success:", fit.success, fit.message)
+print("residual RMS:", np.sqrt(np.mean(fit.fun**2)))
+tight = solve_ivp(lambda t, y: rhs(t, y, fit.x[0]), (0, 4), [2.0],
+                  t_eval=obs_t, rtol=1e-9, atol=1e-11)
+if not tight.success:
+    raise RuntimeError(tight.message)
+print("fitted trajectory tolerance change:",
+      np.max(np.abs(tight.y[0] - (fit.fun + y_obs))))
 ```
 
 ### R
+
+The integration status and optimiser convergence code give separate checks.
 
 ```r
 library(deSolve)
@@ -2869,7 +2886,9 @@ rhs <- function(t, y, parms) {
 
 obs_t <- seq(0, 4, by = 0.5)
 out_true <- ode(y = c(y = 2), times = obs_t, func = rhs, parms = list(k = true_k))
+cat("forward integration status:", attr(out_true, "istate")[1], "(2 means success)\n")
 y_clean <- out_true[, "y"]
+cat("forward maximum error:", max(abs(y_clean - 2 * exp(-true_k * obs_t))), "\n")
 y_obs <- y_clean + rnorm(length(y_clean), mean = 0, sd = 0.03)
 
 objective <- function(k) {
@@ -2881,9 +2900,17 @@ objective <- function(k) {
 fit <- optim(par = 0.5, fn = objective, method = "L-BFGS-B", lower = 0)
 cat("true k:", true_k, "\n")
 cat("estimated k:", fit$par, "\n")
+cat("fit convergence code:", fit$convergence, "(0 means success)\n")
+fitted <- ode(y = c(y = 2), times = obs_t, func = rhs, parms = list(k = fit$par))[, "y"]
+tight <- ode(y = c(y = 2), times = obs_t, func = rhs, parms = list(k = fit$par),
+             rtol = 1e-9, atol = 1e-11)[, "y"]
+cat("residual RMS:", sqrt(mean((fitted - y_obs)^2)), "\n")
+cat("fitted trajectory tolerance change:", max(abs(tight - fitted)), "\n")
 ```
 
 ### Julia
+
+The forward helper rejects an unsuccessful integration before fitting continues.
 
 ```julia
 using DifferentialEquations
@@ -2893,27 +2920,34 @@ using Random
 Random.seed!(42)
 true_k = 0.8
 
-function make_solution(k, obs_t)
+function make_solution(k, obs_t; reltol=1e-8, abstol=1e-10)
     f!(du, u, p, t) = (du[1] = -k * u[1])
     prob = ODEProblem(f!, [2.0], (0.0, 4.0))
-    sol = solve(prob, Tsit5(); saveat=obs_t, reltol=1e-8, abstol=1e-10)
+    sol = solve(prob, Tsit5(); saveat=obs_t, reltol=reltol, abstol=abstol)
+    DifferentialEquations.SciMLBase.successful_retcode(sol) || error("ODE solve failed: $(sol.retcode)")
     return [u[1] for u in sol.u]
 end
 
 obs_t = collect(0.0:0.5:4.0)
 y_clean = make_solution(true_k, obs_t)
+println("forward maximum error: ", maximum(abs.(y_clean .- 2 .* exp.(-true_k .* obs_t))))
 y_obs = y_clean .+ 0.03 .* randn(length(y_clean))
 
 obj(k) = sum((make_solution(k[1], obs_t) .- y_obs).^2)
-result = optimize(obj, [0.5], LBFGS(); autodiff=:forward)
+result = optimize(obj, [0.5], LBFGS())
 
 println("true k: ", true_k)
 println("estimated k: ", Optim.minimizer(result)[1])
+println("fit converged: ", Optim.converged(result))
+fitted = make_solution(Optim.minimizer(result)[1], obs_t)
+tight = make_solution(Optim.minimizer(result)[1], obs_t; reltol=1e-10, abstol=1e-12)
+println("residual RMS: ", sqrt(sum(abs2, fitted .- y_obs) / length(y_obs)))
+println("fitted trajectory tolerance change: ", maximum(abs.(tight .- fitted)))
 ```
 
 ### Why This Pattern Matters
 
-This tiny pipeline captures a very common real-world pattern: you have a model with unknown parameters, noisy data, and a fitting loop that updates parameters to reduce mismatch. The ODE here is simple, but the structure scales directly. Swap in a larger dynamical system, more parameters, and practical constraints, and you are in systems biology, climate calibration, or pharmacokinetics. The loop remains the same: solve forward, compare with data, update parameters, repeat.
+This tiny pipeline captures a very common real-world pattern: you have a model with unknown parameters, noisy data, and a fitting loop that updates parameters to reduce mismatch. The ODE here is simple, but the structure scales directly. Swap in a larger dynamical system, more parameters, and practical constraints, and you are in systems biology, climate calibration, or pharmacokinetics. The loop remains the same: solve forward, compare with data, update parameters, repeat. In R, `ode` reports integration failure through an error or warning; treat warnings as a reason to investigate. A successful status does not establish an accurate answer. Compare the numerical trajectory change under tighter tolerances with the residual scale, and check whether the forward error is acceptable for the application. The residual RMS is a fit diagnostic, not a confidence interval. Different random generators produce different observations across languages; noise, model mismatch and parameter identifiability all affect the fitted value. A single synthetic run cannot measure parameter uncertainty or establish that a real model is adequate.
 
 ---
 

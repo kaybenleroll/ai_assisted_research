@@ -6094,7 +6094,15 @@ A Small End-to-End Pipeline</h1>
 <p>Goal: solve an ODE, then fit a simple model to noisy observations
 generated from that solution.</p>
 <p>This example is compact, but it mirrors real work: simulation
-followed by parameter estimation.</p>
+followed by parameter estimation. For this particular ODE the
+independent solution is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo stretchy="false" form="prefix">(</mo><mi>t</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>2</mn><msup><mi>e</mi><mrow><mi>−</mi><mi>k</mi><mi>t</mi></mrow></msup></mrow><annotation encoding="application/x-tex">y(t)=2e^{-kt}</annotation></semantics></math>.
+Compare the forward solve with it, inspect the solver and optimiser
+statuses and residuals, and repeat the fitted forward solve at tighter
+tolerances. These checks diagnose numerical errors; they do not quantify
+the uncertainty in
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
+caused by noisy observations.</p>
 <h2 data-number="18.1" role="heading" aria-level="3" id="problem-setup"><span class="header-section-number">18.1</span>
 Problem Setup</h2>
 <p>Dynamics:
@@ -6105,6 +6113,8 @@ times, then estimate
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
 from those observations.</p>
 <h2 data-number="18.2" role="heading" aria-level="3" id="python"><span class="header-section-number">18.2</span> Python</h2>
+<p>Check the integration results before interpreting the fitted
+parameter.</p>
 <div class="sourceCode" id="cb64"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.integrate <span class="im">import</span> solve_ivp</span>
 <span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> least_squares</span>
@@ -6119,19 +6129,34 @@ from those observations.</p>
 <span id="cb64-12"><a href="#cb64-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulate ground truth</span></span>
 <span id="cb64-13"><a href="#cb64-13" aria-hidden="true" tabindex="-1"></a>obs_t <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">4</span>, <span class="dv">9</span>)</span>
 <span id="cb64-14"><a href="#cb64-14" aria-hidden="true" tabindex="-1"></a>sol <span class="op">=</span> solve_ivp(<span class="kw">lambda</span> t, y: rhs(t, y, true_k), (<span class="dv">0</span>, <span class="dv">4</span>), [<span class="fl">2.0</span>], t_eval<span class="op">=</span>obs_t)</span>
-<span id="cb64-15"><a href="#cb64-15" aria-hidden="true" tabindex="-1"></a>y_clean <span class="op">=</span> sol.y[<span class="dv">0</span>]</span>
-<span id="cb64-16"><a href="#cb64-16" aria-hidden="true" tabindex="-1"></a>y_obs <span class="op">=</span> y_clean <span class="op">+</span> rng.normal(<span class="fl">0.0</span>, <span class="fl">0.03</span>, size<span class="op">=</span>y_clean.shape)</span>
-<span id="cb64-17"><a href="#cb64-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-18"><a href="#cb64-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit parameter k by least squares</span></span>
-<span id="cb64-19"><a href="#cb64-19" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> residuals(p):</span>
-<span id="cb64-20"><a href="#cb64-20" aria-hidden="true" tabindex="-1"></a>    k <span class="op">=</span> p[<span class="dv">0</span>]</span>
-<span id="cb64-21"><a href="#cb64-21" aria-hidden="true" tabindex="-1"></a>    pred <span class="op">=</span> solve_ivp(<span class="kw">lambda</span> t, y: rhs(t, y, k), (<span class="dv">0</span>, <span class="dv">4</span>), [<span class="fl">2.0</span>], t_eval<span class="op">=</span>obs_t).y[<span class="dv">0</span>]</span>
-<span id="cb64-22"><a href="#cb64-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pred <span class="op">-</span> y_obs</span>
-<span id="cb64-23"><a href="#cb64-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-24"><a href="#cb64-24" aria-hidden="true" tabindex="-1"></a>fit <span class="op">=</span> least_squares(residuals, x0<span class="op">=</span>np.array([<span class="fl">0.5</span>]))</span>
-<span id="cb64-25"><a href="#cb64-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;true k:&quot;</span>, true_k)</span>
-<span id="cb64-26"><a href="#cb64-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;estimated k:&quot;</span>, fit.x[<span class="dv">0</span>])</span></code></pre></div>
+<span id="cb64-15"><a href="#cb64-15" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> sol.success:</span>
+<span id="cb64-16"><a href="#cb64-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">raise</span> <span class="pp">RuntimeError</span>(sol.message)</span>
+<span id="cb64-17"><a href="#cb64-17" aria-hidden="true" tabindex="-1"></a>y_clean <span class="op">=</span> sol.y[<span class="dv">0</span>]</span>
+<span id="cb64-18"><a href="#cb64-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;forward maximum error:&quot;</span>, np.<span class="bu">max</span>(np.<span class="bu">abs</span>(y_clean <span class="op">-</span> <span class="dv">2</span> <span class="op">*</span> np.exp(<span class="op">-</span>true_k <span class="op">*</span> obs_t))))</span>
+<span id="cb64-19"><a href="#cb64-19" aria-hidden="true" tabindex="-1"></a>y_obs <span class="op">=</span> y_clean <span class="op">+</span> rng.normal(<span class="fl">0.0</span>, <span class="fl">0.03</span>, size<span class="op">=</span>y_clean.shape)</span>
+<span id="cb64-20"><a href="#cb64-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-21"><a href="#cb64-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit parameter k by least squares</span></span>
+<span id="cb64-22"><a href="#cb64-22" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> residuals(p):</span>
+<span id="cb64-23"><a href="#cb64-23" aria-hidden="true" tabindex="-1"></a>    k <span class="op">=</span> p[<span class="dv">0</span>]</span>
+<span id="cb64-24"><a href="#cb64-24" aria-hidden="true" tabindex="-1"></a>    sol <span class="op">=</span> solve_ivp(<span class="kw">lambda</span> t, y: rhs(t, y, k), (<span class="dv">0</span>, <span class="dv">4</span>), [<span class="fl">2.0</span>], t_eval<span class="op">=</span>obs_t)</span>
+<span id="cb64-25"><a href="#cb64-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> sol.success:</span>
+<span id="cb64-26"><a href="#cb64-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">RuntimeError</span>(sol.message)</span>
+<span id="cb64-27"><a href="#cb64-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> sol.y[<span class="dv">0</span>] <span class="op">-</span> y_obs</span>
+<span id="cb64-28"><a href="#cb64-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-29"><a href="#cb64-29" aria-hidden="true" tabindex="-1"></a>fit <span class="op">=</span> least_squares(residuals, x0<span class="op">=</span>np.array([<span class="fl">0.5</span>]))</span>
+<span id="cb64-30"><a href="#cb64-30" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;true k:&quot;</span>, true_k)</span>
+<span id="cb64-31"><a href="#cb64-31" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;estimated k:&quot;</span>, fit.x[<span class="dv">0</span>])</span>
+<span id="cb64-32"><a href="#cb64-32" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;fit success:&quot;</span>, fit.success, fit.message)</span>
+<span id="cb64-33"><a href="#cb64-33" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;residual RMS:&quot;</span>, np.sqrt(np.mean(fit.fun<span class="op">**</span><span class="dv">2</span>)))</span>
+<span id="cb64-34"><a href="#cb64-34" aria-hidden="true" tabindex="-1"></a>tight <span class="op">=</span> solve_ivp(<span class="kw">lambda</span> t, y: rhs(t, y, fit.x[<span class="dv">0</span>]), (<span class="dv">0</span>, <span class="dv">4</span>), [<span class="fl">2.0</span>],</span>
+<span id="cb64-35"><a href="#cb64-35" aria-hidden="true" tabindex="-1"></a>                  t_eval<span class="op">=</span>obs_t, rtol<span class="op">=</span><span class="fl">1e-9</span>, atol<span class="op">=</span><span class="fl">1e-11</span>)</span>
+<span id="cb64-36"><a href="#cb64-36" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> tight.success:</span>
+<span id="cb64-37"><a href="#cb64-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">raise</span> <span class="pp">RuntimeError</span>(tight.message)</span>
+<span id="cb64-38"><a href="#cb64-38" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;fitted trajectory tolerance change:&quot;</span>,</span>
+<span id="cb64-39"><a href="#cb64-39" aria-hidden="true" tabindex="-1"></a>      np.<span class="bu">max</span>(np.<span class="bu">abs</span>(tight.y[<span class="dv">0</span>] <span class="op">-</span> (fit.fun <span class="op">+</span> y_obs))))</span></code></pre></div>
 <h2 data-number="18.3" role="heading" aria-level="3" id="r"><span class="header-section-number">18.3</span> R</h2>
+<p>The integration status and optimiser convergence code give separate
+checks.</p>
 <div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(deSolve)</span>
 <span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
@@ -6144,19 +6169,29 @@ from those observations.</p>
 <span id="cb65-10"><a href="#cb65-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb65-11"><a href="#cb65-11" aria-hidden="true" tabindex="-1"></a>obs_t <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">4</span>, <span class="at">by =</span> <span class="fl">0.5</span>)</span>
 <span id="cb65-12"><a href="#cb65-12" aria-hidden="true" tabindex="-1"></a>out_true <span class="ot">&lt;-</span> <span class="fu">ode</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="at">y =</span> <span class="dv">2</span>), <span class="at">times =</span> obs_t, <span class="at">func =</span> rhs, <span class="at">parms =</span> <span class="fu">list</span>(<span class="at">k =</span> true_k))</span>
-<span id="cb65-13"><a href="#cb65-13" aria-hidden="true" tabindex="-1"></a>y_clean <span class="ot">&lt;-</span> out_true[, <span class="st">&quot;y&quot;</span>]</span>
-<span id="cb65-14"><a href="#cb65-14" aria-hidden="true" tabindex="-1"></a>y_obs <span class="ot">&lt;-</span> y_clean <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="fu">length</span>(y_clean), <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="fl">0.03</span>)</span>
-<span id="cb65-15"><a href="#cb65-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb65-16"><a href="#cb65-16" aria-hidden="true" tabindex="-1"></a>objective <span class="ot">&lt;-</span> <span class="cf">function</span>(k) {</span>
-<span id="cb65-17"><a href="#cb65-17" aria-hidden="true" tabindex="-1"></a>  out <span class="ot">&lt;-</span> <span class="fu">ode</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="at">y =</span> <span class="dv">2</span>), <span class="at">times =</span> obs_t, <span class="at">func =</span> rhs, <span class="at">parms =</span> <span class="fu">list</span>(<span class="at">k =</span> k))</span>
-<span id="cb65-18"><a href="#cb65-18" aria-hidden="true" tabindex="-1"></a>  pred <span class="ot">&lt;-</span> out[, <span class="st">&quot;y&quot;</span>]</span>
-<span id="cb65-19"><a href="#cb65-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum</span>((pred <span class="sc">-</span> y_obs)<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb65-20"><a href="#cb65-20" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb65-21"><a href="#cb65-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb65-22"><a href="#cb65-22" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="at">par =</span> <span class="fl">0.5</span>, <span class="at">fn =</span> objective, <span class="at">method =</span> <span class="st">&quot;L-BFGS-B&quot;</span>, <span class="at">lower =</span> <span class="dv">0</span>)</span>
-<span id="cb65-23"><a href="#cb65-23" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;true k:&quot;</span>, true_k, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb65-24"><a href="#cb65-24" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;estimated k:&quot;</span>, fit<span class="sc">$</span>par, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
+<span id="cb65-13"><a href="#cb65-13" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;forward integration status:&quot;</span>, <span class="fu">attr</span>(out_true, <span class="st">&quot;istate&quot;</span>)[<span class="dv">1</span>], <span class="st">&quot;(2 means success)</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb65-14"><a href="#cb65-14" aria-hidden="true" tabindex="-1"></a>y_clean <span class="ot">&lt;-</span> out_true[, <span class="st">&quot;y&quot;</span>]</span>
+<span id="cb65-15"><a href="#cb65-15" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;forward maximum error:&quot;</span>, <span class="fu">max</span>(<span class="fu">abs</span>(y_clean <span class="sc">-</span> <span class="dv">2</span> <span class="sc">*</span> <span class="fu">exp</span>(<span class="sc">-</span>true_k <span class="sc">*</span> obs_t))), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb65-16"><a href="#cb65-16" aria-hidden="true" tabindex="-1"></a>y_obs <span class="ot">&lt;-</span> y_clean <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="fu">length</span>(y_clean), <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="fl">0.03</span>)</span>
+<span id="cb65-17"><a href="#cb65-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-18"><a href="#cb65-18" aria-hidden="true" tabindex="-1"></a>objective <span class="ot">&lt;-</span> <span class="cf">function</span>(k) {</span>
+<span id="cb65-19"><a href="#cb65-19" aria-hidden="true" tabindex="-1"></a>  out <span class="ot">&lt;-</span> <span class="fu">ode</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="at">y =</span> <span class="dv">2</span>), <span class="at">times =</span> obs_t, <span class="at">func =</span> rhs, <span class="at">parms =</span> <span class="fu">list</span>(<span class="at">k =</span> k))</span>
+<span id="cb65-20"><a href="#cb65-20" aria-hidden="true" tabindex="-1"></a>  pred <span class="ot">&lt;-</span> out[, <span class="st">&quot;y&quot;</span>]</span>
+<span id="cb65-21"><a href="#cb65-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum</span>((pred <span class="sc">-</span> y_obs)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb65-22"><a href="#cb65-22" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb65-23"><a href="#cb65-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-24"><a href="#cb65-24" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="at">par =</span> <span class="fl">0.5</span>, <span class="at">fn =</span> objective, <span class="at">method =</span> <span class="st">&quot;L-BFGS-B&quot;</span>, <span class="at">lower =</span> <span class="dv">0</span>)</span>
+<span id="cb65-25"><a href="#cb65-25" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;true k:&quot;</span>, true_k, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb65-26"><a href="#cb65-26" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;estimated k:&quot;</span>, fit<span class="sc">$</span>par, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb65-27"><a href="#cb65-27" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;fit convergence code:&quot;</span>, fit<span class="sc">$</span>convergence, <span class="st">&quot;(0 means success)</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb65-28"><a href="#cb65-28" aria-hidden="true" tabindex="-1"></a>fitted <span class="ot">&lt;-</span> <span class="fu">ode</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="at">y =</span> <span class="dv">2</span>), <span class="at">times =</span> obs_t, <span class="at">func =</span> rhs, <span class="at">parms =</span> <span class="fu">list</span>(<span class="at">k =</span> fit<span class="sc">$</span>par))[, <span class="st">&quot;y&quot;</span>]</span>
+<span id="cb65-29"><a href="#cb65-29" aria-hidden="true" tabindex="-1"></a>tight <span class="ot">&lt;-</span> <span class="fu">ode</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="at">y =</span> <span class="dv">2</span>), <span class="at">times =</span> obs_t, <span class="at">func =</span> rhs, <span class="at">parms =</span> <span class="fu">list</span>(<span class="at">k =</span> fit<span class="sc">$</span>par),</span>
+<span id="cb65-30"><a href="#cb65-30" aria-hidden="true" tabindex="-1"></a>             <span class="at">rtol =</span> <span class="fl">1e-9</span>, <span class="at">atol =</span> <span class="fl">1e-11</span>)[, <span class="st">&quot;y&quot;</span>]</span>
+<span id="cb65-31"><a href="#cb65-31" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;residual RMS:&quot;</span>, <span class="fu">sqrt</span>(<span class="fu">mean</span>((fitted <span class="sc">-</span> y_obs)<span class="sc">^</span><span class="dv">2</span>)), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb65-32"><a href="#cb65-32" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;fitted trajectory tolerance change:&quot;</span>, <span class="fu">max</span>(<span class="fu">abs</span>(tight <span class="sc">-</span> fitted)), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
 <h2 data-number="18.4" role="heading" aria-level="3" id="julia"><span class="header-section-number">18.4</span> Julia</h2>
+<p>The forward helper rejects an unsuccessful integration before fitting
+continues.</p>
 <div class="sourceCode" id="cb66"><pre class="sourceCode julia"><code class="sourceCode julia"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">DifferentialEquations</span></span>
 <span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Optim</span></span>
 <span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Random</span></span>
@@ -6164,22 +6199,29 @@ from those observations.</p>
 <span id="cb66-5"><a href="#cb66-5" aria-hidden="true" tabindex="-1"></a><span class="bu">Random</span>.<span class="fu">seed!</span>(<span class="fl">42</span>)</span>
 <span id="cb66-6"><a href="#cb66-6" aria-hidden="true" tabindex="-1"></a>true_k <span class="op">=</span> <span class="fl">0.8</span></span>
 <span id="cb66-7"><a href="#cb66-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-8"><a href="#cb66-8" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">make_solution</span>(k, obs_t)</span>
+<span id="cb66-8"><a href="#cb66-8" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">make_solution</span>(k, obs_t; reltol<span class="op">=</span><span class="fl">1e-8</span>, abstol<span class="op">=</span><span class="fl">1e-10</span>)</span>
 <span id="cb66-9"><a href="#cb66-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">f!</span>(du, u, p, t) <span class="op">=</span> (du[<span class="fl">1</span>] <span class="op">=</span> <span class="op">-</span>k <span class="op">*</span> u[<span class="fl">1</span>])</span>
 <span id="cb66-10"><a href="#cb66-10" aria-hidden="true" tabindex="-1"></a>    prob <span class="op">=</span> <span class="fu">ODEProblem</span>(f!, [<span class="fl">2.0</span>], (<span class="fl">0.0</span>, <span class="fl">4.0</span>))</span>
-<span id="cb66-11"><a href="#cb66-11" aria-hidden="true" tabindex="-1"></a>    sol <span class="op">=</span> <span class="fu">solve</span>(prob, <span class="fu">Tsit5</span>(); saveat<span class="op">=</span>obs_t, reltol<span class="op">=</span><span class="fl">1e-8</span>, abstol<span class="op">=</span><span class="fl">1e-10</span>)</span>
-<span id="cb66-12"><a href="#cb66-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [u[<span class="fl">1</span>] for u <span class="kw">in</span> sol.u]</span>
-<span id="cb66-13"><a href="#cb66-13" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
-<span id="cb66-14"><a href="#cb66-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-15"><a href="#cb66-15" aria-hidden="true" tabindex="-1"></a>obs_t <span class="op">=</span> <span class="fu">collect</span>(<span class="fl">0.0</span><span class="op">:</span><span class="fl">0.5</span><span class="op">:</span><span class="fl">4.0</span>)</span>
-<span id="cb66-16"><a href="#cb66-16" aria-hidden="true" tabindex="-1"></a>y_clean <span class="op">=</span> <span class="fu">make_solution</span>(true_k, obs_t)</span>
-<span id="cb66-17"><a href="#cb66-17" aria-hidden="true" tabindex="-1"></a>y_obs <span class="op">=</span> y_clean <span class="op">.+</span> <span class="fl">0.03</span> <span class="op">.*</span> <span class="fu">randn</span>(<span class="fu">length</span>(y_clean))</span>
-<span id="cb66-18"><a href="#cb66-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-19"><a href="#cb66-19" aria-hidden="true" tabindex="-1"></a><span class="fu">obj</span>(k) <span class="op">=</span> <span class="fu">sum</span>((<span class="fu">make_solution</span>(k[<span class="fl">1</span>], obs_t) <span class="op">.-</span> y_obs)<span class="op">.^</span><span class="fl">2</span>)</span>
-<span id="cb66-20"><a href="#cb66-20" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> <span class="fu">optimize</span>(obj, [<span class="fl">0.5</span>], <span class="fu">LBFGS</span>(); autodiff<span class="op">=:</span>forward)</span>
-<span id="cb66-21"><a href="#cb66-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-22"><a href="#cb66-22" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">&quot;true k: &quot;</span>, true_k)</span>
-<span id="cb66-23"><a href="#cb66-23" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">&quot;estimated k: &quot;</span>, Optim.<span class="fu">minimizer</span>(result)[<span class="fl">1</span>])</span></code></pre></div>
+<span id="cb66-11"><a href="#cb66-11" aria-hidden="true" tabindex="-1"></a>    sol <span class="op">=</span> <span class="fu">solve</span>(prob, <span class="fu">Tsit5</span>(); saveat<span class="op">=</span>obs_t, reltol<span class="op">=</span>reltol, abstol<span class="op">=</span>abstol)</span>
+<span id="cb66-12"><a href="#cb66-12" aria-hidden="true" tabindex="-1"></a>    DifferentialEquations.SciMLBase.<span class="fu">successful_retcode</span>(sol) <span class="op">||</span> <span class="fu">error</span>(<span class="st">&quot;ODE solve failed: </span><span class="sc">$</span>(sol.retcode)<span class="st">&quot;</span>)</span>
+<span id="cb66-13"><a href="#cb66-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [u[<span class="fl">1</span>] for u <span class="kw">in</span> sol.u]</span>
+<span id="cb66-14"><a href="#cb66-14" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb66-15"><a href="#cb66-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-16"><a href="#cb66-16" aria-hidden="true" tabindex="-1"></a>obs_t <span class="op">=</span> <span class="fu">collect</span>(<span class="fl">0.0</span><span class="op">:</span><span class="fl">0.5</span><span class="op">:</span><span class="fl">4.0</span>)</span>
+<span id="cb66-17"><a href="#cb66-17" aria-hidden="true" tabindex="-1"></a>y_clean <span class="op">=</span> <span class="fu">make_solution</span>(true_k, obs_t)</span>
+<span id="cb66-18"><a href="#cb66-18" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">&quot;forward maximum error: &quot;</span>, <span class="fu">maximum</span>(<span class="fu">abs</span>.(y_clean <span class="op">.-</span> <span class="fl">2</span> <span class="op">.*</span> <span class="fu">exp</span>.(<span class="op">-</span>true_k <span class="op">.*</span> obs_t))))</span>
+<span id="cb66-19"><a href="#cb66-19" aria-hidden="true" tabindex="-1"></a>y_obs <span class="op">=</span> y_clean <span class="op">.+</span> <span class="fl">0.03</span> <span class="op">.*</span> <span class="fu">randn</span>(<span class="fu">length</span>(y_clean))</span>
+<span id="cb66-20"><a href="#cb66-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-21"><a href="#cb66-21" aria-hidden="true" tabindex="-1"></a><span class="fu">obj</span>(k) <span class="op">=</span> <span class="fu">sum</span>((<span class="fu">make_solution</span>(k[<span class="fl">1</span>], obs_t) <span class="op">.-</span> y_obs)<span class="op">.^</span><span class="fl">2</span>)</span>
+<span id="cb66-22"><a href="#cb66-22" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> <span class="fu">optimize</span>(obj, [<span class="fl">0.5</span>], <span class="fu">LBFGS</span>())</span>
+<span id="cb66-23"><a href="#cb66-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-24"><a href="#cb66-24" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">&quot;true k: &quot;</span>, true_k)</span>
+<span id="cb66-25"><a href="#cb66-25" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">&quot;estimated k: &quot;</span>, Optim.<span class="fu">minimizer</span>(result)[<span class="fl">1</span>])</span>
+<span id="cb66-26"><a href="#cb66-26" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">&quot;fit converged: &quot;</span>, Optim.<span class="fu">converged</span>(result))</span>
+<span id="cb66-27"><a href="#cb66-27" aria-hidden="true" tabindex="-1"></a>fitted <span class="op">=</span> <span class="fu">make_solution</span>(Optim.<span class="fu">minimizer</span>(result)[<span class="fl">1</span>], obs_t)</span>
+<span id="cb66-28"><a href="#cb66-28" aria-hidden="true" tabindex="-1"></a>tight <span class="op">=</span> <span class="fu">make_solution</span>(Optim.<span class="fu">minimizer</span>(result)[<span class="fl">1</span>], obs_t; reltol<span class="op">=</span><span class="fl">1e-10</span>, abstol<span class="op">=</span><span class="fl">1e-12</span>)</span>
+<span id="cb66-29"><a href="#cb66-29" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">&quot;residual RMS: &quot;</span>, <span class="fu">sqrt</span>(<span class="fu">sum</span>(abs2, fitted <span class="op">.-</span> y_obs) <span class="op">/</span> <span class="fu">length</span>(y_obs)))</span>
+<span id="cb66-30"><a href="#cb66-30" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">&quot;fitted trajectory tolerance change: &quot;</span>, <span class="fu">maximum</span>(<span class="fu">abs</span>.(tight <span class="op">.-</span> fitted)))</span></code></pre></div>
 <h2 data-number="18.5" role="heading" aria-level="3" id="why-this-pattern-matters"><span class="header-section-number">18.5</span> Why This Pattern Matters</h2>
 <p>This tiny pipeline captures a very common real-world pattern: you
 have a model with unknown parameters, noisy data, and a fitting loop
@@ -6187,7 +6229,17 @@ that updates parameters to reduce mismatch. The ODE here is simple, but
 the structure scales directly. Swap in a larger dynamical system, more
 parameters, and practical constraints, and you are in systems biology,
 climate calibration, or pharmacokinetics. The loop remains the same:
-solve forward, compare with data, update parameters, repeat.</p>
+solve forward, compare with data, update parameters, repeat. In R,
+<code>ode</code> reports integration failure through an error or
+warning; treat warnings as a reason to investigate. A successful status
+does not establish an accurate answer. Compare the numerical trajectory
+change under tighter tolerances with the residual scale, and check
+whether the forward error is acceptable for the application. The
+residual RMS is a fit diagnostic, not a confidence interval. Different
+random generators produce different observations across languages;
+noise, model mismatch and parameter identifiability all affect the
+fitted value. A single synthetic run cannot measure parameter
+uncertainty or establish that a real model is adequate.</p>
 <hr />
 <h1 data-number="19" role="heading" aria-level="2" id="further-reading-and-resources"><span class="header-section-number">19</span> Further Reading and
 Resources</h1>
