@@ -392,7 +392,7 @@ flowchart LR
         p2["... 7 more positions ..."]
         p3["Position (2,2):\nbottom-right 3×3 patch"]
     end
-    subgraph output["3×3 Output\n⌊(5−3+0)/1⌋+1 = 3 per side"]
+    subgraph output["3×3 Output"]
         o1["output[0,0]"]
         o2["..."]
         o3["output[2,2]"]
