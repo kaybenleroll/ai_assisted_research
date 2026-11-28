@@ -622,7 +622,7 @@ With one fewer gate and no separate cell state, a GRU has fewer parameters than 
 
 Transformers (§7) have largely displaced RNNs for natural language, where their parallelism and direct long-range attention win decisively. But RNNs hold onto real niches, and the reasons are structural. The first is streaming and online inference: an RNN processes one element at a time and carries a fixed-size hidden state, so it uses $O(1)$ memory per step regardless of how much history precedes it. Attention, by contrast, attends to all previous tokens, so its per-step cost grows with the sequence. For a model that must consume an unbounded stream — live audio, sensor telemetry — the RNN's constant per-step footprint is exactly right. The second is very long sequences, where attention's quadratic cost in sequence length becomes prohibitive and a linear-cost recurrence is the only thing that fits. The third is edge deployment under tight memory limits, where a small recurrent model beats a transformer you cannot afford to host. And the fourth is data with a genuinely recurrent character — many time-series problems — where the recurrent inductive bias matches the underlying process and helps rather than hinders.
 
-Worth naming here: **state-space models** (SSMs), most prominently **Mamba** (Gu & Dao, 2023), are the current standard answer to exactly the pitch above — linear-cost sequence processing with a fixed-size recurrent state, but with a training-time formulation that parallelises across the sequence the way a transformer does, closing much of the throughput gap that made vanilla RNNs impractical to train at scale. Where you would once have reached for an LSTM or GRU on long-sequence, streaming, or edge workloads, an SSM is now the more common choice.
+Worth naming here: **state-space models** (SSMs), most prominently **Mamba** (Gu & Dao, 2023), provide another approach to the requirements above — linear-cost sequence processing with a fixed-size recurrent state, but with a training-time formulation that parallelises across the sequence the way a transformer does, closing much of the throughput gap that made vanilla RNNs impractical to train at scale. Compare an SSM with recurrent and attention-based baselines on the target sequence length, hardware, and quality requirement; linear scaling alone does not determine the best model.
 
 ### Code: An LSTM in Three Frameworks
 
@@ -1041,7 +1041,7 @@ This produces a sample from exactly the right distribution, but now the stochast
 
 ### Putting It Together
 
-In practice the encoder is built to output $\boldsymbol{\mu}$ and $\log \boldsymbol{\sigma}^2$ rather than $\boldsymbol{\sigma}$ directly — predicting the log-variance keeps the value numerically stable and unconstrained in sign, since variance must be positive but a log can range freely. A training step then runs: encode $\mathbf{x}$ to get $\boldsymbol{\mu}$ and $\log \boldsymbol{\sigma}^2$, draw $\boldsymbol{\varepsilon}$, form $\mathbf{z} = \boldsymbol{\mu} + \boldsymbol{\sigma} \odot \boldsymbol{\varepsilon}$, decode $\mathbf{z}$ to a reconstruction, compute the ELBO (reconstruction term plus the closed-form KL), and backpropagate.
+In practice the encoder is built to output $\boldsymbol{\mu}$ and $\log \boldsymbol{\sigma}^2$ rather than $\boldsymbol{\sigma}$ directly — predicting the log-variance keeps the value numerically stable and unconstrained in sign, since variance must be positive but a log can range freely. For the schematic below, take a Gaussian decoder with fixed independent variance $1/2$ per observed component. Its negative log likelihood is the summed squared error plus a constant independent of the model parameters. Other variances change the reconstruction weight relative to the KL term. A training step then runs: encode $\mathbf{x}$ to get $\boldsymbol{\mu}$ and $\log \boldsymbol{\sigma}^2$, draw $\boldsymbol{\varepsilon}$, form $\mathbf{z} = \boldsymbol{\mu} + \boldsymbol{\sigma} \odot \boldsymbol{\varepsilon}$, decode $\mathbf{z}$ to a reconstruction, compute the ELBO (reconstruction term plus the closed-form KL), and backpropagate.
 
 ```python
 # One VAE training step, schematically (PyTorch-style)
@@ -1053,7 +1053,7 @@ x_hat = decoder(z)
 
 recon = mse_loss(x_hat, x, reduction="sum")
 kl = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())
-loss = recon + kl                        # negative ELBO
+loss = recon + kl                        # negative sampled ELBO, up to a constant
 loss.backward()
 ```
 
@@ -1378,13 +1378,13 @@ For images, compare convolutional networks and Vision Transformers using the dat
 
 ### Sequences and Text
 
-For text and sequences, transformers have almost entirely displaced RNNs, and the practical workflow reflects it. Start with a pretrained transformer: BERT-class models for understanding tasks (classification, extraction, retrieval), GPT-class models for generation. Fine-tune that on your data. Train from scratch only if you have both domain-specific requirements that the pretrained models genuinely cannot meet and a dataset large enough to support training a transformer from nothing — a high bar that most projects do not clear. RNNs are not entirely gone: they retain an edge in streaming and edge settings, where autoregressive transformer inference is too slow or too heavy, and the constant-memory, one-step-at-a-time nature of a recurrent model is exactly what the deployment needs. But for the overwhelming majority of NLP work, the question is which pretrained transformer to fine-tune, not whether to use one.
+For text and sequences, transformers have almost entirely displaced RNNs, and the practical workflow reflects it. Compare a pretrained transformer with a simple task-specific baseline: BERT-class models can support classification or extraction, while GPT-class models can generate text. Evaluate zero-shot or prompted use where applicable, feature extraction, and fine-tuning against the same held-out data and operational constraints. Train from scratch only if you have both domain-specific requirements that the pretrained models genuinely cannot meet and a dataset large enough to support training a transformer from nothing — a high bar that most projects do not clear. RNNs are not entirely gone: they retain an edge in streaming and edge settings, where autoregressive transformer inference is too slow or too heavy, and the constant-memory, one-step-at-a-time nature of a recurrent model is exactly what the deployment needs. The best adaptation method depends on the task, available labels, and deployment constraints.
 
 ### Generation: Which Generative Model
 
 When the task is generation, the choice among VAEs, GANs, and diffusion models follows from what you are optimising for, and the trade-offs are distinct enough that the question almost answers itself once you name your priority.
 
-If you want a structured latent space — one you can interpolate through smoothly, or in which the axes of variation are disentangled — reach for a VAE, or a VAE-based latent diffusion model. The regularised latent space is the whole point; it is the asset you are buying, and the slightly blurry samples are the price.
+If you want an encoded latent representation for generation or interpolation, evaluate a VAE or a VAE-based latent diffusion model. Prior regularisation encourages useful latent organisation, but it does not guarantee coherent interpolation or disentangled axes. Recovering distinct factors requires additional assumptions or supervision and evaluation; see [Locatello and colleagues](https://proceedings.mlr.press/v97/locatello19a.html).
 
 If you want very fast single-pass generation and can tolerate the training instability that comes with it, use a GAN. StyleGAN remains a strong choice for photorealistic images, and GANs still hold a niche in latency-critical video generation (real-time avatars, face reenactment) — but for general-purpose video generation, diffusion and diffusion-transformer models have taken over.
 
