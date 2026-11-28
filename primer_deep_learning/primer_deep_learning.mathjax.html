@@ -1695,11 +1695,14 @@ why modern deep networks train where older ones stalled — a well-chosen
 initialisation keeps gradients alive from the very first step.</p>
 <h2 data-number="4.6" role="heading" aria-level="3" id="regularisation"><span class="header-section-number">4.6</span>
 Regularisation</h2>
-<p>The classical regularisers carry straight over. L2 weight decay
-(penalising the sum of squared weights) and L1 (penalising the sum of
-absolute weights) work exactly as they do in linear models, shrinking
-weights towards zero to control capacity. Deep learning adds two
-regularisers worth knowing well.</p>
+<p>The classical regularisers carry straight over. L2 and L1 penalties
+add the sum of squared or absolute weights to the loss, encouraging
+smaller weights. Weight decay instead shrinks the weights directly
+during an update. For plain SGD the two can be equivalent after matching
+coefficients, but with adaptive optimisers such as Adam they generally
+differ; AdamW decouples weight decay from the adaptive gradient update.
+See <a href="https://arxiv.org/abs/1711.05101">Loshchilov and
+Hutter</a>. Deep learning adds two regularisers worth knowing well.</p>
 <p>Dropout is the signature technique. During training, on each forward
 pass, you randomly set a fraction <span class="math inline">\(p\)</span>
 of the activations in a layer to zero — different neurons dropped each
@@ -2371,13 +2374,14 @@ much history precedes it. Attention, by contrast, attends to all
 previous tokens, so its per-step cost grows with the sequence. For a
 model that must consume an unbounded stream — live audio, sensor
 telemetry — the RNN’s constant per-step footprint is exactly right. The
-second is very long sequences, where attention’s quadratic cost in
-sequence length becomes prohibitive and a linear-cost recurrence is the
-only thing that fits. The third is edge deployment under tight memory
-limits, where a small recurrent model beats a transformer you cannot
-afford to host. And the fourth is data with a genuinely recurrent
-character — many time-series problems — where the recurrent inductive
-bias matches the underlying process and helps rather than hinders.</p>
+second is very long sequences, where full attention’s quadratic cost in
+sequence length can become prohibitive. Recurrence is one option; sparse
+and linear-attention variants offer other trade-offs, such as the <a href="https://proceedings.mlr.press/v119/katharopoulos20a.html">linear-attention
+formulation</a>. The third is edge deployment under tight memory limits,
+where a small recurrent model beats a transformer you cannot afford to
+host. And the fourth is data with a genuinely recurrent character — many
+time-series problems — where the recurrent inductive bias matches the
+underlying process and helps rather than hinders.</p>
 <p>Worth naming here: <strong>state-space models</strong> (SSMs), most
 prominently <strong>Mamba</strong> (Gu &amp; Dao, 2023), provide another
 approach to the requirements above — linear-cost sequence processing
@@ -2644,12 +2648,13 @@ and pre-LN elsewhere in this section: the mechanism above is the
 textbook version, and production models have since tweaked it.</p>
 <p>Every sub-layer is wrapped in a residual connection and a layer
 normalisation, in the form <span class="math inline">\(\operatorname{LayerNorm}(\mathbf{x} +
-\operatorname{Sublayer}(\mathbf{x}))\)</span>. The residual is there for
-exactly the reason it was in ResNet: the <span class="math inline">\(+\,\mathbf{x}\)</span> gives the gradient a direct
-path back through the identity, so even a deep stack of blocks trains
-without the gradient vanishing. Transformers are deep, and they would
-not train without these skip connections any more than a 152-layer CNN
-would.</p>
+\operatorname{Sublayer}(\mathbf{x}))\)</span>. The residual gives
+gradients a route around the sublayer, helping optimisation in deep
+stacks. In this post-LN form the gradient along that route still passes
+through layer normalisation, so the shortcut is not an unmodified
+identity path and does not guarantee against vanishing gradients. The
+pre-LN alternative below leaves the residual path outside the
+normalisation.</p>
 <h2 data-number="7.6" role="heading" aria-level="3" id="layer-normalisation"><span class="header-section-number">7.6</span>
 Layer Normalisation</h2>
 <p>Transformers normalise with layer normalisation rather than the batch
@@ -3080,19 +3085,17 @@ understanding why. The reward model is an imperfect proxy for human
 preference — it was trained on finite data and has blind spots. If you
 let the policy optimise the reward freely, it will find those blind
 spots and exploit them. This is <strong>reward hacking</strong>: the
-policy discovers degenerate outputs that score absurdly high on the
-reward model while being useless or incoherent to an actual human —
-repeating flattering phrases, exploiting length biases, drifting into
-text that games the scorer’s quirks. Left unchecked, the policy
-collapses onto a narrow region of these high-scoring degeneracies. The
-KL term prevents this by making the policy pay a penalty for straying
-far from the sensible, fluent SFT distribution. It keeps the model’s
-outputs recognisably language while it climbs the reward, so the
-optimisation improves helpfulness instead of discovering an adversarial
-exploit of its own grader. (Newer methods like Direct Preference
-Optimisation fold these stages together and skip the explicit reward
-model, but the conceptual structure — preferences supply the signal, a
-proximity constraint prevents collapse — is the same.)</p>
+policy may discover outputs that score highly on the reward model while
+being less useful to a human, for example by exploiting a length bias. A
+KL penalty makes deviations from the SFT policy costly and can mitigate
+over-optimisation; it does not guarantee that reward hacking is
+prevented or that helpfulness improves. Its strength must be tuned and
+the resulting model evaluated against independent human judgements. The
+<a href="https://arxiv.org/abs/2203.02155">InstructGPT study</a> uses
+such a penalty to mitigate over-optimisation. (Newer methods like Direct
+Preference Optimisation fold these stages together and skip the explicit
+reward model, but the conceptual structure — preferences supply the
+signal and a reference policy regulates deviation — is the same.)</p>
 <h2 data-number="8.6" role="heading" aria-level="3" id="emergent-capabilities"><span class="header-section-number">8.6</span> Emergent Capabilities</h2>
 <p>The last thing to know about scale is the strangest. At small scale,
 a language model does roughly what you’d expect: it completes tokens,
@@ -3733,18 +3736,20 @@ order of 1000 steps, one per noise level, and each step is a full
 forward pass through a large network. Generating one image takes a
 thousand network evaluations, which is slow. <strong>DDIM</strong> (Song
 et al., 2020) fixes this by reformulating the reverse process. It
-reparameterises the chain as non-Markovian and makes the reverse step
-<em>deterministic</em> — dropping the random <span class="math inline">\(\sigma_t \mathbf{z}\)</span> term — which,
-somewhat surprisingly, lets you take much larger steps without wrecking
-quality. You can skip from <span class="math inline">\(t\)</span> to
-some much earlier timestep directly, and 10–50 steps can work well for
-many models, but that is not a universal quality-preserving conversion:
-the best step count depends on the training objective, noise schedule,
-solver, guidance scale, and requested fidelity. Every skipped step is a
-latency saving only if the resulting quality remains acceptable. Each
-DDIM step first reconstructs an estimate of the clean image from the
-current noisy one and the predicted noise, then re-noises it to the next
-(lower) level:</p>
+introduces a family of non-Markovian processes with the same training
+objective; the deterministic DDIM choice sets the sampling noise to
+zero. The family also permits stochastic sampling. A reduced sequence of
+timesteps can accelerate generation, with a quality trade-off that must
+be measured; see <a href="https://arxiv.org/abs/2010.02502">Song and
+colleagues</a>. You can skip from <span class="math inline">\(t\)</span>
+to some much earlier timestep directly, and 10–50 steps can work well
+for many models, but that is not a universal quality-preserving
+conversion: the best step count depends on the training objective, noise
+schedule, solver, guidance scale, and requested fidelity. Every skipped
+step is a latency saving only if the resulting quality remains
+acceptable. Each DDIM step first reconstructs an estimate of the clean
+image from the current noisy one and the predicted noise, then re-noises
+it to the next (lower) level:</p>
 <p>First reconstruct the clean-image estimate:</p>
 <p><span class="math display">\[\widehat{\mathbf{x}}_0 =
 \frac{\mathbf{x}_t - \sqrt{1 -
