@@ -216,6 +216,13 @@ lint-spell *FILES:
 render-qa project:
   python3 -I maintenance/scripts/render_qa.py "{{project}}"
 
+# Build and run the pinned interactive browser QA container
+build-browser-qa-image:
+  {{OCI}} build -t localhost/primers-browser-qa:1.61.1 -f maintenance/build/browser-qa/Containerfile maintenance/build/browser-qa
+
+browser-qa +FILES:
+  OCI={{OCI}} python3 -I maintenance/scripts/browser-qa/run.py {{FILES}}
+
 # Build the shared pandoc image used by all primer projects
 build-image:
   {{OCI}} build -t {{IMAGE}} -f maintenance/build/Dockerfile maintenance/build/

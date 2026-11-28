@@ -46,6 +46,10 @@ controls or destinations, results, and any defects. Resolve known regressions
 before release. Advisory status does not make a known broken interaction or
 fragment link acceptable.
 
+The containerised `just browser-qa` recipe supplies a repeatable Chromium sample
+of keyboard, no-JavaScript and landmark behaviour; see [Contributing](../../CONTRIBUTING.md).
+It does not run a screen reader. Record that review independently.
+
 Record checks not performed as not performed, including advisory checks; do
 not treat them as passed. Historical evidence retains its original result and
 scope.
