@@ -2934,7 +2934,7 @@ println("forward maximum error: ", maximum(abs.(y_clean .- 2 .* exp.(-true_k .* 
 y_obs = y_clean .+ 0.03 .* randn(length(y_clean))
 
 obj(k) = sum((make_solution(k[1], obs_t) .- y_obs).^2)
-result = optimize(obj, [0.5], LBFGS(); autodiff=:forward)
+result = optimize(obj, [0.5], LBFGS())
 
 println("true k: ", true_k)
 println("estimated k: ", Optim.minimizer(result)[1])

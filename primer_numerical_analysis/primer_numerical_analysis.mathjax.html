@@ -5465,7 +5465,7 @@ continues.</p>
 <span id="cb66-19"><a href="#cb66-19" aria-hidden="true" tabindex="-1"></a>y_obs <span class="op">=</span> y_clean <span class="op">.+</span> <span class="fl">0.03</span> <span class="op">.*</span> <span class="fu">randn</span>(<span class="fu">length</span>(y_clean))</span>
 <span id="cb66-20"><a href="#cb66-20" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb66-21"><a href="#cb66-21" aria-hidden="true" tabindex="-1"></a><span class="fu">obj</span>(k) <span class="op">=</span> <span class="fu">sum</span>((<span class="fu">make_solution</span>(k[<span class="fl">1</span>], obs_t) <span class="op">.-</span> y_obs)<span class="op">.^</span><span class="fl">2</span>)</span>
-<span id="cb66-22"><a href="#cb66-22" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> <span class="fu">optimize</span>(obj, [<span class="fl">0.5</span>], <span class="fu">LBFGS</span>(); autodiff<span class="op">=:</span>forward)</span>
+<span id="cb66-22"><a href="#cb66-22" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> <span class="fu">optimize</span>(obj, [<span class="fl">0.5</span>], <span class="fu">LBFGS</span>())</span>
 <span id="cb66-23"><a href="#cb66-23" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb66-24"><a href="#cb66-24" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">&quot;true k: &quot;</span>, true_k)</span>
 <span id="cb66-25"><a href="#cb66-25" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">&quot;estimated k: &quot;</span>, Optim.<span class="fu">minimizer</span>(result)[<span class="fl">1</span>])</span>
