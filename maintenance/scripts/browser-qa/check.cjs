@@ -6,13 +6,16 @@ const { pathToFileURL } = require('url');
 const assert = require('assert').strict;
 
 async function check(file, browser) {
-  const mathml = file.replace(/(?:\.mathjax)?\.html$/, '.mathml.html');
-  const hasMathml = mathml !== file && fs.existsSync(mathml);
+  const isMathml = file.endsWith('.mathml.html');
+  const mathml = isMathml ? file : file.replace(/(?:\.mathjax)?\.html$/, '.mathml.html');
+  const rendererTarget = isMathml ? file.replace(/\.mathml\.html$/, '.mathjax.html') : mathml;
+  const hasMathml = !isMathml && fs.existsSync(mathml);
   if (hasMathml) {
     const context = await browser.newContext({ javaScriptEnabled: false });
     try {
       const page = await context.newPage();
       page.setDefaultTimeout(5000);
+      page.setDefaultNavigationTimeout(5000);
       await page.goto(pathToFileURL(file).href);
       const fallback = page.getByRole('link', { name: 'Read the MathML version' });
       assert(await fallback.isVisible(), 'MathML fallback is not visible');
@@ -31,6 +34,7 @@ async function check(file, browser) {
 
   const page = await browser.newPage();
   page.setDefaultTimeout(5000);
+  page.setDefaultNavigationTimeout(5000);
   try {
     await page.goto(pathToFileURL(file).href);
     await page.waitForSelector('#TOC.collapsible-ready', { timeout: 15000 });
@@ -43,20 +47,26 @@ async function check(file, browser) {
     assert(await skip.evaluate(el => el === document.activeElement), 'skip link is not first focus');
     await page.keyboard.press('Enter');
     assert(await main.evaluate(el => el === document.activeElement), 'skip link did not focus main');
+    await page.reload();
+    await page.waitForSelector('#TOC.collapsible-ready', { timeout: 15000 });
     const toggle = nav.getByRole('button').first();
-    await toggle.focus();
+    await tabTo(page, toggle, 'contents toggle');
     const before = await toggle.getAttribute('aria-expanded');
     const id = await toggle.getAttribute('aria-controls');
     assert(id, 'contents toggle lacks aria-controls');
     const controlled = page.locator(`#${CSSescape(id)}`);
     assert.equal(await controlled.count(), 1, 'controlled list missing or duplicated');
     const wasHidden = await controlled.evaluate(el => el.hidden);
+    assert.equal(before, String(!wasHidden), 'contents initial aria-expanded disagrees with visibility');
     await page.keyboard.press('Enter');
-    assert.notEqual(await toggle.getAttribute('aria-expanded'), before, 'contents aria-expanded did not change');
-    assert.notEqual(await controlled.evaluate(el => el.hidden), wasHidden, 'contents list did not toggle');
+    const after = await toggle.getAttribute('aria-expanded');
+    const hidden = await controlled.evaluate(el => el.hidden);
+    assert.equal(after, String(!hidden), 'contents aria-expanded disagrees with visibility');
+    assert.notEqual(after, before, 'contents aria-expanded did not change');
+    assert.notEqual(hidden, wasHidden, 'contents list did not toggle');
     const link = nav.locator('a[href^="#"]').first();
     const href = await link.getAttribute('href');
-    await link.focus();
+    await tabTo(page, link, 'contents link');
     await page.keyboard.press('Enter');
     assert.equal(new URL(page.url()).hash, href, 'contents link did not navigate');
     assert(await page.evaluate(id => !!document.getElementById(id), decodeURIComponent(href.slice(1))), 'contents target missing');
@@ -66,13 +76,22 @@ async function check(file, browser) {
     if (!hasMathml && !file.endsWith('.mathml.html') && await page.locator('#math-mode-toggle').count()) {
       throw Error('renderer control exists but sibling MathML output is missing');
     }
-    if (hasMathml) {
-      await page.locator('#math-mode-toggle').focus();
+    if (hasMathml || isMathml) {
+      assert(fs.existsSync(rendererTarget), 'renderer destination is missing');
+      await page.goto(pathToFileURL(file).href);
+      await tabTo(page, page.locator('#math-mode-toggle'), 'renderer control');
       await page.keyboard.press('Enter');
-      await page.waitForURL(url => url.pathname === pathToFileURL(mathml).pathname);
-      console.log('  PASS renderer control: Enter to MathML');
+      await page.waitForURL(url => url.pathname === pathToFileURL(rendererTarget).pathname);
+      console.log(`  PASS renderer control: Tab and Enter to ${isMathml ? 'MathJax' : 'MathML'}`);
     } else console.log('  SKIP renderer control: no sibling MathML output');
   } finally { await page.close(); }
+}
+async function tabTo(page, target, label) {
+  for (let i = 0; i < 300; i++) {
+    await page.keyboard.press('Tab');
+    if (await target.evaluate(el => el === document.activeElement)) return;
+  }
+  throw Error(`${label} was not reached by Tab`);
 }
 function CSSescape(id) { return id.replace(/[^a-zA-Z0-9_-]/g, c => `\\${c.codePointAt(0).toString(16)} `); }
 (async () => {

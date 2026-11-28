@@ -223,6 +223,10 @@ build-browser-qa-image:
 browser-qa +FILES:
   OCI={{OCI}} python3 -I maintenance/scripts/browser-qa/run.py {{FILES}}
 
+# Exercise positive and negative browser QA fixtures
+check-browser-qa:
+  OCI={{OCI}} python3 -I -m unittest discover -s maintenance/tests -p 'test_browser_qa.py'
+
 # Build the shared pandoc image used by all primer projects
 build-image:
   {{OCI}} build -t {{IMAGE}} -f maintenance/build/Dockerfile maintenance/build/

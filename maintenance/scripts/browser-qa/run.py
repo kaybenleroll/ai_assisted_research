@@ -43,9 +43,13 @@ def main(paths):
     status = command('git', 'status', '--porcelain=v1', '--untracked-files=normal')
     print('Working tree:', 'clean' if not status else 'dirty\n' + status, flush=True)
     print('Image:', IMAGE, command(OCI, 'image', 'inspect', IMAGE, '--format', '{{.Id}}'), flush=True)
+    for evidence_file in ('maintenance/scripts/browser-qa/run.py', 'maintenance/scripts/browser-qa/check.cjs'):
+        describe_file(ROOT / evidence_file)
     for name in selected:
         describe_file(ROOT / name)
-        sibling = (ROOT / name).with_name((ROOT / name).name.removesuffix('.html').removesuffix('.mathjax') + '.mathml.html')
+        filename = (ROOT / name).name
+        target = filename.removesuffix('.mathml.html') + '.mathjax.html' if filename.endswith('.mathml.html') else filename.removesuffix('.html').removesuffix('.mathjax') + '.mathml.html'
+        sibling = (ROOT / name).with_name(target)
         if sibling.is_file() and sibling != ROOT / name:
             describe_file(sibling)
     mount = f'{ROOT}:/repo:ro' + (',z' if OCI == 'podman' else '')
