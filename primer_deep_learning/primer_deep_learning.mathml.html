@@ -1297,29 +1297,30 @@ the training section makes precise.</p>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>1</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(-1, 1)</annotation></semantics></math>
 instead of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(0, 1)</annotation></semantics></math>.
-The key improvement is that it is zero-centred: its output averages
-around zero rather than around
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.5</mn><annotation encoding="application/x-tex">0.5</annotation></semantics></math>,
-which keeps the signal flowing into the next layer balanced and tends to
-make optimisation better-behaved. It is still an S-curve, though, and it
-still saturates at both extremes, so the vanishing-gradient problem is
-reduced but not solved.</p>
+Unlike sigmoid, it is centred at zero as a function:
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">tanh</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\tanh(0)=0</annotation></semantics></math>
+and it can produce positive or negative outputs. The actual mean
+activation depends on the input distribution, so it is not necessarily
+zero. It is still an S-curve, though, and it still saturates at both
+extremes, so the vanishing-gradient problem is reduced but not
+solved.</p>
 <p><strong>ReLU.</strong> The rectified linear unit,</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">ReLU</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mrow><mi mathvariant="normal">max</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mi>z</mi><mo stretchy="false" form="postfix">)</mo><mo>,</mo></mrow><annotation encoding="application/x-tex">\operatorname{ReLU}(z) = \max(0, z),</annotation></semantics></math></p>
 <p>throws out the S-curve entirely. It is the identity for positive
 inputs and zero for negative ones — a hinge at the origin. For any
 positive input its derivative is exactly 1, so it does not squash
-gradients on the way back, and that single property is most of why deep
-networks became trainable. It is also trivially cheap to compute: a
-comparison and nothing else, against the exponentials that sigmoid and
-tanh require. ReLU has its own failure mode, the dead neuron problem. If
-a neuron’s pre-activation is negative for every input it ever sees, its
-output is always zero, its gradient is always zero, and it never updates
-— it is dead, permanently. A large gradient step can knock a neuron into
-this state and it never recovers. In practice this is mitigated by
-careful initialisation and variants like leaky ReLU that allow a small
-negative slope, but the basic ReLU’s combination of cheapness and
-non-saturation made it the default hidden activation for a decade.</p>
+gradients on the way back, which can help gradient flow on active paths;
+weights, inactive units and initialisation still matter. It is also
+trivially cheap to compute: a comparison and nothing else, against the
+exponentials that sigmoid and tanh require. ReLU has its own failure
+mode, the dead neuron problem. If a neuron’s pre-activation is negative
+for every input it ever sees, its output is always zero, its gradient is
+always zero, and it never updates — it is dead, permanently. A large
+gradient step can knock a neuron into this state and it never recovers.
+In practice this is mitigated by careful initialisation and variants
+like leaky ReLU that allow a small negative slope, but the basic ReLU’s
+combination of cheapness and non-saturation made it the default hidden
+activation for a decade.</p>
 <p><strong>GELU.</strong> The Gaussian error linear unit,</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">GELU</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>z</mi><mo>⋅</mo><mi mathvariant="normal">Φ</mi><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo stretchy="false" form="postfix">)</mo><mo>,</mo></mrow><annotation encoding="application/x-tex">\operatorname{GELU}(z) = z \cdot \Phi(z),</annotation></semantics></math></p>
 <p>where
@@ -1332,13 +1333,11 @@ that a standard normal variable falls below
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>z</mi><annotation encoding="application/x-tex">z</annotation></semantics></math>
 — so small inputs are softly suppressed and large inputs pass through
 nearly unchanged. The curve looks like ReLU with the sharp corner
-rounded off and a slight dip below zero for small negative inputs. That
-smoothness is the point. ReLU’s derivative jumps discontinuously from 0
-to 1 at the origin, and a smooth activation gives the optimiser a
-continuous gradient everywhere, which empirically helps training
-stability in very large models. GELU is the default activation in the
-transformer architectures behind BERT and the GPT family, where it
-consistently edges out plain ReLU.</p>
+rounded off and a slight dip below zero for small negative inputs.
+Unlike ReLU, GELU has a continuous derivative. It is used in BERT and
+some GPT-family models, but smoothness alone does not guarantee more
+stable training or better results than ReLU; the outcome depends on the
+architecture and experiment.</p>
 <h2 data-number="3.4" role="heading" aria-level="3" id="the-forward-pass"><span class="header-section-number">3.4</span> The
 Forward Pass</h2>
 <p>Putting the pieces together, the forward pass is the computation that
@@ -1772,8 +1771,9 @@ bias-corrected adaptive rate:</p>
 — work across an enormous range of problems with little tuning, and that
 robustness is why Adam is the default. It gives you momentum’s
 acceleration and RMSProp’s per-weight adaptation in one optimiser, and
-it converges quickly and reliably on the kinds of loss surfaces deep
-networks produce. When in doubt, reach for Adam.</p>
+it is a useful baseline on many deep-learning problems. It does not
+guarantee convergence or remove the need to tune and compare
+optimisers.</p>
 <h2 data-number="4.5" role="heading" aria-level="3" id="weight-initialisation"><span class="header-section-number">4.5</span> Weight Initialisation</h2>
 <p>Before training begins the weights have to be set to something, and
 the obvious choice — all zeros — is catastrophically wrong. If every
@@ -1800,9 +1800,11 @@ scale to compensate, drawing from a normal distribution with variance
 set by the fan-in:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝑾</mi><mo>∼</mo><mi mathvariant="script">𝒩</mi><mspace width="-0.167em"></mspace><mrow><mo stretchy="true" form="prefix">(</mo><mn>0</mn><mo>,</mo><mspace width="0.278em"></mspace><mfrac><mn>2</mn><msub><mi>n</mi><mrow><mi mathvariant="normal">i</mi><mi mathvariant="normal">n</mi></mrow></msub></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbf{W} \sim \mathcal{N}\!\left(0, \; \frac{2}{n_{\mathrm{in}}}\right).</annotation></semantics></math></p>
 <p>The rule of thumb is simple: He initialisation for ReLU and its
-relatives, Xavier for sigmoid and tanh. Getting this right is part of
-why modern deep networks train where older ones stalled — a well-chosen
-initialisation keeps gradients alive from the very first step.</p>
+relatives, Xavier for sigmoid and tanh. A suitable initialisation can
+improve signal propagation at the start, but the assumptions behind the
+variance calculation are approximate and do not guarantee healthy
+gradients throughout training. See <a href="https://proceedings.mlr.press/v9/glorot10a.html">Glorot and
+Bengio</a>.</p>
 <h2 data-number="4.6" role="heading" aria-level="3" id="regularisation"><span class="header-section-number">4.6</span>
 Regularisation</h2>
 <p>The classical regularisers carry straight over. L2 and L1 penalties
@@ -1827,15 +1829,14 @@ instead, dividing the surviving activations by
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(1 - p)</annotation></semantics></math>
 on every training step, so inference needs no scaling at all and runs
 the network without dropout scaling. Same expected activation, but the
-correction moves to training so the inference path stays untouched. The
-reason dropout works is that it prevents co-adaptation. When any neuron
-might vanish on the next step, the network cannot afford to build
-features that depend on a precise, fragile combination of specific
+correction moves to training so the inference path stays untouched. One
+proposed explanation for dropout is that it reduces co-adaptation. When
+any neuron might vanish on the next step, the network cannot afford to
+build features that depend on a precise, fragile combination of specific
 neurons; it is forced to spread the representation across redundant
 units so that the answer survives whichever ones are dropped. The effect
-resembles training a large ensemble of thinned networks that share
-weights, and the redundancy it forces generalises better than a network
-that has been allowed to put all its eggs in one basket.</p>
+resembles averaging an ensemble of thinned networks that share weights;
+its effect on generalisation depends on the task and training setup.</p>
 <p>Early stopping is the simplest regulariser of all and you already use
 it in spirit: monitor the validation loss during training, and stop when
 it stops improving and starts to rise. The rising validation loss is the
@@ -2582,13 +2583,11 @@ the same additive, gradient-preserving pathway the LSTM gets from its
 cell state.</p>
 <p>With one fewer gate and no separate cell state, a GRU has fewer
 parameters than an LSTM and trains a little faster. In practice the two
-perform comparably on most tasks, and there is no universal winner.
-Prefer a GRU when you want the lighter, faster option — shorter
-sequences, tighter compute budgets, or cases where the long-range
-dependency is real but not the make-or-break factor. Reach for an LSTM
-when the task hinges on very long-range memory and you want the extra
-control the separate cell state and dedicated output gate provide. When
-it genuinely matters, try both.</p>
+perform comparably on most tasks, and there is no universal winner. A
+GRU may be a useful smaller baseline, while an LSTM offers a separate
+cell state and output gate. Neither guarantees better long-range memory
+or lower latency on a given implementation; compare both on the task and
+target hardware.</p>
 <h2 data-number="6.6" role="heading" aria-level="3" id="when-rnns-still-earn-their-place"><span class="header-section-number">6.6</span> When RNNs Still Earn Their
 Place</h2>
 <p>Transformers (§7) have largely displaced RNNs for natural language,
@@ -2607,9 +2606,9 @@ one option; sparse and linear-attention variants offer other trade-offs,
 such as the <a href="https://proceedings.mlr.press/v119/katharopoulos20a.html">linear-attention
 formulation</a>. The third is edge deployment under tight memory limits,
 where a small recurrent model beats a transformer you cannot afford to
-host. And the fourth is data with a genuinely recurrent character — many
-time-series problems — where the recurrent inductive bias matches the
-underlying process and helps rather than hinders.</p>
+host. A fourth candidate is time-series data, where a recurrent
+inductive bias may help; compare it with simpler and attention-based
+baselines on held-out sequences.</p>
 <p>Worth naming here: <strong>state-space models</strong> (SSMs), most
 prominently <strong>Mamba</strong> (Gu &amp; Dao, 2023), provide another
 approach to the requirements above — linear-cost sequence processing
@@ -3250,22 +3249,24 @@ a comparatively modest 300 billion tokens. The sharper correction came
 from the <strong>Chinchilla</strong> paper (Hoffmann et al., 2022),
 which showed that this generation of large models — GPT-3 among them —
 were badly <em>undertrained</em>. They were too big for the number of
-tokens they had seen. Chinchilla’s finding, often quoted as a rule of
-thumb, is that compute-optimal training uses roughly <strong>20 tokens
-per parameter</strong>. A 70-billion-parameter model wants about 1.4
-trillion training tokens to be trained well; a 175-billion model trained
-on only 300 billion tokens, as GPT-3 was, is leaving capability on the
-table.</p>
+tokens they had seen. In the settings studied by Chinchilla, a
+frequently quoted training-compute rule of thumb is roughly <strong>20
+tokens per parameter</strong>; it is not a universal optimum when data,
+architecture or inference costs differ. See <a href="https://arxiv.org/abs/2203.15556">Hoffmann and colleagues</a>.
+Under that fitted rule, a 70-billion-parameter model corresponds to
+about 1.4 trillion training tokens; a 175-billion model trained on 300
+billion tokens, as GPT-3 was, falls short of that training-compute
+estimate.</p>
 <p>The implication reaches past the training run. A smaller model
 trained on the compute-optimal amount of data can match a larger model
 that was undertrained — and the smaller model is cheaper to run for
-every single inference, forever. Since most of an LLM’s lifetime cost is
-inference, not training, this reframes the whole economics. The question
-stopped being “how big a model can we afford to train?” and became “what
-is the smallest model that hits our quality bar, trained on enough data
-to earn its parameters?” That shift is why the field moved towards
-smaller, longer-trained models for deployment even as the frontier kept
-pushing scale at the top end.</p>
+every single inference, forever. For a heavily used model, inference can
+dominate lifetime compute, but the balance depends on usage and
+deployment. The question stopped being “how big a model can we afford to
+train?” and became “what is the smallest model that hits our quality
+bar, trained on enough data to earn its parameters?” That shift is why
+the field moved towards smaller, longer-trained models for deployment
+even as the frontier kept pushing scale at the top end.</p>
 <h2 data-number="8.4" role="heading" aria-level="3" id="fine-tuning-adapting-without-retraining"><span class="header-section-number">8.4</span> Fine-Tuning: Adapting Without
 Retraining</h2>
 <p>A pre-trained model is a general next-token predictor. To make it
@@ -3378,12 +3379,12 @@ policy close to the SFT model it started from, with
 controlling how hard the leash pulls.</p>
 <p>That KL constraint is not optional decoration, and it is worth
 understanding why. The reward model is an imperfect proxy for human
-preference — it was trained on finite data and has blind spots. If you
-let the policy optimise the reward freely, it will find those blind
-spots and exploit them. This is <strong>reward hacking</strong>: the
-policy may discover outputs that score highly on the reward model while
-being less useful to a human, for example by exploiting a length bias. A
-KL penalty makes deviations from the SFT policy costly and can mitigate
+preference — it was trained on finite data and has blind spots. If the
+policy optimises the reward freely, it can find and exploit those blind
+spots. This is <strong>reward hacking</strong>: the policy may discover
+outputs that score highly on the reward model while being less useful to
+a human, for example by exploiting a length bias. A KL penalty makes
+deviations from the SFT policy costly and can mitigate
 over-optimisation; it does not guarantee that reward hacking is
 prevented or that helpfulness improves. Its strength must be tuned and
 the resulting model evaluated against independent human judgements. The
@@ -3699,8 +3700,8 @@ straight from the prior and decode — and the KL term encourages the
 training-time posteriors to overlap the prior. Whether the decoder
 produces coherent samples must still be checked empirically; finite
 optimisation and model capacity can leave poorly modelled regions.</p>
-<p>The same regularity makes interpolation work, which is the cleanest
-demonstration that the latent space is now well-behaved. Encode two
+<p>Interpolation offers a way to inspect latent-space behaviour,
+although its quality must be checked rather than assumed. Encode two
 images to codes
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi mathvariant="bold-italic">𝒛</mi><mn>1</mn></msub><annotation encoding="application/x-tex">\mathbf{z}_1</annotation></semantics></math>
 and
@@ -3709,11 +3710,12 @@ walk a straight line between them,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">𝒛</mi><mi>t</mi></msub><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>t</mi><mo stretchy="false" form="postfix">)</mo><msub><mi mathvariant="bold-italic">𝒛</mi><mn>1</mn></msub><mo>+</mo><mi>t</mi><msub><mi mathvariant="bold-italic">𝒛</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">\mathbf{z}_t = (1-t)\mathbf{z}_1 + t\mathbf{z}_2</annotation></semantics></math>
 for
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>
-from 0 to 1, and decode each point along the way. With a plain
-autoencoder this path crosses dead regions and produces nonsense in the
-middle. With a VAE, KL regularisation can encourage a more useful latent
-organisation and smoother interpolation, though it does not guarantee
-that every region is well trained or every path coherent.</p>
+from 0 to 1, and decode each point along the way. For a plain
+autoencoder, an interpolated path may cross regions the decoder was not
+trained to reconstruct. With a VAE, KL regularisation can encourage a
+more useful latent organisation and smoother interpolation, though it
+does not guarantee that every region is well trained or every path
+coherent.</p>
 <h2 data-number="9.6" role="heading" aria-level="3" id="limitations"><span class="header-section-number">9.6</span>
 Limitations</h2>
 <p>That word “blurry” is the VAE’s signature weakness, and it falls
@@ -3723,9 +3725,9 @@ decoder for assigning probability to the true
 across the spread of latents that the encoder might sample — and when
 many plausible outputs are consistent with a code, the loss-minimising
 choice is to predict their average. Averaging over sharp alternatives
-gives a smooth, hedged result. So VAE samples come out soft and blurry,
-lacking the crisp high-frequency detail of the training images; the
-model is, in effect, declining to commit to any single sharp answer.</p>
+gives a smooth, hedged result. This can make reconstructions from a
+simple squared-error or fixed-variance Gaussian decoder look soft. Blur
+is not inevitable for every VAE, decoder or sampling procedure.</p>
 <p>The second failure mode is <strong>posterior collapse</strong>. If
 the KL term comes to dominate — often because the decoder is powerful
 enough to model the data without help from
