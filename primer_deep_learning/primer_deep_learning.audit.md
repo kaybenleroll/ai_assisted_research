@@ -71,6 +71,19 @@ The model-choice advice at line 1387 offers a VAE for disentangled axes, althoug
 
 Additional unadjudicated claims include the purported current dominance of state-space models at line 625, unconditional positional extrapolation at line 740, and categorical claims about generative-family quality at lines 1231–1240. These require source-backed review before readiness; inclusion here is not a finding that each is false.
 
+## Post-revision outline review (partial)
+
+At `f4aae7c`, Codex compared the following source boundaries; these are partial decisions, not a structural pass. The existing contents comparison above was run at the unchanged heading structure of `2ee1e86`; the rendered contents at the revised output still need inspection.
+
+| Boundary | Reader tasks and comparison | Disposition |
+|---|---|---|
+| Introduction / Why Deep Learning Now, lines 7–50 / 54–96 | The first orients the reader, states prerequisites and places notation before use; the second explains the historical motivation. Merging them would mix a reusable navigation entry with the historical narrative. | Retain the top-level boundary; later sibling review remains open. |
+| Why Deep Learning Now / Neural Network Fundamentals, lines 84–96 / 98–116 | The former explains why learned features became attractive, while the latter constructs the neuron and multilayer composition. The feature argument motivates the operation but does not teach it, so a separate mechanism entry helps later reference. | Retain. The historical claims need independent adjudication. |
+| Neural Network Fundamentals / Training Deep Networks, lines 176–200 / 202–224 | The forward computation and representation capacity precede the loss and reverse derivatives. Combining them would make one longer chapter that obscures the distinction between what is represented and how parameters are fitted. | Retain. |
+| Training Deep Networks / Convolutional Neural Networks, lines 351–367 | Loss-curve diagnosis ends the general training discussion; the CNN opening poses a new spatial design problem using those foundations. A separate entry lets a reader return to that architectural decision without locating it inside optimiser guidance. | Retain. |
+
+All later top-level boundaries, child hierarchy, and rendered contents remain unreviewed for this pass. The structural gate remains not-checked.
+
 ## Post-revision semantic and route review (partial)
 
 At `f4aae7c`, Codex re-inspected the matrix locators against their stated roles and the surrounding passages read in full at `2ee1e86`; changed passages were separately checked as described below. This is a mapping review, not a complete new content audit. The foundations, spatial, recurrent, attention, variational and selection locators identify passages addressing their recorded roles; that does not establish that their entire routes pass. Three mappings need correction or deeper evidence:
