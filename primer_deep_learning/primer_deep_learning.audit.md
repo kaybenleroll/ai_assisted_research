@@ -3,12 +3,12 @@
 - Issue and milestone: #482; depends on #476 / PR #516.
 - Audit revision: `482-audit-draft-v1`.
 - Audit schema: 2
-- Source revision: `2ee1e86aa371b2cea344f8122c9012d692680ecc`
+- Source revision: `14aada35a41183c337721a3cf3a0919c91dd2636`
 - Tracked path: `primer_deep_learning/primer_deep_learning.audit.md`.
 - Starting branch: `docs/482-deep-learning-audit`.
 - Reviewer(s): Codex.
 - Date: 2026-11-27.
-- Reviewed revision: `2ee1e86aa371b2cea344f8122c9012d692680ecc`
+- Reviewed revision: `14aada35a41183c337721a3cf3a0919c91dd2636`
 - Historical review: the full continuous pre-revision read was at `bda64e7666f2c228de6f12b87c9beeaa36831076`; a subsequent continuous reread covered lines 1–1424 at `538fa40`, with lines 1–184 carried from the identical pre-correction text and lines 185–200 reread after that correction; the changed passages at the current revision have been sampled but have not received a complete audit.
 - Brief reviewed: `primer_deep_learning/primer_deep_learning.brief.md`, `482-brief-v1`.
 - Readiness decision: not-ready
@@ -35,17 +35,17 @@ All nine primary concepts remain not-checked below until the remaining claim rev
 
 | route_id | route tier | concept_id | explanation locator | example/action locator | interpretation locator | limitation locator | evidence revision | reviewer | status | finding | scope decision |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| foundations | primary | network_update | primer_deep_learning.md:222 | primer_deep_learning.md:263 | primer_deep_learning.md:263 | primer_deep_learning.md:263 | d6b664fed44bbdb8be25f3b526fd4f43fd688598 | Codex | not-checked | Reader path traced; broader training claims remain under review. | retain pending full claim review |
-| spatial | primary | cnn_features | primer_deep_learning.md:371 | primer_deep_learning.md:383 | primer_deep_learning.md:408 | primer_deep_learning.md:446 | d6b664fed44bbdb8be25f3b526fd4f43fd688598 | Codex | not-checked | Shape and parameter paths traced; transfer and equivariance claims require review. | retain pending full claim review |
-| recurrent | primary | state_gradients | primer_deep_learning.md:536 | primer_deep_learning.md:566 | primer_deep_learning.md:566 | primer_deep_learning.md:582 | d6b664fed44bbdb8be25f3b526fd4f43fd688598 | Codex | not-checked | State and direct gradient paths traced; deployment claims require review. | retain pending full claim review |
-| attention | primary | attention_weights | primer_deep_learning.md:706 | primer_deep_learning.md:718 | primer_deep_learning.md:718 | primer_deep_learning.md:718 | d6b664fed44bbdb8be25f3b526fd4f43fd688598 | Codex | not-checked | Lookup traced; position and architecture claims require review. | retain pending full claim review |
-| language | primary | language_training | primer_deep_learning.md:918 | primer_deep_learning.md:924 | primer_deep_learning.md:930 | primer_deep_learning.md:912 | d6b664fed44bbdb8be25f3b526fd4f43fd688598 | Codex | not-checked | Corrected objective interpretation locator; adaptation is a separate example and claim review remains open. | retain pending full claim review |
-| variational | primary | elbo | primer_deep_learning.md:1012 | primer_deep_learning.md:1012 | primer_deep_learning.md:1020 | primer_deep_learning.md:1068 | d6b664fed44bbdb8be25f3b526fd4f43fd688598 | Codex | not-checked | Likelihood scaling corrected and derivation traced; complete claim review remains open. | retain pending full claim review |
-| adversarial | primary | wasserstein | primer_deep_learning.md:1104 | primer_deep_learning.md:1114 | primer_deep_learning.md:1114 | primer_deep_learning.md:1112 | d6b664fed44bbdb8be25f3b526fd4f43fd688598 | Codex | not-checked | New critic example addresses the former missing comparison; full claim review remains open. | retain pending full claim review |
-| diffusion | primary | score | primer_deep_learning.md:1177 | primer_deep_learning.md:1158 | primer_deep_learning.md:1177 | primer_deep_learning.md:1177 | d6b664fed44bbdb8be25f3b526fd4f43fd688598 | Codex | not-checked | Corrected score explanation locator; forward noise example and symbolic score derivation are distinct. | retain pending full claim review |
-| selection | primary | model_choice | primer_deep_learning.md:1375 | primer_deep_learning.md:1413 | primer_deep_learning.md:1415 | primer_deep_learning.md:1415 | d6b664fed44bbdb8be25f3b526fd4f43fd688598 | Codex | not-checked | Scenario traced; unsupported VAE-axis and unconditional adaptation claims corrected. | retain pending full claim review |
+| foundations | primary | network_update | primer_deep_learning.md:222 | primer_deep_learning.md:263 | primer_deep_learning.md:263 | primer_deep_learning.md:263 | 14aada35a41183c337721a3cf3a0919c91dd2636 | Codex | not-checked | Reader path traced; broader training claims remain under review. | retain pending full claim review |
+| spatial | primary | cnn_features | primer_deep_learning.md:371 | primer_deep_learning.md:383 | primer_deep_learning.md:408 | primer_deep_learning.md:446 | 14aada35a41183c337721a3cf3a0919c91dd2636 | Codex | not-checked | Shape and parameter paths traced; transfer and equivariance claims require review. | retain pending full claim review |
+| recurrent | primary | state_gradients | primer_deep_learning.md:536 | primer_deep_learning.md:566 | primer_deep_learning.md:566 | primer_deep_learning.md:582 | 14aada35a41183c337721a3cf3a0919c91dd2636 | Codex | not-checked | State and direct gradient paths traced; deployment claims require review. | retain pending full claim review |
+| attention | primary | attention_weights | primer_deep_learning.md:706 | primer_deep_learning.md:718 | primer_deep_learning.md:718 | primer_deep_learning.md:718 | 14aada35a41183c337721a3cf3a0919c91dd2636 | Codex | not-checked | Lookup traced; position and architecture claims require review. | retain pending full claim review |
+| language | primary | language_training | primer_deep_learning.md:918 | primer_deep_learning.md:924 | primer_deep_learning.md:930 | primer_deep_learning.md:912 | 14aada35a41183c337721a3cf3a0919c91dd2636 | Codex | not-checked | Corrected objective interpretation locator; adaptation is a separate example and claim review remains open. | retain pending full claim review |
+| variational | primary | elbo | primer_deep_learning.md:1012 | primer_deep_learning.md:1012 | primer_deep_learning.md:1020 | primer_deep_learning.md:1068 | 14aada35a41183c337721a3cf3a0919c91dd2636 | Codex | not-checked | Likelihood scaling corrected and derivation traced; complete claim review remains open. | retain pending full claim review |
+| adversarial | primary | wasserstein | primer_deep_learning.md:1104 | primer_deep_learning.md:1114 | primer_deep_learning.md:1114 | primer_deep_learning.md:1112 | 14aada35a41183c337721a3cf3a0919c91dd2636 | Codex | not-checked | New critic example addresses the former missing comparison; full claim review remains open. | retain pending full claim review |
+| diffusion | primary | score | primer_deep_learning.md:1177 | primer_deep_learning.md:1158 | primer_deep_learning.md:1177 | primer_deep_learning.md:1177 | 14aada35a41183c337721a3cf3a0919c91dd2636 | Codex | not-checked | Corrected score explanation locator; forward noise example and symbolic score derivation are distinct. | retain pending full claim review |
+| selection | primary | model_choice | primer_deep_learning.md:1375 | primer_deep_learning.md:1413 | primer_deep_learning.md:1415 | primer_deep_learning.md:1415 | 14aada35a41183c337721a3cf3a0919c91dd2636 | Codex | not-checked | Scenario traced; unsupported VAE-axis and unconditional adaptation claims corrected. | retain pending full claim review |
 
-The 36 current locator roles were reconciled against `d6b664f` on 28 November 2026 using the continuous source read, the changed-passage re-review, and the current reader-path trace below. The language interpretation, diffusion explanation, critic example and shifted selection mappings were corrected. Locator meaning and reachability do not establish the truth of every surrounding claim, so the rows remain `not-checked` pending the broader review. A primary `gap` or `not-checked` row blocks content readiness.
+The 36 current locator roles were reconciled against `d6b664f` on 28 November 2026 and carried forward to `14aada3` after checking the two changed paragraphs and their adjacent routes using the continuous source read, the changed-passage re-review, and the current reader-path trace below. The language interpretation, diffusion explanation, critic example and shifted selection mappings were corrected. Locator meaning and reachability do not establish the truth of every surrounding claim, so the rows remain `not-checked` pending the broader review. A primary `gap` or `not-checked` row blocks content readiness.
 
 ## Route transition evidence
 
@@ -186,13 +186,17 @@ Compared `2ee1e86` with source commit `f4aae7c`: lines 625, 1044–1056, 1381 an
 
 ## Position and adaptation correction
 
-Compared `d6b664f` with `14aada3`: lines 740 and 950 and the published outputs changed. The sinusoidal functions can be evaluated beyond trained positions but do not guarantee length generalisation. The former prefix-tuning description conflated input-only prompt tuning with layer-wise prefix activations; [Li and Liang](https://aclanthology.org/2021.acl-long.353/) explicitly distinguish them. Codex re-read the changed passages and adjacent attention and language routes on 28 November 2026. Existing matrix locators still point to unchanged local passages at `d6b664f`; their statuses remain not-checked until the required current-revision reconciliation and claim review.
+Compared `d6b664f` with `14aada3`: lines 740 and 950 and the published outputs changed. The sinusoidal functions can be evaluated beyond trained positions but do not guarantee length generalisation. The former prefix-tuning description conflated input-only prompt tuning with layer-wise prefix activations; [Li and Liang](https://aclanthology.org/2021.acl-long.353/) explicitly distinguish them. Codex re-read the changed passages and adjacent attention and language routes on 28 November 2026. Existing matrix locators point to unchanged local passages; the attention and language routes were rechecked after these two changes, and the other routes were carried forward because their source passages did not change. All statuses remain not-checked pending claim review.
 
 `just deep-learning-all`, `just render-qa primer_deep_learning`, scoped offline links and `git diff --check` passed after this change. Codex inspected changed PDF pages 42 and 52 and all four render-QA candidates: opening page 1, actual table page 71, code page 46 and equation page 14. No clipping or unreadable content was observed; this visual sample does not establish interactive accessibility or complete PDF coverage.
 
 ## Comparison revision checks
 
 At `d6b664f`, `just deep-learning-all` and `just render-qa primer_deep_learning` passed after the historical and generative-family qualifications. Codex visually inspected PDF pages 6–7 and 70–71, including the split comparison table; no clipping was seen and the repeated column headings identify the continuation. These samples do not replace the report's remaining opening, code and figure candidates or interactive checks.
+
+## Full audit command result
+
+`just primer-audit primer_deep_learning` initially stopped at its Git-backed evidence check because matrix evidence revisions were `d6b664f` while the audit header still named `2ee1e86`. This metadata mismatch was corrected after the changed source passages and dependent routes were reviewed; the mismatch was not a content verdict. The command must be rerun on this corrected tracked state.
 
 ## Release readiness checklist
 
