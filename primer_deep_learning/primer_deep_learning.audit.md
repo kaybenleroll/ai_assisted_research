@@ -25,9 +25,9 @@ The pre-revision observations, boundary proposals, exact locators, independent c
 - Source read coverage: 1-150, 151-300, 301-450, 451-600, 601-750, 751-900, 901-1050, 1051-1200, 1201-1350, 1351-1435
 
 Historical continuous read at `2ee1e86` covered 1–150, 151–300, 301–450, 451–600, 601–750, 751–900, 901–1050, 1051–1200, 1201–1350 and 1351–1433. Codex then read the current `14aada3` source continuously in the inclusive non-overlapping batches recorded above on 28 November 2026; no batch was truncated.
-- Rendered contents: **not-checked** for the full post-change outline; the opening PDF contents and notation page were sampled.
+- Rendered contents: HTML TOC text and hierarchy inspected at `78edc97`; the opening PDF contents and notation page were sampled. Interactive browser inspection remains unperformed.
 
-The continuous source read at `2ee1e86` is complete. Explicit boundary and child decisions, the rendered contents review, and the reader-scale depth pass remain incomplete. `python3 -I maintenance/scripts/check/primer_outline_compare.py primer_deep_learning/primer_deep_learning.md primer_deep_learning/primer_deep_learning.html` reported no H2/H3 candidate differences or ambiguities; this advisory comparison does not establish hierarchy or navigation quality. Moving notation preserves its `notation` HTML fragment and the parent chapter numbering, but this does not prove interactive navigation.
+At the earlier `2ee1e86` stage, explicit boundary and child decisions, the rendered contents review, and the reader-scale depth pass were incomplete; subsequent work is recorded below. `python3 -I maintenance/scripts/check/primer_outline_compare.py primer_deep_learning/primer_deep_learning.md primer_deep_learning/primer_deep_learning.html` reported no H2/H3 candidate differences or ambiguities; this advisory comparison does not establish hierarchy or navigation quality. Moving notation preserves its `notation` HTML fragment and the parent chapter numbering, but this does not prove interactive navigation.
 
 ## Adversarial depth gate
 
@@ -224,7 +224,7 @@ Risk-selected corrections at `78edc97`: line 325 distinguishes L2 penalties and 
 
 The continuous read also identified unresolved claims that can affect a reader's decisions: the activation discussion at lines 161–174 treats zero-centred tanh output and GELU's advantage as unconditional; lines 309–327 overstate guarantees of initialisation and dropout; lines 619–625 imply recurrent architectures categorically beat alternatives in several deployment settings; lines 938–970 make broad claims about compute-optimal training and guarantees of policy behaviour; and lines 1059–1068 describe VAE interpolation and blur too categorically. The responsible content reviewer must check and qualify these against appropriate primary evidence, then reassess the affected `foundations`, `recurrent`, `language` and `variational` routes. These are current review findings, not claims that every listed statement has been independently disproved.
 
-`just deep-learning-all`, `just render-qa primer_deep_learning`, scoped offline `just lint-links` for the three HTML variants, and `git diff --check` passed at the source revision. Codex inspected changed PDF pages 22, 38, 44, 53 and 67; no clipping was seen. The automated QA does not establish interactive accessibility or content correctness.
+`just deep-learning-all`, `just render-qa primer_deep_learning`, scoped offline `just lint-links` for the three HTML variants, and `git diff --check` passed at the source revision. Codex inspected changed PDF pages 22, 38, 44, 53 and 67; no clipping was seen. The automated QA does not establish interactive accessibility or content correctness. `just primer-audit primer_deep_learning` also passed at `a8c8258`: the Git-backed evidence check, build, render QA, freshness, Markdown and scoped offline links. Its rebuild produced an 82-page PDF with identical extracted layout text and a different creation time; the committed PDF was restored as rebuild noise. This mechanical pass does not pass the human gates.
 
 ## Diffusion child boundaries at `78edc97`
 
@@ -240,13 +240,85 @@ The adjacent boundaries below were reviewed individually against the source, ext
 | Latent diffusion / beyond images, 1205–1209 / 1211–1229 | The image pipeline motivates the move to other state spaces, including discrete text. Retain so readers can find the separate modality comparison. |
 | Beyond images / family comparison, 1219–1229 / 1231–1243 | Text models are one application; the final table compares three model families. Retain as a synthesis, although the text-conditioning row still needs claim adjudication. |
 
-Other parents' individual sibling boundaries remain unreviewed, and the structural gate remains not-checked.
+### Training and attention child boundaries
+
+| Boundary and evidence | Reader task and decision |
+|---|---|
+| Loss / backpropagation, 206–216 / 218–263 | Choose a compatible objective, then differentiate it; retain so the derivation can be revisited separately. |
+| Backpropagation / vanishing gradients, 259–263 / 265–273 | The worked update shows chain-rule use; the next passage examines repeated Jacobians. Retain as a failure landmark, though a merger would strengthen narrative continuity. |
+| Vanishing gradients / optimisers, 269–273 / 275–307 | The first analyses gradient propagation; the second chooses an update given a gradient. Retain because an optimiser cannot by itself repair every missing gradient. |
+| Optimisers / initialisation, 289–307 / 309–321 | Adam specifies updates during training; initialisation sets the starting state. Retain for the distinct timing and decision. |
+| Initialisation / regularisation, 311–321 / 323–329 | Starting weight scale differs from controlling fitted weights and validation performance. Retain; current initialisation claims still require qualification. |
+| Regularisation / batch normalisation, 325–329 / 331–339 | Dropout and early stopping address generalisation; batch statistics and learned scale address training behaviour. Retain, while noting batch statistics can also regularise. |
+| Batch normalisation / schedules, 333–339 / 341–349 | Batch-dependent transformations differ from changing the optimiser rate over time. Retain as separate settings. |
+| Schedules / failure modes, 343–349 / 351–361 | A prescribed rate trajectory precedes diagnostics for observed symptoms. Retain: the latter synthesises several preceding knobs. |
+| Attention intuition / scaled attention, 700–702 / 704–718 | The lookup analogy introduces roles; equations and the worked mixture supply an operation. Combining would smooth a short transition, but retaining makes the calculation easy to find. |
+| Scaled attention / multi-head, 714–718 / 720–730 | One lookup establishes a weighted value; projections and concatenation provide multiple learned views. Retain for the distinct construction. |
+| Multi-head / position, 724–730 / 732–742 | Combining views alone lacks positional information; the next section provides it. Retain so the missing input is explicit. |
+| Position / full transformer, 736–742 / 744–783 | Position vectors modify inputs; the following stack combines attention and feed-forward sublayers. Retain as a bridge from a component to the assembled model. |
+| Full transformer / layer normalisation, 777–783 / 785–793 | Assembly places residuals and normalisation; the child explains the normalisation and pre/post placement. Retain for lookup, although folding this short explanation into the stack is plausible. |
+| Layer normalisation / BERT versus GPT, 789–793 / 795–803 | Training stability and placement are separate from encoder/decoder objectives. Retain; the latter prepares the language chapter. |
+| BERT versus GPT / code, 797–803 / 805–883 | The comparison explains objective and masking; code implements unmasked single-head attention. Retain and treat the code as illustrative rather than a complete BERT or GPT implementation. |
+
+### Further child boundaries
+
+| Boundary and evidence | Reader task and decision |
+|---|---|
+| Introduction: coverage / exclusions, 11–15 / 17–19 | What the guide offers versus what it omits; retain distinct scope checks. |
+| Introduction: exclusions / notation, 17–19 / 21–38 | Scope versus symbol lookup; retain for navigation. |
+| Introduction: notation / background, 21–38 / 40–44 | Reference symbols versus prerequisites; retain as distinct reader checks. |
+| Introduction: background / structure, 40–44 / 46–50 | Prerequisites versus reading route; retain for distinct questions. |
+| Motivation: data / compute, 58–64 / 66–74 | Examples versus hardware throughput; retain separate causes. |
+| Motivation: compute / algorithms, 68–74 / 76–82 | Hardware versus optimisation choices; retain to separate conditions. |
+| Motivation: algorithms / classical ML, 78–82 / 84–90 | Training techniques versus representational comparison; retain, subject to the factual qualifications listed above. |
+| Motivation: classical ML / ImageNet, 86–90 / 92–96 | Mechanism versus historical demonstration; merging is plausible, but retain the benchmark landmark. |
+| Fundamentals: perceptron / MLP, 100–110 / 112–146 | Single linear boundary versus composition; retain to mark the change in capacity. |
+| Fundamentals: MLP / activation, 114–146 / 148–174 | Layer composition versus why nonlinearity matters; retain for independent activation lookup. |
+| Fundamentals: activation / forward pass, 151–174 / 176–194 | Individual functions versus dimensioned computation; retain for the worked operation. |
+| Fundamentals: forward pass / approximation, 178–194 / 196–200 | Particular prediction versus existence and capacity; retain to distinguish construction from theorem. |
+| CNN: convolution / pooling, 371–408 / 410–414 | Shared local filter versus spatial summary; retain because the operations have different effects. |
+| CNN: pooling / architecture evolution, 412–414 / 416–430 | One operator versus historical compositions and residuals; retain for component and architecture lookup. |
+| CNN: architecture / transfer, 418–430 / 432–436 | Model families versus reuse of learned weights; retain for the adaptation decision. |
+| CNN: transfer / vision transformers, 434–436 / 438–442 | Reusing a CNN versus comparing a different image architecture; retain while making pretraining common to both choices. |
+| CNN: ViT / wrong tool, 440–442 / 444–446 | Image-model comparison versus data that violates spatial assumptions; retain as a boundary decision. |
+| CNN: wrong tool / code, 446 / 448–526 | Model-selection limits versus framework implementations; retain so illustrative code is not mistaken for a general recommendation. |
+| RNN: cell / BPTT, 536–566 / 568–578 | Compute sequential states versus train shared parameters; retain despite continuous dependency. |
+| RNN: BPTT / vanishing gradients, 570–578 / 580–584 | Jacobian chain versus its failure; merging would be coherent, but retain the direct diagnostic landmark. |
+| RNN: gradient failure / LSTM, 582–584 / 586–606 | Identify the limitation then use gating; retain as problem and response. |
+| RNN: LSTM / GRU, 599–606 / 608–619 | Two distinct state-update designs; retain for comparison. |
+| RNN: GRU / applicability, 613–619 / 621–625 | Gate mechanics versus deployment trade-offs; retain, with deployment claims still under review. |
+| RNN: applicability / code, 623–625 / 627–692 | Choice criteria versus illustrative framework implementation; retain. |
+| Language: tokenisation / objectives, 897–912 / 914–930 | Form model inputs then choose prediction targets; retain to distinguish pipeline stages. |
+| Language: objectives / scaling, 918–930 / 932–938 | Training target versus empirical loss scaling; retain, subject to scaling claim review. |
+| Language: scaling / fine-tuning, 934–938 / 940–950 | Pretraining budget versus adapting a pretrained model; retain. |
+| Language: fine-tuning / RLHF, 942–950 / 952–970 | Parameter-efficient adaptation versus preference-based objective; retain even though both update a model. |
+| Language: RLHF / capabilities, 956–970 / 972–978 | Training procedure versus measured capabilities and metric uncertainty; retain as distinct questions. |
+| VAE: autoencoder / latent model, 988–994 / 996–1004 | Reconstruction gap motivates a probabilistic generative model; retain so the assumption change is visible. |
+| VAE: latent model / ELBO, 998–1004 / 1006–1030 | Specify the marginal then derive a tractable bound; retain as model and inference operations. |
+| VAE: ELBO / reparameterisation, 1012–1030 / 1032–1040 | Derive the objective then estimate its gradients; retain for separate mathematical steps. |
+| VAE: reparameterisation / implementation, 1034–1040 / 1042–1062 | Derivative estimator versus a variance-specific schematic; retain for an executable-style landmark. |
+| VAE: implementation / limitations, 1051–1062 / 1064–1068 | Training procedure versus failure cases; retain, while interpolation and blur claims need qualification. |
+| GAN: minimax / failures, 1076–1086 / 1088–1096 | Idealised objective versus training pathology; retain as theory and failure comparison. |
+| GAN: failures / Wasserstein, 1090–1096 / 1098–1114 | Instability motivates an alternative critic; retain as a problem-response boundary. |
+| GAN: Wasserstein / variants, 1102–1114 / 1116–1118 | Critic constraint versus architecture examples; retain to separate general objective from design families. |
+| GAN: variants / use, 1118 / 1120–1122 | Named examples versus decision about suitability; retain for practical lookup, subject to comparative claim review. |
+| Frameworks: PyTorch / TensorFlow, 1250–1258 / 1260–1266 | Separate software ecosystems and deployment routes; retain for direct lookup. |
+| Frameworks: TensorFlow / JAX, 1262–1266 / 1268–1278 | High-level training and runtimes versus composable transformations; retain. |
+| Frameworks: JAX / HuggingFace, 1270–1278 / 1280–1291 | Numerical engine versus library and model hub; retain to prevent conflation. |
+| Frameworks: HuggingFace / comparison, 1282–1291 / 1293–1367 | A specific ecosystem versus cross-framework choice and code; retain for synthesis. |
+| Selection: tabular / images, 1373–1375 / 1377–1379 | Alternative data modalities require different baselines; retain. |
+| Selection: images / sequences, 1379 / 1381–1383 | Spatial versus temporal inputs and transfer choices; retain. |
+| Selection: sequences / generation, 1383 / 1385–1395 | Predictive sequence tasks versus choosing a generative family; retain. |
+| Selection: generation / compute, 1387–1395 / 1397–1415 | Family choice versus cost and a worked constrained decision; retain, although the image case could be moved under images at the cost of separating it from the budget table. |
+| Selection: compute / starting point, 1399–1415 / 1417–1419 | Data and case evidence versus general decision procedure; retain the final synthesis as a compact return point. |
+
+The individual sibling boundaries have now been reviewed as navigation and reasoning decisions. At `78edc97`, Codex extracted the actual HTML TOC navigation text and inspected its 14 top-level entries and child headings in source order; notation appears within the opening entry. `python3 -I maintenance/scripts/check/primer_outline_compare.py primer_deep_learning/primer_deep_learning.md primer_deep_learning/primer_deep_learning.html` reported no H2/H3 candidate differences or ambiguities. This is a text and hierarchy check, not a visual or interactive browser inspection. The structural gate remains not-checked until the rendered contents and unresolved substantive claims are adjudicated together; retention decisions are not a content pass.
 
 ## Release readiness checklist
 
 At `2ee1e86`, pinned `just deep-learning-all`, `just render-qa primer_deep_learning`, targeted offline links, spelling, Markdown and prose checks completed on the changed inputs. Prose reports five existing advisories. The two-layer update was independently checked by finite differences; scalar recurrence, gate and attention arithmetic were independently recalculated; a non-symmetric Jacobian finite-difference counterexample is documented in the proposal. PDF visual samples were taken on an immediately preceding build, including pages 1, 14, 34, 41, 46, 54–56, 69 and 79–80; after the notation move page 5 was rechecked, and after the later changes pages 19–20 and 57–62 were rechecked, including both sides of affected page breaks; the universal approximation correction was checked on preceding-build pages 14–16. At `2ee1e86`, changed regions and page breaks were inspected on pages 16–18, 44–45, 49–52 and 63–65; after tokenizer changes pages 47–49 were inspected; the subsequent scenario was inspected on pages 78–80; the network and gated-cell additions were inspected on pages 18–19 and 36–37; the attention and diagnostics passages were inspected on pages 8, 16, 25, 35, 39–41 and 60–62; after the WordPiece change pages 47–49 were inspected; the model-selection revision was inspected on pages 30–32 and 76–79; the sourced table and scenario were inspected on pages 78–81, and the final conditional starting point was checked on pages 79–81. These are targeted samples, not an exhaustive inspection of the final 81-page PDF. Other pagination on the final build must be rechecked against the changed source. PDF metadata reports `Tagged: no`.
 
-The browser service returned no available browser during the parent work; keyboard, no-JavaScript, accessibility-tree and screen-reader checks were not performed. Full claims verification, executable framework examples, individual child-boundary decisions and full route-depth judgement are not complete; the automated `just primer-audit` result is recorded above. The continuous post-change source read is complete, but reading alone does not close those reviews. The locator mapping check above does not establish that the cited passages satisfy the depth gate. The preliminary brief also needs its full case trace and post-draft checkpoint reconciled.
+The browser service returned no available browser during the parent work; keyboard, no-JavaScript, accessibility-tree and screen-reader checks were not performed. Risk-selected claims review, executable framework examples, full route-depth judgement and visual/interactive contents inspection are not complete; the automated `just primer-audit` result is recorded above. The continuous source read and later changed-passage review are recorded above, but reading alone does not close those reviews. The locator mapping check above does not establish that the cited passages satisfy the depth gate. The preliminary brief also needs its full case trace and post-draft checkpoint reconciled.
 
 - Structural gate: **not-checked**
 - Content gate: **fail** (primary routes remain not-checked).
