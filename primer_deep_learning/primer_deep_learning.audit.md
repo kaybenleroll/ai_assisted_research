@@ -22,7 +22,9 @@ The pre-revision observations, boundary proposals, exact locators, independent c
 
 ## Outline and hierarchy review
 
-- Source read coverage: 1-150, 151-300, 301-450, 451-600, 601-750, 751-900, 901-1050, 1051-1200, 1201-1350, 1351-1433 (continuous read at `2ee1e86`, Codex, 28 November 2026).
+- Source read coverage: none
+
+Historical continuous read at `2ee1e86` covered 1–150, 151–300, 301–450, 451–600, 601–750, 751–900, 901–1050, 1051–1200, 1201–1350 and 1351–1433. The changed passages have been re-read at the current revision, but a fresh continuous source read at `14aada3` has not been recorded; the schema coverage is therefore `none`.
 - Rendered contents: **not-checked** for the full post-change outline; the opening PDF contents and notation page were sampled.
 
 The continuous source read at `2ee1e86` is complete. Explicit boundary and child decisions, the rendered contents review, and the reader-scale depth pass remain incomplete. `python3 -I maintenance/scripts/check/primer_outline_compare.py primer_deep_learning/primer_deep_learning.md primer_deep_learning/primer_deep_learning.html` reported no H2/H3 candidate differences or ambiguities; this advisory comparison does not establish hierarchy or navigation quality. Moving notation preserves its `notation` HTML fragment and the parent chapter numbering, but this does not prove interactive navigation.
@@ -196,7 +198,7 @@ At `d6b664f`, `just deep-learning-all` and `just render-qa primer_deep_learning`
 
 ## Full audit command result
 
-`just primer-audit primer_deep_learning` initially stopped at its Git-backed evidence check because matrix evidence revisions were `d6b664f` while the audit header still named `2ee1e86`. This metadata mismatch was corrected after the changed source passages and dependent routes were reviewed; the mismatch was not a content verdict. The next run found the brief still named the old source revision; its source and reviewed revision metadata were updated to `14aada3`. Its reader promise, scope and stable IDs did not change. The command must be rerun on the reconciled tracked state.
+`just primer-audit primer_deep_learning` initially stopped at its Git-backed evidence check because matrix evidence revisions were `d6b664f` while the audit header still named `2ee1e86`. This metadata mismatch was corrected after the changed source passages and dependent routes were reviewed; the mismatch was not a content verdict. The next run found the brief still named the old source revision; its source and reviewed revision metadata were updated to `14aada3`. Its reader promise, scope and stable IDs did not change. A third run passed the evidence check but rejected the annotated coverage field as malformed. The field now explicitly records `none` for the current revision, with the earlier continuous read recorded separately; the full current read remains a blocker. The command must be rerun on the reconciled tracked state.
 
 ## Release readiness checklist
 
