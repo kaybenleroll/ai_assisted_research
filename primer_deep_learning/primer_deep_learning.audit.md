@@ -12,7 +12,7 @@
 - Historical review: the full continuous pre-revision read was at `bda64e7666f2c228de6f12b87c9beeaa36831076`; a subsequent continuous reread covered lines 1–1424 at `538fa40`, with lines 1–184 carried from the identical pre-correction text and lines 185–200 reread after that correction; the changed passages at the current revision have been sampled but have not received a complete audit.
 - Brief reviewed: `primer_deep_learning/primer_deep_learning.brief.md`, `482-brief-v1`.
 - Readiness decision: not-ready
-- Review boundary: Full source read and provisional outline decisions at the pre-revision revision; changed passages and numeric arithmetic sampled after revision. Source claims, all route transitions, and post-change outline and depth gates remain incomplete.
+- Review boundary: Continuous source read at `2ee1e86` and provisional outline decisions at the pre-revision revision. Source claims, all route transitions, post-change outline and depth gates remain incomplete; subsequent source corrections require a revision-bound re-review.
 - Teaching-case contract: Separate mathematical worked threads and an explicitly illustrative decision case are planned in the brief.
 - Core-concept depth matrix: Brief `482-brief-v1`; rows below are deliberately not checked until post-change review is completed.
 
@@ -70,6 +70,12 @@ At `2ee1e86`, the VAE schematic at lines 1044–1056 omits the decoder likelihoo
 The model-choice advice at line 1387 offers a VAE for disentangled axes, although the prior-matching ELBO alone does not establish axis identifiability; readers could choose it expecting a property the objective does not guarantee. Qualify this as a separate modelling and evaluation goal. Line 1381 also instructs readers to fine-tune a pretrained transformer unconditionally, while line 1417 proposes comparing zero-shot, feature extraction and fine-tuning; reconcile the former with the latter. These affect the primary selection route. No new independent source or code verification was performed for these observations.
 
 Additional unadjudicated claims include the purported current dominance of state-space models at line 625, unconditional positional extrapolation at line 740, and categorical claims about generative-family quality at lines 1231–1240. These require source-backed review before readiness; inclusion here is not a finding that each is false.
+
+## Follow-up revision after the continuous read
+
+Compared `2ee1e86` with source commit `f4aae7c`: lines 625, 1044–1056, 1381 and 1387 changed, along with the three HTML variants and PDF. The VAE schematic now specifies independent Gaussian variance 1/2, for which summed squared error is the negative log likelihood up to an additive constant; the sampled reconstruction term and analytic KL retain the same sum reduction. The latent-selection claim now states the need for additional assumptions or supervision, consistent with [Locatello et al.](https://proceedings.mlr.press/v97/locatello19a.html). The sequence recommendation now compares adaptation choices; the SSM passage no longer claims dominance. Codex inspected the changed source and its immediate context on 28 November 2026. The original two findings are addressed locally, but the variational, recurrent and selection routes, dependent transitions and all retained semantic locators have not received the required complete re-review. The old matrix retains its original evidence revision and statuses; it must not be read as a current-revision verdict.
+
+`just deep-learning-all` passed using the repository container after a sandbox runtime failure; `just render-qa primer_deep_learning` passed its automated checks. Codex inspected changed PDF pages 38, 58, 77 and 78: the changed passages are legible and no clipping was seen. The opening, table, code and equation candidate pages in the QA report remain uninspected for this build. Interactive accessibility checks were not performed.
 
 ## Release readiness checklist
 
