@@ -98,6 +98,18 @@ Additional top-level boundary decisions at `e0ffef8` (the added critic example d
 
 Codex inspected the generated HTML contents at `e0ffef8` by extracting the actual TOC navigation text: all 14 top-level entries and their displayed H3 entries are present in source order; notation appears inside the opening entry before the foundations. The comparison is text and hierarchy inspection, not interactive navigation or a visual browser check. The advisory outline comparator at `2ee1e86` found no candidates; source headings were unchanged at `e0ffef8`. Child-boundary analysis and reader-scale section dispositions remain incomplete, so the structural gate remains not-checked.
 
+## Reader-scale review (partial)
+
+Codex assessed the following sections at `e0ffef8` using the continuous read and the changed-passage review. These dispositions apply to the teaching job described, not to every claim or the entire release gate.
+
+| Section and route | Teaching job and reasoning | Application and limit | Disposition |
+|---|---|---|---|
+| Training Deep Networks, `foundations`, lines 202–273 | Connect a forward graph to a loss gradient by deriving softmax cross-entropy and propagating errors through each layer. | The two-layer scalar calculation at line 263 follows all four updates and compares losses; it explicitly limits the result to one input, activation region and step size. The following Jacobian discussion distinguishes scalar intuition from matrix directions. This lets the reader reproduce one step, not infer that every update improves generalisation. | Retain this worked spine; remaining optimiser and diagnostic claims require review. |
+| Recurrent Neural Networks, `recurrent`, lines 536–606 | Link a shared state update to the time-unrolled gradient and the direct path of a gated cell. | The scalar recurrence at line 566 shows state attenuation, and the gate calculation at line 606 isolates a two-step factor. The stated fixed-gate assumption separates that path from the complete derivative. The reader can compare the two calculations, though they are different examples rather than a single trained system. | Retain this teaching spine; claims about deployment and architecture comparisons require review. |
+| Attention and Transformers, `attention`, lines 700–740 | Explain query-key scores, normalisation and value aggregation before multi-head attention and positional information. | At line 718 a scalar query produces weights and an output, then a changed query produces a different mixture; the passage limits interpretation of weights as explanations. The assumptions behind scaling are stated at line 714. This supports calculating a lookup but does not by itself verify full transformer training or all positional claims. | Retain this teaching spine; review positional extrapolation and remaining claims. |
+
+Other major sections and their section-level dispositions remain not-checked. In particular, a row in the concept matrix cannot stand in for the whole-section judgement.
+
 ## Post-revision semantic and route review (partial)
 
 At `f4aae7c`, Codex re-inspected the matrix locators against their stated roles and the surrounding passages read in full at `2ee1e86`; changed passages were separately checked as described below. This is a mapping review, not a complete new content audit. The foundations, spatial, recurrent, attention, variational and selection locators identify passages addressing their recorded roles; that does not establish that their entire routes pass. Three mappings need correction or deeper evidence:
