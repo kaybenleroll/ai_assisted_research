@@ -1963,9 +1963,10 @@ nothing useful, because the MLP treats the image as a flat vector of
 and the pixel right next to it at
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>100</mn><mo>,</mo><mn>101</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(100, 101)</annotation></semantics></math>
 are, as far as the network is concerned, two arbitrary coordinates in a
-long list. The fact that they are physically adjacent — that together
-they might form part of an edge, a corner, a whisker — is information
-the architecture throws away on the first line.</p>
+long list. Flattening preserves the pixel values and their fixed
+ordering, but the dense layer has no built-in preference for nearby
+pixels to interact as a local pattern. It must learn useful spatial
+relationships from the data.</p>
 <p>That is the problem convolutional neural networks (CNNs) solve. They
 build the structure of an image directly into the architecture: nearby
 pixels are related, the same visual pattern can appear anywhere in the
@@ -2032,15 +2033,15 @@ detector be reused across locations; exact equivariance depends on the
 boundary and sampling conditions.</p>
 <p>Two more knobs control how the kernel moves. <strong>Stride</strong>
 is how far the kernel jumps between applications. A stride of 1 moves it
-one pixel at a time, producing a dense output; a stride of 2 skips every
-other position, halving the output size in each dimension and
-downsampling as it goes. <strong>Padding</strong> is how you handle the
-edges. Without padding, the kernel cannot be centred on border pixels,
-so the output map shrinks slightly with every conv layer — stack enough
-of them and the spatial dimensions vanish. Zero-padding the input
-(adding a border of zeros) lets you control the output size. With stride
-1, “same” padding keeps the spatial size; for larger strides,
-implementations that support it typically produce
+one pixel at a time, producing a dense output; a stride of 2 samples
+every other position, downsampling the output. The exact output size
+also depends on the kernel and padding. <strong>Padding</strong> is how
+you handle the edges. Without padding, the kernel cannot be centred on
+border pixels, so the output map shrinks slightly with every conv layer
+— stack enough of them and the spatial dimensions vanish. Zero-padding
+the input (adding a border of zeros) lets you control the output size.
+With stride 1, “same” padding keeps the spatial size; for larger
+strides, implementations that support it typically produce
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">⌈</mo><mi>n</mi><mi>/</mi><mi>s</mi><mo stretchy="false" form="postfix">⌉</mo></mrow><annotation encoding="application/x-tex">\lceil n/s\rceil</annotation></semantics></math>
 positions instead. The general formula for the output size along one
 dimension is</p>
