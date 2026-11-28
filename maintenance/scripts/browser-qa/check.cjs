@@ -30,7 +30,9 @@ async function check(file, browser) {
       assert(await page.locator('math').count() > 0, 'MathML destination contains no maths');
       console.log('  PASS JavaScript off: Tab and Enter to MathML');
     } finally { await context.close(); }
-  } else console.log('  SKIP JavaScript-off MathML fallback: no sibling MathML output');
+  } else console.log(isMathml
+    ? '  SKIP JavaScript-off MathML fallback: selected output is already MathML'
+    : '  SKIP JavaScript-off MathML fallback: no sibling MathML output');
 
   const page = await browser.newPage();
   page.setDefaultTimeout(5000);
