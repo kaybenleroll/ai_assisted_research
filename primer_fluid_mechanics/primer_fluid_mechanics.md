@@ -899,18 +899,11 @@ The reduced model is often the most useful first answer. If a required output is
 
 ### Model Hierarchies and Escalation
 
+![Flow-model selection from question and scales through candidate model and evidence gate. Illustrative model-escalation route. Check balances, refinement, comparison, and uncertainty against the decision tolerance; diagnose a failed check before increasing model complexity.](figures/model_escalation.png)
+
 An escalation plan should state what observation would justify moving to a more detailed model. For a channel, begin with a one-dimensional resistance relation; move to a two-dimensional laminar calculation if wall or entrance structure matters; add three-dimensional geometry if side walls or junctions affect the output; and add thermal or multiphase physics only when a scale or measurement shows that those mechanisms are consequential. Each step should inherit a test from the previous level.
 
 This approach avoids two opposite failures. Starting with a production solver can hide a simple unit or sign error behind a large input file. Staying with a reduced model after it has failed a sensitivity test can produce a precise but irrelevant result. A hierarchy gives the analyst a documented stopping rule: stop when the remaining model uncertainty is below the decision tolerance, or escalate when it is not.
-
-![Flow-model selection from question and scales through candidate model and evidence gate](figures/model_escalation.png)
-
-```{=latex}
-% Flush this figure before the following explanation.
-\clearpage
-```
-
-*Figure: illustrative model-escalation route. Check balances, refinement, comparison, and uncertainty against the decision tolerance; diagnose a failed check before increasing model complexity.*
 
 ## Introductory CFD: Balances on Control Volumes
 
@@ -920,14 +913,7 @@ $$
 \frac{d(q_i\Delta x)}{dt} = F_{i-1/2}-F_{i+1/2}+S_i\Delta x.
 $$
 
-![Finite-volume cells and shared face fluxes](figures/finite_volume_faces.png)
-
-```{=latex}
-% Flush this figure before the following explanation.
-\clearpage
-```
-
-*Figure: an internal face flux must be computed once and used with opposite signs in its two neighbouring cells. This pairwise cancellation is the source of exact discrete conservation in the finite-volume update.*
+![Finite-volume cells and shared face fluxes. An internal face flux must be computed once and used with opposite signs in its two neighbouring cells. This pairwise cancellation is the source of exact discrete conservation in the finite-volume update.](figures/finite_volume_faces.png){width=80%}
 
 The same face flux is used with opposite signs by the two cells that share that face. This simple bookkeeping is the reason a finite-volume method can conserve a quantity globally: interior fluxes cancel when cell balances are summed. Boundary fluxes and sources remain. A method that computes separate, inconsistent “left” and “right” fluxes at a shared face can lose this property even if each cell update looks plausible.
 
@@ -1334,14 +1320,7 @@ Run the same physical problem to the same final time while using $N$, $2N$, and 
 
 Use the cell-average exact solution when the numerical state is a cell average. Comparing a cell average with the exact value at its centre introduces an additional quadrature error. For a smooth sine wave this may be small, but the mismatch can obscure the expected order at fine resolution. The example should state which comparison is used and use the same definition in all three language implementations.
 
-![Advection refinement convergence](figures/advection_convergence.png)
-
-```{=latex}
-% Flush this figure before the following explanation.
-\clearpage
-```
-
-*Figure: a log–log refinement plot makes the observed first-order trend visible. The generated example uses the same error definition and physical final time at each resolution.*
+![Advection refinement convergence. A log–log refinement plot makes the observed first-order trend visible. The generated example uses the same error definition and physical final time at each resolution.](figures/advection_convergence.png)
 
 ### A Language-Parity Contract
 
