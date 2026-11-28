@@ -2584,10 +2584,11 @@ spaced frequencies:</p>
 varying quickly across positions and high dimensions varying slowly, so
 the full vector gives every position a unique fingerprint. The reasons
 for choosing sinusoids are practical. They are fixed rather than
-learned, so they add no parameters. They extrapolate to sequences longer
-than any seen in training, because the functions are defined for every
-position. And they encode relative position implicitly: because of the
-trigonometric identities, the encoding of position <span class="math inline">\(t + k\)</span> is a fixed linear function of the
+learned, so they add no parameters. The functions are defined beyond the
+positions seen in training, so the encoding can be computed for longer
+sequences; that does not guarantee that the trained model will
+generalise to them. And they encode relative position implicitly:
+because of the trigonometric identities, the encoding of position <span class="math inline">\(t + k\)</span> is a fixed linear function of the
 encoding at <span class="math inline">\(t\)</span>, so the model can
 learn to attend “three tokens back” in a position-independent way.
 Learned positional embeddings — just a trainable vector per position —
@@ -3013,14 +3014,14 @@ low-dimensional subspace — turns out to hold well enough in practice
 that LoRA has become the default way to fine-tune large models on modest
 hardware.</p>
 <p><strong>Prefix tuning</strong> is a different lever on the same goal.
-Leave every model weight frozen and instead prepend a handful of
-trainable “virtual tokens” — learned embedding vectors that are not real
-tokens but occupy positions at the front of the sequence. Only those
-prefix embeddings are trained. The model reads them through its ordinary
-attention machinery and they steer its behaviour, much as a well-crafted
-prompt would, except the steering is learned by gradient descent rather
-than written by hand. It trains even fewer parameters than LoRA, at the
-cost of consuming some of the context window.</p>
+Freeze the pretrained model and learn a sequence of continuous prefix
+vectors that the model can attend to. The original <a href="https://aclanthology.org/2021.acl-long.353/">prefix-tuning
+method</a> optimises prefix activations at every transformer layer;
+learning only input-level virtual-token embeddings is a related, simpler
+form of prompt tuning. The learned prefix steers behaviour without
+updating the base weights, but it consumes attention context and its
+parameter count and effectiveness depend on prefix length, architecture
+and task.</p>
 <h2 data-number="8.5" role="heading" aria-level="3" id="rlhf-from-completion-to-instruction-following"><span class="header-section-number">8.5</span> RLHF: From Completion to
 Instruction-Following</h2>
 <p>A pre-trained CLM model completes text. That is not the same as being
