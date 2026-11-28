@@ -25,9 +25,26 @@ The pre-revision observations, boundary proposals, exact locators, independent c
 - Source read coverage: 1-150, 151-300, 301-450, 451-600, 601-750, 751-900, 901-1050, 1051-1200, 1201-1350, 1351-1435
 
 Historical continuous read at `2ee1e86` covered 1–150, 151–300, 301–450, 451–600, 601–750, 751–900, 901–1050, 1051–1200, 1201–1350 and 1351–1433. Codex then read the current `14aada3` source continuously in the inclusive non-overlapping batches recorded above on 28 November 2026; no batch was truncated.
-- Rendered contents: HTML TOC text and hierarchy inspected at `78edc97`; the opening PDF contents and notation page were sampled. Interactive browser inspection remains unperformed.
+- Rendered contents: **checked**; PDF contents pages 1–3 and opening and notation pages 3–5 at `050f66a`, plus HTML TOC text and hierarchy. Interactive browser inspection remains unperformed.
 
 At the earlier `2ee1e86` stage, explicit boundary and child decisions, the rendered contents review, and the reader-scale depth pass were incomplete; subsequent work is recorded below. `python3 -I maintenance/scripts/check/primer_outline_compare.py primer_deep_learning/primer_deep_learning.md primer_deep_learning/primer_deep_learning.html` reported no H2/H3 candidate differences or ambiguities; this advisory comparison does not establish hierarchy or navigation quality. Moving notation preserves its `notation` HTML fragment and the parent chapter numbering, but this does not prove interactive navigation.
+
+| Actual section and hierarchy at reviewed revision | Purpose and parent/child relationship | Adjacent sibling boundary and rationale | Finding and disposition |
+|---|---|---|---|
+| Introduction, 3–50 | Scope, notation and prerequisites orient the reader. | Why Deep Learning Now, 54–96, supplies historical motivation rather than navigation. | Retain; notation precedes first use. |
+| Why Deep Learning Now, 54–96 | Data, compute and algorithms explain enabling conditions. | Fundamentals, 98–200, constructs the mechanisms. | Retain; historical claims have bounded review. |
+| Neural Network Fundamentals, 98–200 | Neurons, layers and forward computation build the model. | Training, 202–361, derives its loss gradients. | Retain the model/training distinction. |
+| Training Deep Networks, 202–361 | Loss, derivatives, optimisers and diagnosis explain fitting. | CNN, 363–526, applies foundations to spatial structure. | Retain; child decisions are recorded below. |
+| CNN, 363–526 | Convolution, pooling, transfer and code develop the spatial route. | RNN, 528–692, handles sequential state. | Retain; different input structures justify the boundary. |
+| RNN, 528–692 | State, gradients, gates and examples explain sequential processing. | Attention, 694–883, introduces another retrieval mechanism. | Retain; attention also works without recurrence. |
+| Attention, 694–883 | Lookup, position and blocks build the transformer. | Language, 885–980, compares objectives and adaptation. | Retain; mechanism differs from training workflow. |
+| Language, 885–980 | Tokenisation, objectives and adaptation connect inputs to use. | VAE, 982–1068, introduces a different generative objective. | Retain; a combined generative parent would obscure the route. |
+| VAE, 982–1068 | Latent model, bound and estimator explain variational training. | GAN, 1070–1122, replaces this objective with an adversarial game. | Retain to expose the change of mechanism. |
+| GAN, 1070–1122 | Game, failure modes and critic explain adversarial training. | Diffusion, 1124–1243, uses noise prediction. | Retain for comparison of the objectives. |
+| Diffusion, 1124–1243 | Corruption, reverse process and sampler choices develop denoising. | Frameworks, 1244–1367, changes to implementation systems. | Retain so the family comparison closes first. |
+| Frameworks, 1244–1367 | Framework entries and code compare software choices. | Selection, 1369–1419, applies model and data constraints. | Retain; framework and model choice are distinct. |
+| Selection, 1369–1419 | Modality decisions and the worked scenario synthesise prior material. | Further Reading, 1421–1435, provides external paths. | Retain as application followed by reference. |
+| Further Reading, 1421–1435 | Annotated primary sources support follow-up. | The preceding selection case applies the guide; references answer a different need. | Retain as a deliberately brief reference. |
 
 ## Adversarial depth gate
 
