@@ -82,7 +82,21 @@ At `f4aae7c`, Codex compared the following source boundaries; these are partial 
 | Neural Network Fundamentals / Training Deep Networks, lines 176–200 / 202–224 | The forward computation and representation capacity precede the loss and reverse derivatives. Combining them would make one longer chapter that obscures the distinction between what is represented and how parameters are fitted. | Retain. |
 | Training Deep Networks / Convolutional Neural Networks, lines 351–367 | Loss-curve diagnosis ends the general training discussion; the CNN opening poses a new spatial design problem using those foundations. A separate entry lets a reader return to that architectural decision without locating it inside optimiser guidance. | Retain. |
 
-All later top-level boundaries, child hierarchy, and rendered contents remain unreviewed for this pass. The structural gate remains not-checked.
+Additional top-level boundary decisions at `e0ffef8` (the added critic example does not change headings):
+
+| Boundary | Reader tasks and comparison | Disposition |
+|---|---|---|
+| CNN / RNN, lines 444–450 / 528–536 | CNN suitability and code conclude the spatial route; RNN state begins an order-sensitive sequence route. Grouping both as one architecture catalogue would obscure the different input structures. | Retain. |
+| RNN / attention, lines 621–629 / 694–706 | Streaming suitability completes recurrence; attention begins with the encoder bottleneck and supplies a different retrieval mechanism. Moving attention into RNN would hide its use in transformers independently of recurrence. | Retain. |
+| Attention / LLMs, lines 795–807 / 885–897 | The BERT/GPT architectural comparison bridges to tokenisation, objectives and adaptation. Combining the chapters would put training recipes inside the mechanism reference; the present boundary supports both routes. | Retain. |
+| LLMs / VAEs, lines 972–984 / 986–1008 | LLM capability claims finish the language discussion; VAEs introduce generative latent variables and a new objective. An overarching generative parent is plausible, but would combine language objectives and the subsequent three family comparison awkwardly; retain separate entries. | Retain; claims review remains open. |
+| VAE / GAN, lines 1064–1078 | Posterior collapse and reconstruction limits motivate a distinct adversarial objective; separate entries let readers compare the training trade-offs. | Retain. |
+| GAN / diffusion, lines 1118–1130 | GAN deployment and speed precede a noise-based generative process with a different training objective. Merging them would hide that change in mechanism. | Retain. |
+| Diffusion / frameworks, lines 1229–1246 | The family comparison concludes model mechanisms; framework choices address implementation interfaces. Moving frameworks earlier would interrupt the generative-family comparison. | Retain. |
+| Frameworks / selection, lines 1291–1305 and 1365–1375 | Framework choice compares software systems; selection compares problem, data and model families. Their tasks differ even though each is a practical decision. | Retain. |
+| Selection / Further Reading, lines 1413–1425 | The scenario and practical starting point apply the primer; the final annotated references direct readers to deeper sources. Merging references into the scenario would make them harder to find. | Retain. |
+
+Codex inspected the generated HTML contents at `e0ffef8` by extracting the actual TOC navigation text: all 14 top-level entries and their displayed H3 entries are present in source order; notation appears inside the opening entry before the foundations. The comparison is text and hierarchy inspection, not interactive navigation or a visual browser check. The advisory outline comparator at `2ee1e86` found no candidates; source headings were unchanged at `e0ffef8`. Child-boundary analysis and reader-scale section dispositions remain incomplete, so the structural gate remains not-checked.
 
 ## Post-revision semantic and route review (partial)
 
@@ -93,6 +107,10 @@ At `f4aae7c`, Codex re-inspected the matrix locators against their stated roles 
 - `score`: line 1128 explains the forward process, while the actual score identity is at line 1175; line 1156 begins code constructing noisy inputs, not an application of the score identity. The reader must bridge the example and score result without a worked numerical score. Whether the brief requires that calculation or the symbolic derivation suffices remains not-checked.
 
 The old evidence rows remain bound to `2ee1e86`; they have not been silently rebound to the revised source. These observations do not replace transition-by-transition review, independent technical checking or the reader-scale gate.
+
+## Worked critic follow-up
+
+At `e0ffef8`, the only source change from `f4aae7c` is the new worked critic example at line 1114; all published outputs were rebuilt. For unit masses at 1 and 0, $f(x)=x$ achieves the distance 1, and the 1-Lipschitz inequality bounds every critic difference by 1. The constant critic has zero gradient and is 1-Lipschitz, while the sampled norm-one penalty penalises it. Codex checked this arithmetic and the adjacent constraints on 28 November 2026; this addresses the identified missing example but the full adversarial route and its locators still require revision-bound review. `just deep-learning-all` and `just render-qa primer_deep_learning` passed; the revised example was visually inspected on PDF page 62 without clipping. Other required PDF candidate inspection is outstanding.
 
 ## Follow-up revision after the continuous read
 
