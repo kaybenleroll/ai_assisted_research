@@ -518,7 +518,7 @@ println("solution: ", result.zero)
 println("residual norm: ", result.residual_norm)
 ```
 
-These starting values converge to approximately $(1.932, 0.518)$; the system also has a symmetric counterpart. `scipy.optimize.fsolve` uses a MINPACK hybrid solver with step controls. [R’s `nleqslv`](https://cran.r-project.org/web/packages/nleqslv/refman/nleqslv.html) defaults to Broyden’s method with a double-dogleg trust-region strategy, while [`NLsolve.jl`](https://github.com/JuliaNLSolvers/NLsolve.jl#fine-tunings) defaults to a trust-region method. Both can estimate the Jacobian numerically when one is not supplied.
+The system has solutions near $(0.518, 1.932)$ and $(1.932, 0.518)$; compare each returned point and residual with these candidates and inspect the solver’s convergence status. `scipy.optimize.fsolve` uses a MINPACK hybrid solver with step controls. [R’s `nleqslv`](https://cran.r-project.org/web/packages/nleqslv/refman/nleqslv.html) defaults to Broyden’s method with a double-dogleg trust-region strategy, while [`NLsolve.jl`](https://github.com/JuliaNLSolvers/NLsolve.jl#fine-tunings) defaults to a trust-region method. Both can estimate the Jacobian numerically when one is not supplied.
 
 ### Shared Example: Find Root of $f(x)=\cos(x)-x$
 

@@ -1977,9 +1977,12 @@ cost per step is much lower when Jacobian evaluations are expensive.</p>
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> <span class="fu">nlsolve</span>(F!, [<span class="fl">1.0</span>, <span class="fl">1.5</span>])</span>
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">&quot;solution: &quot;</span>, result.zero)</span>
 <span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">&quot;residual norm: &quot;</span>, result.residual_norm)</span></code></pre></div>
-<p>These starting values converge to approximately <span class="math inline">\((1.932, 0.518)\)</span>; the system also has a
-symmetric counterpart. <code>scipy.optimize.fsolve</code> uses a MINPACK
-hybrid solver with step controls. <a href="https://cran.r-project.org/web/packages/nleqslv/refman/nleqslv.html">R’s
+<p>The system has solutions near <span class="math inline">\((0.518,
+1.932)\)</span> and <span class="math inline">\((1.932, 0.518)\)</span>;
+compare each returned point and residual with these candidates and
+inspect the solver’s convergence status.
+<code>scipy.optimize.fsolve</code> uses a MINPACK hybrid solver with
+step controls. <a href="https://cran.r-project.org/web/packages/nleqslv/refman/nleqslv.html">R’s
 <code>nleqslv</code></a> defaults to Broyden’s method with a
 double-dogleg trust-region strategy, while <a href="https://github.com/JuliaNLSolvers/NLsolve.jl#fine-tunings"><code>NLsolve.jl</code></a>
 defaults to a trust-region method. Both can estimate the Jacobian
