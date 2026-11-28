@@ -5103,10 +5103,12 @@ a smooth interval, trapezoid is second-order, so doubling <span class="math inli
 holds, you are in the asymptotic regime and your extrapolation is on
 solid ground. If it does not, either the grid is missing important
 structure or the implementation needs another look.</p>
-<p>Here is the refinement study in code. The target is <span class="math inline">\(I = \int_0^1 e^{-x^2}\, dx\)</span>; the true
-value is available from <code>scipy.integrate.quad</code> (Python),
-<code>integrate</code> (R), or <code>quadgk</code> (Julia) at
-near-machine-precision accuracy.</p>
+<p>Here is the refinement study in code. The target is <span class="math inline">\(I = \int_0^1 e^{-x^2}\, dx\)</span>. Each
+implementation compares the trapezoidal estimates with a separately
+computed adaptive quadrature reference and reports the integrator’s
+estimated absolute error. This estimate is diagnostic, not a proof of
+the reference error; differences smaller than it, or comparable with
+floating-point rounding, are not reliable error measurements.</p>
 <p><strong>Python:</strong></p>
 <div class="sourceCode" id="cb61"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.integrate <span class="im">import</span> quad</span>
@@ -5118,25 +5120,25 @@ near-machine-precision accuracy.</p>
 <span id="cb61-8"><a href="#cb61-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> h <span class="op">*</span> (y[<span class="dv">0</span>]<span class="op">/</span><span class="dv">2</span> <span class="op">+</span> np.<span class="bu">sum</span>(y[<span class="dv">1</span>:<span class="op">-</span><span class="dv">1</span>]) <span class="op">+</span> y[<span class="op">-</span><span class="dv">1</span>]<span class="op">/</span><span class="dv">2</span>)</span>
 <span id="cb61-9"><a href="#cb61-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb61-10"><a href="#cb61-10" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> <span class="kw">lambda</span> x: np.exp(<span class="op">-</span>x<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb61-11"><a href="#cb61-11" aria-hidden="true" tabindex="-1"></a>true_val, _ <span class="op">=</span> quad(f, <span class="dv">0</span>, <span class="dv">1</span>)</span>
-<span id="cb61-12"><a href="#cb61-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb61-13"><a href="#cb61-13" aria-hidden="true" tabindex="-1"></a>h0 <span class="op">=</span> <span class="fl">0.1</span></span>
+<span id="cb61-11"><a href="#cb61-11" aria-hidden="true" tabindex="-1"></a>reference, ref_error <span class="op">=</span> quad(f, <span class="dv">0</span>, <span class="dv">1</span>, epsabs<span class="op">=</span><span class="fl">1e-13</span>, epsrel<span class="op">=</span><span class="fl">1e-13</span>)</span>
+<span id="cb61-12"><a href="#cb61-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Reference: </span><span class="sc">{</span>reference<span class="sc">:.15f}</span><span class="ss">; estimated absolute error: </span><span class="sc">{</span>ref_error<span class="sc">:.3e}</span><span class="ss">&quot;</span>)</span>
+<span id="cb61-13"><a href="#cb61-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb61-14"><a href="#cb61-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;</span><span class="sc">{</span><span class="st">&#39;h&#39;</span><span class="sc">:&gt;10}</span><span class="ss">  </span><span class="sc">{</span><span class="st">&#39;T(h)&#39;</span><span class="sc">:&gt;18}</span><span class="ss">  </span><span class="sc">{</span><span class="st">&#39;Error&#39;</span><span class="sc">:&gt;12}</span><span class="ss">  </span><span class="sc">{</span><span class="st">&#39;Ratio&#39;</span><span class="sc">:&gt;8}</span><span class="ss">&quot;</span>)</span>
 <span id="cb61-15"><a href="#cb61-15" aria-hidden="true" tabindex="-1"></a>prev_err <span class="op">=</span> <span class="va">None</span></span>
 <span id="cb61-16"><a href="#cb61-16" aria-hidden="true" tabindex="-1"></a>T_prev <span class="op">=</span> <span class="va">None</span></span>
 <span id="cb61-17"><a href="#cb61-17" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">5</span>):</span>
-<span id="cb61-18"><a href="#cb61-18" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> <span class="bu">int</span>(<span class="dv">1</span> <span class="op">/</span> (h0 <span class="op">/</span> <span class="dv">2</span><span class="op">**</span>k))</span>
+<span id="cb61-18"><a href="#cb61-18" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> <span class="dv">100</span> <span class="op">*</span> <span class="dv">2</span><span class="op">**</span>k</span>
 <span id="cb61-19"><a href="#cb61-19" aria-hidden="true" tabindex="-1"></a>    T <span class="op">=</span> trapezoid(f, <span class="dv">0</span>, <span class="dv">1</span>, n)</span>
-<span id="cb61-20"><a href="#cb61-20" aria-hidden="true" tabindex="-1"></a>    err <span class="op">=</span> <span class="bu">abs</span>(T <span class="op">-</span> true_val)</span>
+<span id="cb61-20"><a href="#cb61-20" aria-hidden="true" tabindex="-1"></a>    err <span class="op">=</span> <span class="bu">abs</span>(T <span class="op">-</span> reference)</span>
 <span id="cb61-21"><a href="#cb61-21" aria-hidden="true" tabindex="-1"></a>    ratio <span class="op">=</span> prev_err <span class="op">/</span> err <span class="cf">if</span> prev_err <span class="cf">else</span> <span class="bu">float</span>(<span class="st">&#39;nan&#39;</span>)</span>
-<span id="cb61-22"><a href="#cb61-22" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;</span><span class="sc">{</span>h0<span class="op">/</span><span class="dv">2</span><span class="op">**</span>k<span class="sc">:&gt;10.5f}</span><span class="ss">  </span><span class="sc">{</span>T<span class="sc">:&gt;18.15f}</span><span class="ss">  </span><span class="sc">{</span>err<span class="sc">:&gt;12.3e}</span><span class="ss">  </span><span class="sc">{</span>ratio<span class="sc">:&gt;8.2f}</span><span class="ss">&quot;</span>)</span>
+<span id="cb61-22"><a href="#cb61-22" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;</span><span class="sc">{</span><span class="dv">1</span><span class="op">/</span>n<span class="sc">:&gt;10.5f}</span><span class="ss">  </span><span class="sc">{</span>T<span class="sc">:&gt;18.15f}</span><span class="ss">  </span><span class="sc">{</span>err<span class="sc">:&gt;12.3e}</span><span class="ss">  </span><span class="sc">{</span>ratio<span class="sc">:&gt;8.2f}</span><span class="ss">&quot;</span>)</span>
 <span id="cb61-23"><a href="#cb61-23" aria-hidden="true" tabindex="-1"></a>    prev_err <span class="op">=</span> err</span>
 <span id="cb61-24"><a href="#cb61-24" aria-hidden="true" tabindex="-1"></a>    T_prev2, T_prev <span class="op">=</span> T_prev, T</span>
 <span id="cb61-25"><a href="#cb61-25" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb61-26"><a href="#cb61-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Richardson extrapolation</span></span>
 <span id="cb61-27"><a href="#cb61-27" aria-hidden="true" tabindex="-1"></a>T_rich <span class="op">=</span> T_prev <span class="op">+</span> (T_prev <span class="op">-</span> T_prev2) <span class="op">/</span> <span class="dv">3</span></span>
 <span id="cb61-28"><a href="#cb61-28" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;</span><span class="ch">\n</span><span class="ss">Richardson extrapolation: </span><span class="sc">{</span>T_rich<span class="sc">:.15f}</span><span class="ss">&quot;</span>)</span>
-<span id="cb61-29"><a href="#cb61-29" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Richardson error:         </span><span class="sc">{</span><span class="bu">abs</span>(T_rich <span class="op">-</span> true_val)<span class="sc">:.3e}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<span id="cb61-29"><a href="#cb61-29" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Richardson difference:    </span><span class="sc">{</span><span class="bu">abs</span>(T_rich <span class="op">-</span> reference)<span class="sc">:.3e}</span><span class="ss">&quot;</span>)</span></code></pre></div>
 <p>The ratio column should converge towards 4, confirming second-order
 convergence. Richardson extrapolation takes two consecutive estimates
 <span class="math inline">\(T(h)\)</span> and <span class="math inline">\(T(h/2)\)</span> and cancels the leading <span class="math inline">\(O(h^2)\)</span> error term:</p>
@@ -5147,9 +5149,9 @@ T(h)}{3}\]</span></p>
 <span class="math inline">\(T(h) = I + ch^2 + \cdots\)</span>, giving
 <span class="math inline">\(T^* = T(h/2) + (T(h/2) - T(h))/3 = I +
 O(h^4)\)</span>. Richardson extrapolation cancels the second-order error
-term, giving a fourth-order estimate from two second-order estimates;
-the error typically drops by a factor of 16 or more beyond what the
-finest grid alone achieves.</p>
+term, giving a fourth-order estimate from two second-order estimates for
+this smooth integrand, until rounding and reference uncertainty
+dominate.</p>
 <p><strong>R:</strong></p>
 <div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>trapezoid <span class="ot">&lt;-</span> <span class="cf">function</span>(f, a, b, n) {</span>
 <span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">seq</span>(a, b, <span class="at">length.out =</span> n <span class="sc">+</span> <span class="dv">1</span>)</span>
@@ -5159,28 +5161,29 @@ finest grid alone achieves.</p>
 <span id="cb62-6"><a href="#cb62-6" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb62-7"><a href="#cb62-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb62-8"><a href="#cb62-8" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">exp</span>(<span class="sc">-</span>x<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb62-9"><a href="#cb62-9" aria-hidden="true" tabindex="-1"></a>true_val <span class="ot">&lt;-</span> <span class="fu">integrate</span>(f, <span class="dv">0</span>, <span class="dv">1</span>)<span class="sc">$</span>value</span>
-<span id="cb62-10"><a href="#cb62-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb62-11"><a href="#cb62-11" aria-hidden="true" tabindex="-1"></a>h0 <span class="ot">&lt;-</span> <span class="fl">0.1</span></span>
-<span id="cb62-12"><a href="#cb62-12" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">&quot;%10s  %18s  %12s  %8s</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="st">&quot;h&quot;</span>, <span class="st">&quot;T(h)&quot;</span>, <span class="st">&quot;Error&quot;</span>, <span class="st">&quot;Ratio&quot;</span>))</span>
-<span id="cb62-13"><a href="#cb62-13" aria-hidden="true" tabindex="-1"></a>prev_err <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb62-14"><a href="#cb62-14" aria-hidden="true" tabindex="-1"></a>T_prev <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb62-15"><a href="#cb62-15" aria-hidden="true" tabindex="-1"></a>T_prev2 <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb62-16"><a href="#cb62-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb62-17"><a href="#cb62-17" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (k <span class="cf">in</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">4</span>)) {</span>
-<span id="cb62-18"><a href="#cb62-18" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="dv">1</span> <span class="sc">/</span> (h0 <span class="sc">/</span> <span class="dv">2</span><span class="sc">^</span>k))</span>
-<span id="cb62-19"><a href="#cb62-19" aria-hidden="true" tabindex="-1"></a>  T <span class="ot">&lt;-</span> <span class="fu">trapezoid</span>(f, <span class="dv">0</span>, <span class="dv">1</span>, n)</span>
-<span id="cb62-20"><a href="#cb62-20" aria-hidden="true" tabindex="-1"></a>  err <span class="ot">&lt;-</span> <span class="fu">abs</span>(T <span class="sc">-</span> true_val)</span>
-<span id="cb62-21"><a href="#cb62-21" aria-hidden="true" tabindex="-1"></a>  ratio <span class="ot">&lt;-</span> <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(prev_err)) prev_err <span class="sc">/</span> err <span class="cf">else</span> <span class="cn">NaN</span></span>
-<span id="cb62-22"><a href="#cb62-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">&quot;%10.5f  %18.15f  %12.3e  %8.2f</span><span class="sc">\n</span><span class="st">&quot;</span>, h0<span class="sc">/</span><span class="dv">2</span><span class="sc">^</span>k, T, err, ratio))</span>
-<span id="cb62-23"><a href="#cb62-23" aria-hidden="true" tabindex="-1"></a>  prev_err <span class="ot">&lt;-</span> err</span>
-<span id="cb62-24"><a href="#cb62-24" aria-hidden="true" tabindex="-1"></a>  T_prev2 <span class="ot">&lt;-</span> T_prev</span>
-<span id="cb62-25"><a href="#cb62-25" aria-hidden="true" tabindex="-1"></a>  T_prev <span class="ot">&lt;-</span> T</span>
-<span id="cb62-26"><a href="#cb62-26" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb62-27"><a href="#cb62-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb62-28"><a href="#cb62-28" aria-hidden="true" tabindex="-1"></a>T_rich <span class="ot">&lt;-</span> T_prev <span class="sc">+</span> (T_prev <span class="sc">-</span> T_prev2) <span class="sc">/</span> <span class="dv">3</span></span>
-<span id="cb62-29"><a href="#cb62-29" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">&quot;</span><span class="sc">\n</span><span class="st">Richardson extrapolation: %.15f</span><span class="sc">\n</span><span class="st">&quot;</span>, T_rich))</span>
-<span id="cb62-30"><a href="#cb62-30" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">&quot;Richardson error:         %.3e</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="fu">abs</span>(T_rich <span class="sc">-</span> true_val)))</span></code></pre></div>
+<span id="cb62-9"><a href="#cb62-9" aria-hidden="true" tabindex="-1"></a>ref <span class="ot">&lt;-</span> <span class="fu">integrate</span>(f, <span class="dv">0</span>, <span class="dv">1</span>, <span class="at">rel.tol =</span> <span class="fl">1e-13</span>, <span class="at">abs.tol =</span> <span class="fl">1e-13</span>)</span>
+<span id="cb62-10"><a href="#cb62-10" aria-hidden="true" tabindex="-1"></a>reference <span class="ot">&lt;-</span> ref<span class="sc">$</span>value</span>
+<span id="cb62-11"><a href="#cb62-11" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">&quot;Reference: %.15f; estimated absolute error: %.3e</span><span class="sc">\n</span><span class="st">&quot;</span>, reference, ref<span class="sc">$</span>abs.error))</span>
+<span id="cb62-12"><a href="#cb62-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-13"><a href="#cb62-13" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">&quot;%10s  %18s  %12s  %8s</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="st">&quot;h&quot;</span>, <span class="st">&quot;T(h)&quot;</span>, <span class="st">&quot;Error&quot;</span>, <span class="st">&quot;Ratio&quot;</span>))</span>
+<span id="cb62-14"><a href="#cb62-14" aria-hidden="true" tabindex="-1"></a>prev_err <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb62-15"><a href="#cb62-15" aria-hidden="true" tabindex="-1"></a>T_prev <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb62-16"><a href="#cb62-16" aria-hidden="true" tabindex="-1"></a>T_prev2 <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb62-17"><a href="#cb62-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-18"><a href="#cb62-18" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (k <span class="cf">in</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">4</span>)) {</span>
+<span id="cb62-19"><a href="#cb62-19" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="dv">100</span> <span class="sc">*</span> <span class="dv">2</span><span class="sc">^</span>k</span>
+<span id="cb62-20"><a href="#cb62-20" aria-hidden="true" tabindex="-1"></a>  T <span class="ot">&lt;-</span> <span class="fu">trapezoid</span>(f, <span class="dv">0</span>, <span class="dv">1</span>, n)</span>
+<span id="cb62-21"><a href="#cb62-21" aria-hidden="true" tabindex="-1"></a>  err <span class="ot">&lt;-</span> <span class="fu">abs</span>(T <span class="sc">-</span> reference)</span>
+<span id="cb62-22"><a href="#cb62-22" aria-hidden="true" tabindex="-1"></a>  ratio <span class="ot">&lt;-</span> <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(prev_err)) prev_err <span class="sc">/</span> err <span class="cf">else</span> <span class="cn">NaN</span></span>
+<span id="cb62-23"><a href="#cb62-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">&quot;%10.5f  %18.15f  %12.3e  %8.2f</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="dv">1</span><span class="sc">/</span>n, T, err, ratio))</span>
+<span id="cb62-24"><a href="#cb62-24" aria-hidden="true" tabindex="-1"></a>  prev_err <span class="ot">&lt;-</span> err</span>
+<span id="cb62-25"><a href="#cb62-25" aria-hidden="true" tabindex="-1"></a>  T_prev2 <span class="ot">&lt;-</span> T_prev</span>
+<span id="cb62-26"><a href="#cb62-26" aria-hidden="true" tabindex="-1"></a>  T_prev <span class="ot">&lt;-</span> T</span>
+<span id="cb62-27"><a href="#cb62-27" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb62-28"><a href="#cb62-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-29"><a href="#cb62-29" aria-hidden="true" tabindex="-1"></a>T_rich <span class="ot">&lt;-</span> T_prev <span class="sc">+</span> (T_prev <span class="sc">-</span> T_prev2) <span class="sc">/</span> <span class="dv">3</span></span>
+<span id="cb62-30"><a href="#cb62-30" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">&quot;</span><span class="sc">\n</span><span class="st">Richardson extrapolation: %.15f</span><span class="sc">\n</span><span class="st">&quot;</span>, T_rich))</span>
+<span id="cb62-31"><a href="#cb62-31" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">&quot;Richardson difference:    %.3e</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="fu">abs</span>(T_rich <span class="sc">-</span> reference)))</span></code></pre></div>
 <p><strong>Julia:</strong></p>
 <div class="sourceCode" id="cb63"><pre class="sourceCode julia"><code class="sourceCode julia"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">QuadGK</span></span>
 <span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Printf</span></span>
@@ -5194,43 +5197,50 @@ finest grid alone achieves.</p>
 <span id="cb63-10"><a href="#cb63-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> h <span class="op">*</span> s</span>
 <span id="cb63-11"><a href="#cb63-11" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
 <span id="cb63-12"><a href="#cb63-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb63-13"><a href="#cb63-13" aria-hidden="true" tabindex="-1"></a><span class="fu">f</span>(x) <span class="op">=</span> <span class="fu">exp</span>(<span class="op">-</span>x<span class="op">^</span><span class="fl">2</span>)</span>
-<span id="cb63-14"><a href="#cb63-14" aria-hidden="true" tabindex="-1"></a>true_val, _ <span class="op">=</span> <span class="fu">quadgk</span>(f, <span class="fl">0.0</span>, <span class="fl">1.0</span>; rtol<span class="op">=</span><span class="fl">1e-14</span>)</span>
-<span id="cb63-15"><a href="#cb63-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb63-16"><a href="#cb63-16" aria-hidden="true" tabindex="-1"></a>h0 <span class="op">=</span> <span class="fl">0.1</span></span>
-<span id="cb63-17"><a href="#cb63-17" aria-hidden="true" tabindex="-1"></a><span class="pp">@printf</span>(<span class="st">&quot;%10s  %18s  %12s  %8s</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="st">&quot;h&quot;</span>, <span class="st">&quot;T(h)&quot;</span>, <span class="st">&quot;Error&quot;</span>, <span class="st">&quot;Ratio&quot;</span>)</span>
-<span id="cb63-18"><a href="#cb63-18" aria-hidden="true" tabindex="-1"></a>prev_err <span class="op">=</span> <span class="cn">NaN</span></span>
-<span id="cb63-19"><a href="#cb63-19" aria-hidden="true" tabindex="-1"></a>T_prev2 <span class="op">=</span> <span class="cn">NaN</span></span>
-<span id="cb63-20"><a href="#cb63-20" aria-hidden="true" tabindex="-1"></a>T_prev <span class="op">=</span> <span class="cn">NaN</span></span>
-<span id="cb63-21"><a href="#cb63-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb63-22"><a href="#cb63-22" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> <span class="fl">0</span><span class="op">:</span><span class="fl">4</span></span>
-<span id="cb63-23"><a href="#cb63-23" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> <span class="fu">Int</span>(<span class="fu">round</span>(<span class="fl">1</span> <span class="op">/</span> (h0 <span class="op">/</span> <span class="fl">2</span><span class="op">^</span>k)))</span>
-<span id="cb63-24"><a href="#cb63-24" aria-hidden="true" tabindex="-1"></a>    T <span class="op">=</span> <span class="fu">trapezoid</span>(f, <span class="fl">0.0</span>, <span class="fl">1.0</span>, n)</span>
-<span id="cb63-25"><a href="#cb63-25" aria-hidden="true" tabindex="-1"></a>    err <span class="op">=</span> <span class="fu">abs</span>(T <span class="op">-</span> true_val)</span>
-<span id="cb63-26"><a href="#cb63-26" aria-hidden="true" tabindex="-1"></a>    ratio <span class="op">=</span> <span class="fu">isnan</span>(prev_err) ? <span class="cn">NaN</span> <span class="op">:</span> prev_err <span class="op">/</span> err</span>
-<span id="cb63-27"><a href="#cb63-27" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@printf</span>(<span class="st">&quot;%10.5f  %18.15f  %12.3e  %8.2f</span><span class="sc">\n</span><span class="st">&quot;</span>, h0<span class="op">/</span><span class="fl">2</span><span class="op">^</span>k, T, err, ratio)</span>
-<span id="cb63-28"><a href="#cb63-28" aria-hidden="true" tabindex="-1"></a>    prev_err <span class="op">=</span> err</span>
-<span id="cb63-29"><a href="#cb63-29" aria-hidden="true" tabindex="-1"></a>    T_prev2 <span class="op">=</span> T_prev</span>
-<span id="cb63-30"><a href="#cb63-30" aria-hidden="true" tabindex="-1"></a>    T_prev <span class="op">=</span> T</span>
-<span id="cb63-31"><a href="#cb63-31" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
-<span id="cb63-32"><a href="#cb63-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb63-33"><a href="#cb63-33" aria-hidden="true" tabindex="-1"></a>T_rich <span class="op">=</span> T_prev <span class="op">+</span> (T_prev <span class="op">-</span> T_prev2) <span class="op">/</span> <span class="fl">3</span></span>
-<span id="cb63-34"><a href="#cb63-34" aria-hidden="true" tabindex="-1"></a><span class="pp">@printf</span>(<span class="st">&quot;</span><span class="sc">\n</span><span class="st">Richardson extrapolation: %.15f</span><span class="sc">\n</span><span class="st">&quot;</span>, T_rich)</span>
-<span id="cb63-35"><a href="#cb63-35" aria-hidden="true" tabindex="-1"></a><span class="pp">@printf</span>(<span class="st">&quot;Richardson error:         %.3e</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="fu">abs</span>(T_rich <span class="op">-</span> true_val))</span></code></pre></div>
-<p>All three implementations should produce the same convergence table.
-The ratio column landing near 4.00 for each halving is your convergence
-confirmation. The Richardson extrapolation result should be accurate to
-near machine precision, demonstrating that two second-order estimates,
-properly combined, can match what a much finer grid would achieve
-directly.</p>
+<span id="cb63-13"><a href="#cb63-13" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">run_study</span>()</span>
+<span id="cb63-14"><a href="#cb63-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">f</span>(x) <span class="op">=</span> <span class="fu">exp</span>(<span class="op">-</span>x<span class="op">^</span><span class="fl">2</span>)</span>
+<span id="cb63-15"><a href="#cb63-15" aria-hidden="true" tabindex="-1"></a>    reference, ref_error <span class="op">=</span> <span class="fu">quadgk</span>(f, <span class="fl">0.0</span>, <span class="fl">1.0</span>; rtol<span class="op">=</span><span class="fl">1e-13</span>, atol<span class="op">=</span><span class="fl">1e-13</span>)</span>
+<span id="cb63-16"><a href="#cb63-16" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@printf</span>(<span class="st">&quot;Reference: %.15f; estimated absolute error: %.3e</span><span class="sc">\n</span><span class="st">&quot;</span>, reference, ref_error)</span>
+<span id="cb63-17"><a href="#cb63-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-18"><a href="#cb63-18" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@printf</span>(<span class="st">&quot;%10s  %18s  %12s  %8s</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="st">&quot;h&quot;</span>, <span class="st">&quot;T(h)&quot;</span>, <span class="st">&quot;Error&quot;</span>, <span class="st">&quot;Ratio&quot;</span>)</span>
+<span id="cb63-19"><a href="#cb63-19" aria-hidden="true" tabindex="-1"></a>    prev_err <span class="op">=</span> <span class="cn">NaN</span></span>
+<span id="cb63-20"><a href="#cb63-20" aria-hidden="true" tabindex="-1"></a>    T_prev2 <span class="op">=</span> <span class="cn">NaN</span></span>
+<span id="cb63-21"><a href="#cb63-21" aria-hidden="true" tabindex="-1"></a>    T_prev <span class="op">=</span> <span class="cn">NaN</span></span>
+<span id="cb63-22"><a href="#cb63-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-23"><a href="#cb63-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> k <span class="kw">in</span> <span class="fl">0</span><span class="op">:</span><span class="fl">4</span></span>
+<span id="cb63-24"><a href="#cb63-24" aria-hidden="true" tabindex="-1"></a>        n <span class="op">=</span> <span class="fl">100</span> <span class="op">*</span> <span class="fl">2</span><span class="op">^</span>k</span>
+<span id="cb63-25"><a href="#cb63-25" aria-hidden="true" tabindex="-1"></a>        T <span class="op">=</span> <span class="fu">trapezoid</span>(f, <span class="fl">0.0</span>, <span class="fl">1.0</span>, n)</span>
+<span id="cb63-26"><a href="#cb63-26" aria-hidden="true" tabindex="-1"></a>        err <span class="op">=</span> <span class="fu">abs</span>(T <span class="op">-</span> reference)</span>
+<span id="cb63-27"><a href="#cb63-27" aria-hidden="true" tabindex="-1"></a>        ratio <span class="op">=</span> <span class="fu">isnan</span>(prev_err) ? <span class="cn">NaN</span> <span class="op">:</span> prev_err <span class="op">/</span> err</span>
+<span id="cb63-28"><a href="#cb63-28" aria-hidden="true" tabindex="-1"></a>        <span class="pp">@printf</span>(<span class="st">&quot;%10.5f  %18.15f  %12.3e  %8.2f</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="fl">1</span><span class="op">/</span>n, T, err, ratio)</span>
+<span id="cb63-29"><a href="#cb63-29" aria-hidden="true" tabindex="-1"></a>        prev_err <span class="op">=</span> err</span>
+<span id="cb63-30"><a href="#cb63-30" aria-hidden="true" tabindex="-1"></a>        T_prev2 <span class="op">=</span> T_prev</span>
+<span id="cb63-31"><a href="#cb63-31" aria-hidden="true" tabindex="-1"></a>        T_prev <span class="op">=</span> T</span>
+<span id="cb63-32"><a href="#cb63-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb63-33"><a href="#cb63-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-34"><a href="#cb63-34" aria-hidden="true" tabindex="-1"></a>    T_rich <span class="op">=</span> T_prev <span class="op">+</span> (T_prev <span class="op">-</span> T_prev2) <span class="op">/</span> <span class="fl">3</span></span>
+<span id="cb63-35"><a href="#cb63-35" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@printf</span>(<span class="st">&quot;</span><span class="sc">\n</span><span class="st">Richardson extrapolation: %.15f</span><span class="sc">\n</span><span class="st">&quot;</span>, T_rich)</span>
+<span id="cb63-36"><a href="#cb63-36" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@printf</span>(<span class="st">&quot;Richardson difference:    %.3e</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="fu">abs</span>(T_rich <span class="op">-</span> reference))</span>
+<span id="cb63-37"><a href="#cb63-37" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb63-38"><a href="#cb63-38" aria-hidden="true" tabindex="-1"></a><span class="fu">run_study</span>()</span></code></pre></div>
+<p>The tables should agree up to rounding and the reference integrators’
+uncertainty. Ratios near 4 support second-order convergence over these
+grids; they do not prove it for every grid. Compare the Richardson
+difference with the displayed reference error estimate and
+floating-point precision before interpreting its last digits. For
+example, one Python run gives a Richardson difference of <span class="math inline">\(8.9\times 10^{-16}\)</span> against a reference
+error estimate of <span class="math inline">\(8.3\times
+10^{-15}\)</span>; the difference is too small to establish the true
+error. Results can vary between languages and runtimes.</p>
 <h2 data-number="16.3" role="heading" aria-level="3" id="cross-check"><span class="header-section-number">16.3</span>
 Cross-Check</h2>
 <p>Cross-check your trapezoidal estimate against an adaptive library
 integrator: <code>scipy.integrate.quad</code> in Python,
 <code>integrate</code> in R, or <code>quadgk</code> in Julia. Since
-these use different algorithms, a big mismatch is a useful warning sign.
-For this smooth, bounded integrand on a finite interval, they should
-agree to near machine precision.</p>
+these use different algorithms, a mismatch larger than the expected
+trapezoidal error and the adaptive integrator’s error estimate is a
+useful warning sign. Agreement alone does not prove that either result
+is exact.</p>
 <h2 data-number="16.4" role="heading" aria-level="3" id="conditioning-note"><span class="header-section-number">16.4</span>
 Conditioning Note</h2>
 <p>Integration of a smooth, bounded function over a finite interval is
