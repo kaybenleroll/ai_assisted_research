@@ -57,9 +57,9 @@ Neural networks are not new. The perceptron dates to 1958. Backpropagation, the 
 
 ### Data
 
-A neural network with millions of parameters is a high-capacity model. In classical-ML terms, it sits on the far end of the bias-variance tradeoff: enormous flexibility, and therefore enormous appetite for data. Train such a model on a few thousand examples and it memorises them — textbook overfitting. The capacity that makes deep networks powerful is a liability without data to constrain it.
+A neural network with millions of parameters is a high-capacity model. In classical-ML terms, it sits on the far end of the bias-variance tradeoff: enormous flexibility, and therefore enormous appetite for data. With few examples, such a model can memorise the training set and fail to generalise. Pretraining, regularisation, data augmentation and the task all affect the outcome; parameter count alone does not determine whether a model overfits.
 
-For most of the field's history, that data did not exist in usable form. The thing that changed was the arrival of large, labelled datasets, and the canonical example is ImageNet. The full ImageNet database, released in 2009, held around 3.2 million labelled images across tens of thousands of categories (WordNet synsets); the subset that mattered for training deep networks was the annual ILSVRC benchmark's 1000-category slice — about 1.2 million labelled training images across 1000 categories — hand-annotated at a scale nobody had attempted before. This mattered for a reason that is easy to undersell: a high-capacity model needs enough labelled examples to pin down its many degrees of freedom, and the ILSVRC subset was the first vision dataset large enough to do that for a deep network. Suddenly the model's appetite could be fed.
+For most of the field's history, that data did not exist in usable form. The thing that changed was the arrival of large, labelled datasets, and the canonical example is ImageNet. The full ImageNet database, released in 2009, held around 3.2 million labelled images across tens of thousands of categories (WordNet synsets); the subset that mattered for training deep networks was the annual ILSVRC benchmark's 1000-category slice — about 1.2 million labelled training images across 1000 categories — hand-annotated at a scale nobody had attempted before. This mattered for a reason that is easy to undersell: a high-capacity model needs enough labelled examples to pin down its many degrees of freedom, and the ILSVRC subset provided a large benchmark on which deep networks could be trained and compared. Suddenly the model's appetite could be fed.
 
 Once that loop closes, it accelerates. More data trains better models; better models power more useful products; useful products attract more users, who generate more data; and that data trains the next, better model. This virtuous cycle is why the organisations with the most user interaction tend to have the best models — not because their researchers are uniquely brilliant, but because the flywheel has been turning longer.
 
@@ -83,11 +83,11 @@ Dropout arrived as a regularisation technique tailored to large networks: during
 
 ### Why Classical ML Hits a Ceiling
 
-There is a deeper reason all of this matters, and it explains why deep learning did not just speed up classical ML but replaced it on whole categories of problem. Classical models work beautifully on structured, tabular data where the features are already meaningful — income, age, credit score. They struggle on unstructured data: raw images, audio, text. The reason is feature engineering.
+There is a deeper reason all of this matters, and it explains why deep learning did not just speed up classical ML but replaced it on whole categories of problem. Classical models are often competitive on structured, tabular data where the features are already meaningful — income, age, credit score. Many classical pipelines for images, audio and text rely on feature engineering: deciding how to transform raw inputs into a representation suitable for the model.
 
-A classical image classifier does not see an image; it sees whatever features you extract and hand it. So someone has to decide, in advance, what features matter. For decades this meant hand-designed feature extractors — SIFT for keypoints, HOG for gradient orientations — each a clever piece of engineering encoding a human's guess about what makes an image recognisable. The trouble is that this guess is exactly the hard part. The whole point of an image classifier is to learn what distinguishes a cat from a dog, and hand-designed features bake in a fixed, brittle answer before learning even begins. Change the lighting, the angle, or the scale and the features that worked on the training set fall apart.
+A classical image classifier does not see an image; it sees whatever features you extract and hand it. So someone has to decide, in advance, what features matter. For decades this meant hand-designed feature extractors — SIFT for keypoints, HOG for gradient orientations — each a clever piece of engineering encoding a human's guess about what makes an image recognisable. The trouble is that this guess is exactly the hard part. The whole point of an image classifier is to learn what distinguishes a cat from a dog, and hand-designed features bake in a fixed, brittle answer before learning even begins. Changes in lighting, angle or scale can expose limitations of a chosen representation, although handcrafted features can themselves be designed for some invariances.
 
-Neural networks dissolve this problem by learning the features. The early layers of a trained vision network discover edge detectors and colour-blob detectors; middle layers compose those into textures and parts; late layers assemble parts into objects. Nobody designs this hierarchy — it emerges from gradient descent on the task. Feature extraction stops being a separate, brittle, human-engineered stage and becomes part of the model, learned end-to-end from data. This is the real shift, and it is why deep learning ate computer vision and natural language processing rather than merely improving them.
+Neural networks dissolve this problem by learning the features. The early layers of a trained vision network discover edge detectors and colour-blob detectors; middle layers compose those into textures and parts; late layers assemble parts into objects. Nobody designs this hierarchy — it emerges from gradient descent on the task. Feature extraction can become part of the model and be learned end-to-end from data; the architecture, training data and augmentation still encode human choices and affect robustness. This is the real shift, and it is why deep learning ate computer vision and natural language processing rather than merely improving them.
 
 ### The ImageNet Moment
 
@@ -1230,15 +1230,15 @@ For now, choose by workload rather than by the word “diffusion.” Use an auto
 
 ### Comparison: VAEs, GANs, Diffusion
 
-Pulling the three families together, each makes a different bargain, and the table below is the cheat sheet. VAEs give you a clean, structured latent space and rock-solid training but blurry samples. GANs give you sharp, fast samples but fragile training and a tendency to drop modes. Diffusion gives you the best quality and diversity with stable training, at the cost of slow, many-step sampling — and, as latent diffusion shows, the three are not really rivals so much as components you can compose.
+Pulling the three families together, each makes a different bargain, and the table below is the cheat sheet. VAEs combine an encoder with a likelihood-based objective but can produce blurry reconstructions or suffer posterior collapse. GANs can produce sharp, fast samples but adversarial training can be unstable or drop modes. Diffusion often gives high-quality, diverse samples with a straightforward denoising objective, commonly at the cost of iterative sampling. Results depend on the data, model and sampling method; as latent diffusion shows, these families can also be composed.
 
 | | VAE | GAN | Diffusion |
 |---|---|---|---|
-| Training stability | High | Low | High |
-| Sample quality | Low–medium | High on some image tasks | Often very high, task dependent |
-| Sample diversity | High | Low (mode collapse) | High |
+| Training stability | Often tractable | Adversarial optimisation can be unstable | Denoising regression avoids an adversarial game |
+| Sample quality | Depends on decoder and likelihood | Can be high on image tasks | Often high, task dependent |
+| Sample diversity | Depends on latent use and training | Mode collapse is a risk | Depends on training and sampling |
 | Sampling speed | Fast (single pass) | Fast (single pass) | Slow (many steps) |
-| Latent space | Structured, interpolatable (learned encoder) | Smooth, interpolatable (no encoder — inversion required) | Noise space via DDIM (no encoder) |
+| Latent space | Learned encoder; smooth interpolation is not guaranteed | Generator input; inversion needs additional work | Noise space can be mapped by deterministic DDIM |
 | Text conditioning | Moderate | Moderate | Strong, with several conditioning methods |
 | Best for | Latent representation, VAE-based latent diffusion | Fast images, video, domain adaptation | High-quality conditional generation when latency permits |
 ## Frameworks and Ecosystem

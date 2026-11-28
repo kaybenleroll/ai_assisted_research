@@ -1015,9 +1015,10 @@ practice.</p>
 <p>A neural network with millions of parameters is a high-capacity
 model. In classical-ML terms, it sits on the far end of the
 bias-variance tradeoff: enormous flexibility, and therefore enormous
-appetite for data. Train such a model on a few thousand examples and it
-memorises them — textbook overfitting. The capacity that makes deep
-networks powerful is a liability without data to constrain it.</p>
+appetite for data. With few examples, such a model can memorise the
+training set and fail to generalise. Pretraining, regularisation, data
+augmentation and the task all affect the outcome; parameter count alone
+does not determine whether a model overfits.</p>
 <p>For most of the field’s history, that data did not exist in usable
 form. The thing that changed was the arrival of large, labelled
 datasets, and the canonical example is ImageNet. The full ImageNet
@@ -1028,9 +1029,9 @@ benchmark’s 1000-category slice — about 1.2 million labelled training
 images across 1000 categories — hand-annotated at a scale nobody had
 attempted before. This mattered for a reason that is easy to undersell:
 a high-capacity model needs enough labelled examples to pin down its
-many degrees of freedom, and the ILSVRC subset was the first vision
-dataset large enough to do that for a deep network. Suddenly the model’s
-appetite could be fed.</p>
+many degrees of freedom, and the ILSVRC subset provided a large
+benchmark on which deep networks could be trained and compared. Suddenly
+the model’s appetite could be fed.</p>
 <p>Once that loop closes, it accelerates. More data trains better
 models; better models power more useful products; useful products
 attract more users, who generate more data; and that data trains the
@@ -1109,10 +1110,11 @@ stalled.</p>
 Ceiling</h2>
 <p>There is a deeper reason all of this matters, and it explains why
 deep learning did not just speed up classical ML but replaced it on
-whole categories of problem. Classical models work beautifully on
+whole categories of problem. Classical models are often competitive on
 structured, tabular data where the features are already meaningful —
-income, age, credit score. They struggle on unstructured data: raw
-images, audio, text. The reason is feature engineering.</p>
+income, age, credit score. Many classical pipelines for images, audio
+and text rely on feature engineering: deciding how to transform raw
+inputs into a representation suitable for the model.</p>
 <p>A classical image classifier does not see an image; it sees whatever
 features you extract and hand it. So someone has to decide, in advance,
 what features matter. For decades this meant hand-designed feature
@@ -1121,18 +1123,20 @@ clever piece of engineering encoding a human’s guess about what makes an
 image recognisable. The trouble is that this guess is exactly the hard
 part. The whole point of an image classifier is to learn what
 distinguishes a cat from a dog, and hand-designed features bake in a
-fixed, brittle answer before learning even begins. Change the lighting,
-the angle, or the scale and the features that worked on the training set
-fall apart.</p>
+fixed, brittle answer before learning even begins. Changes in lighting,
+angle or scale can expose limitations of a chosen representation,
+although handcrafted features can themselves be designed for some
+invariances.</p>
 <p>Neural networks dissolve this problem by learning the features. The
 early layers of a trained vision network discover edge detectors and
 colour-blob detectors; middle layers compose those into textures and
 parts; late layers assemble parts into objects. Nobody designs this
 hierarchy — it emerges from gradient descent on the task. Feature
-extraction stops being a separate, brittle, human-engineered stage and
-becomes part of the model, learned end-to-end from data. This is the
-real shift, and it is why deep learning ate computer vision and natural
-language processing rather than merely improving them.</p>
+extraction can become part of the model and be learned end-to-end from
+data; the architecture, training data and augmentation still encode
+human choices and affect robustness. This is the real shift, and it is
+why deep learning ate computer vision and natural language processing
+rather than merely improving them.</p>
 <h2 data-number="2.5" role="heading" aria-level="3" id="the-imagenet-moment"><span class="header-section-number">2.5</span>
 The ImageNet Moment</h2>
 <p>All three ingredients converged in a single, legible event. The
@@ -3934,13 +3938,14 @@ rounds.</p>
 <h2 data-number="11.8" role="heading" aria-level="3" id="comparison-vaes-gans-diffusion"><span class="header-section-number">11.8</span> Comparison: VAEs, GANs,
 Diffusion</h2>
 <p>Pulling the three families together, each makes a different bargain,
-and the table below is the cheat sheet. VAEs give you a clean,
-structured latent space and rock-solid training but blurry samples. GANs
-give you sharp, fast samples but fragile training and a tendency to drop
-modes. Diffusion gives you the best quality and diversity with stable
-training, at the cost of slow, many-step sampling — and, as latent
-diffusion shows, the three are not really rivals so much as components
-you can compose.</p>
+and the table below is the cheat sheet. VAEs combine an encoder with a
+likelihood-based objective but can produce blurry reconstructions or
+suffer posterior collapse. GANs can produce sharp, fast samples but
+adversarial training can be unstable or drop modes. Diffusion often
+gives high-quality, diverse samples with a straightforward denoising
+objective, commonly at the cost of iterative sampling. Results depend on
+the data, model and sampling method; as latent diffusion shows, these
+families can also be composed.</p>
 <table>
 <colgroup>
 <col style="width: 25%" />
@@ -3959,21 +3964,21 @@ you can compose.</p>
 <tbody>
 <tr>
 <td>Training stability</td>
-<td>High</td>
-<td>Low</td>
-<td>High</td>
+<td>Often tractable</td>
+<td>Adversarial optimisation can be unstable</td>
+<td>Denoising regression avoids an adversarial game</td>
 </tr>
 <tr>
 <td>Sample quality</td>
-<td>Low–medium</td>
-<td>High on some image tasks</td>
-<td>Often very high, task dependent</td>
+<td>Depends on decoder and likelihood</td>
+<td>Can be high on image tasks</td>
+<td>Often high, task dependent</td>
 </tr>
 <tr>
 <td>Sample diversity</td>
-<td>High</td>
-<td>Low (mode collapse)</td>
-<td>High</td>
+<td>Depends on latent use and training</td>
+<td>Mode collapse is a risk</td>
+<td>Depends on training and sampling</td>
 </tr>
 <tr>
 <td>Sampling speed</td>
@@ -3983,9 +3988,9 @@ you can compose.</p>
 </tr>
 <tr>
 <td>Latent space</td>
-<td>Structured, interpolatable (learned encoder)</td>
-<td>Smooth, interpolatable (no encoder — inversion required)</td>
-<td>Noise space via DDIM (no encoder)</td>
+<td>Learned encoder; smooth interpolation is not guaranteed</td>
+<td>Generator input; inversion needs additional work</td>
+<td>Noise space can be mapped by deterministic DDIM</td>
 </tr>
 <tr>
 <td>Text conditioning</td>
