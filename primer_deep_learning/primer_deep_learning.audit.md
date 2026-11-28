@@ -196,7 +196,7 @@ At `d6b664f`, `just deep-learning-all` and `just render-qa primer_deep_learning`
 
 ## Full audit command result
 
-`just primer-audit primer_deep_learning` initially stopped at its Git-backed evidence check because matrix evidence revisions were `d6b664f` while the audit header still named `2ee1e86`. This metadata mismatch was corrected after the changed source passages and dependent routes were reviewed; the mismatch was not a content verdict. The command must be rerun on this corrected tracked state.
+`just primer-audit primer_deep_learning` initially stopped at its Git-backed evidence check because matrix evidence revisions were `d6b664f` while the audit header still named `2ee1e86`. This metadata mismatch was corrected after the changed source passages and dependent routes were reviewed; the mismatch was not a content verdict. The next run found the brief still named the old source revision; its source and reviewed revision metadata were updated to `14aada3`. Its reader promise, scope and stable IDs did not change. The command must be rerun on the reconciled tracked state.
 
 ## Release readiness checklist
 
