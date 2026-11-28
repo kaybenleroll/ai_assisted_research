@@ -29,7 +29,7 @@ The continuous source read at `2ee1e86` is complete. Explicit boundary and child
 
 ## Adversarial depth gate
 
-Seven primary concepts remain not-checked and two have confirmed gaps below; no route passes until its transitions and limitations have been reviewed.
+Six primary concepts remain not-checked and three have confirmed gaps below; no route passes until its transitions and limitations have been reviewed.
 
 ## Core-concept depth matrix
 
@@ -41,7 +41,7 @@ Seven primary concepts remain not-checked and two have confirmed gaps below; no 
 | attention | primary | attention_weights | primer_deep_learning.md:706 | primer_deep_learning.md:718 | primer_deep_learning.md:718 | primer_deep_learning.md:718 | 2ee1e86aa371b2cea344f8122c9012d692680ecc | Codex | not-checked | Numeric lookup and scaling assumption checked; the whole attention route still needs review. | retain pending review |
 | language | primary | language_training | primer_deep_learning.md:887 | primer_deep_learning.md:924 | primer_deep_learning.md:948 | primer_deep_learning.md:912 | 2ee1e86aa371b2cea344f8122c9012d692680ecc | Codex | not-checked | BERT, LoRA and WordPiece corrections checked; full language-model route and claims need review. | retain pending review |
 | variational | primary | elbo | primer_deep_learning.md:1008 | primer_deep_learning.md:1012 | primer_deep_learning.md:1020 | primer_deep_learning.md:1068 | 2ee1e86aa371b2cea344f8122c9012d692680ecc | Codex | gap | Lines 1054–1056 call summed MSE plus KL the negative ELBO without specifying the Gaussian likelihood variance or additive constant; the relative reconstruction weight depends on that choice. | retain and correct likelihood assumptions; complete route review |
-| adversarial | primary | wasserstein | primer_deep_learning.md:1100 | primer_deep_learning.md:1108 | primer_deep_learning.md:1106 | primer_deep_learning.md:1112 | 2ee1e86aa371b2cea344f8122c9012d692680ecc | Codex | not-checked | Constraint corrections sampled; the complete GAN comparison remains to be reviewed. | retain pending review |
+| adversarial | primary | wasserstein | primer_deep_learning.md:1100 | primer_deep_learning.md:1108 | primer_deep_learning.md:1106 | primer_deep_learning.md:1112 | 2ee1e86aa371b2cea344f8122c9012d692680ecc | Codex | gap | No concrete distribution pair and worked critic comparison links separation to the critic signal; see post-revision semantic review. | retain and develop comparison or decide scope |
 | diffusion | primary | score | primer_deep_learning.md:1128 | primer_deep_learning.md:1156 | primer_deep_learning.md:1175 | primer_deep_learning.md:1175 | 2ee1e86aa371b2cea344f8122c9012d692680ecc | Codex | not-checked | Broadcast executed; score bridge and reverse sampler need full independent review. | retain pending review |
 | selection | primary | model_choice | primer_deep_learning.md:1369 | primer_deep_learning.md:1411 | primer_deep_learning.md:1413 | primer_deep_learning.md:1413 | 2ee1e86aa371b2cea344f8122c9012d692680ecc | Codex | gap | Line 1387 recommends a VAE for disentangled axes without a condition or evidence that the basic VAE objective identifies such axes; line 1381 prescribes fine-tuning before the conditional comparison at line 1417. | retain and correct selection guidance; complete route review |
 
@@ -70,6 +70,16 @@ At `2ee1e86`, the VAE schematic at lines 1044–1056 omits the decoder likelihoo
 The model-choice advice at line 1387 offers a VAE for disentangled axes, although the prior-matching ELBO alone does not establish axis identifiability; readers could choose it expecting a property the objective does not guarantee. Qualify this as a separate modelling and evaluation goal. Line 1381 also instructs readers to fine-tune a pretrained transformer unconditionally, while line 1417 proposes comparing zero-shot, feature extraction and fine-tuning; reconcile the former with the latter. These affect the primary selection route. No new independent source or code verification was performed for these observations.
 
 Additional unadjudicated claims include the purported current dominance of state-space models at line 625, unconditional positional extrapolation at line 740, and categorical claims about generative-family quality at lines 1231–1240. These require source-backed review before readiness; inclusion here is not a finding that each is false.
+
+## Post-revision semantic and route review (partial)
+
+At `f4aae7c`, Codex re-inspected the matrix locators against their stated roles and the surrounding passages read in full at `2ee1e86`; changed passages were separately checked as described below. This is a mapping review, not a complete new content audit. The foundations, spatial, recurrent, attention, variational and selection locators identify passages addressing their recorded roles; that does not establish that their entire routes pass. Three mappings need correction or deeper evidence:
+
+- `language_training`: the BERT corruption at line 924 and LoRA parameter count at line 948 are separate examples. The latter interprets an adaptation mechanism, not the former objective; this mapping does not establish a continuous token-to-adaptation case. The reader can compare the mechanisms but cannot trace a particular tokenised input through a training objective and adaptation from these locators.
+- `wasserstein`: line 1108 states a soft constraint mechanism, rather than demonstrating an action on a concrete pair of distributions. Lines 1102–1112 explain the dual and its limit but do not work a specific critic and compare its values. A reader cannot use the example to check how separation translates into a critic signal; mark this primary route a gap until a worked comparison or an explicit scope decision resolves it.
+- `score`: line 1128 explains the forward process, while the actual score identity is at line 1175; line 1156 begins code constructing noisy inputs, not an application of the score identity. The reader must bridge the example and score result without a worked numerical score. Whether the brief requires that calculation or the symbolic derivation suffices remains not-checked.
+
+The old evidence rows remain bound to `2ee1e86`; they have not been silently rebound to the revised source. These observations do not replace transition-by-transition review, independent technical checking or the reader-scale gate.
 
 ## Follow-up revision after the continuous read
 
