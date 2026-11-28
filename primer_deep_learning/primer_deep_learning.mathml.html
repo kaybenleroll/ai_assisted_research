@@ -2231,9 +2231,10 @@ them, usually at a small learning rate, so the task-specific features
 can adapt to your domain while the general early-layer features stay
 put. The rule of thumb follows directly from the generality gradient —
 freeze the early layers that learned transferable edges and textures,
-retrain the later layers that need to specialise. The less your data
-resembles ImageNet (medical scans, satellite imagery), the more layers
-you will want to unfreeze.</p>
+retrain the later layers that need to specialise. When the new domain
+differs from ImageNet, compare a frozen extractor with partial and full
+fine-tuning; the best choice depends on labelled data, domain shift and
+overfitting.</p>
 <h2 data-number="5.5" role="heading" aria-level="3" id="vision-transformers-briefly"><span class="header-section-number">5.5</span> Vision Transformers,
 Briefly</h2>
 <p>Convolution is not the only way to process images. The Vision
@@ -3468,25 +3469,18 @@ to reconstruct, so the latent code becomes a compressed representation
 of the data. Autoencoders compress well, and a small variation (the
 <strong>denoising autoencoder</strong>, which adds noise to the input
 and asks the network to reconstruct the clean original) makes them
-denoise well too. What they do <em>not</em> do is generate convincingly,
-and the reason is structural.</p>
-<p>The trouble is the latent space they learn. Nothing in the
-reconstruction objective constrains <em>where</em> the encoder places
-codes. It is free to map each training input to any arbitrary point in
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi mathvariant="double-struck">ℝ</mi><mi>d</mi></msup><annotation encoding="application/x-tex">\mathbb{R}^d</annotation></semantics></math>,
-and it will, scattering codes wherever happens to minimise
-reconstruction error. The result is a latent space full of holes and
-discontinuities. Two inputs that are similar in data space can land far
-apart in latent space, and the regions between training codes correspond
-to nothing the decoder has ever been asked to reconstruct. So if you do
-the obvious generative thing — sample a random point from the latent
-space and decode it — you get garbage, because that point almost
-certainly falls in one of the holes the decoder never learned to handle.
-Interpolate along a straight line between two valid codes and you pass
-through the same dead regions, producing nonsense partway across. The
-autoencoder learned to represent the training data, but it did not learn
-a latent <em>distribution</em> you can sample from. That is the
-generative gap, and closing it is the entire point of the VAE.</p>
+denoise well too. Reconstruction training by itself does not specify how
+to sample new codes for generation.</p>
+<p>The trouble is the latent space they learn. Reconstruction loss alone
+does not specify a sampling distribution over codes. Similar inputs need
+not have nearby codes, and regions between observed codes need not have
+been trained to decode into plausible examples. Sampling an arbitrary
+latent or interpolating between codes can therefore produce poor
+outputs, though the outcome depends on the architecture, data and
+training. The autoencoder learned to represent the training data, but it
+did not learn a latent <em>distribution</em> you can sample from. That
+is the generative gap, and closing it is the entire point of the
+VAE.</p>
 <h2 data-number="9.2" role="heading" aria-level="3" id="the-latent-variable-view"><span class="header-section-number">9.2</span> The Latent-Variable View</h2>
 <p>To fix the gap you need a different framing. Stop thinking of the
 encoder as the primary object and start with a generative story for how
@@ -3750,15 +3744,16 @@ remains so useful that it reappears as a component inside latent
 diffusion at the end of this part.</p>
 <h1 data-number="10" role="heading" aria-level="2" id="generative-adversarial-networks"><span class="header-section-number">10</span> Generative Adversarial
 Networks</h1>
-<p>The VAE’s blurriness traces back to its objective: a likelihood-based
-loss that rewards hedging towards the average. GANs throw that objective
-out entirely. Instead of training a generator to maximise a likelihood,
-you train it to fool an adversary — a second network whose only job is
-to tell real data from the generator’s fakes. There is no explicit
-density, no reconstruction term averaging over possibilities, nothing
-pulling towards a blurry mean. The generator improves by being told,
-repeatedly, exactly how it got caught. The payoff is sharpness; the
-price, as we’ll see, is that the training is genuinely hard to make
+<p>Some VAEs with simple reconstruction likelihoods produce blurry
+outputs because the decoder can favour averages over plausible
+alternatives. GANs throw that objective out entirely. Instead of
+training a generator to maximise a likelihood, you train it to fool an
+adversary — a second network whose only job is to tell real data from
+the generator’s fakes. The original GAN objective has no explicit
+density or reconstruction term, though particular conditional GAN
+systems may add reconstruction losses. The generator improves by being
+told, repeatedly, exactly how it got caught. The payoff is sharpness;
+the price, as we’ll see, is that the training is genuinely hard to make
 converge.</p>
 <h2 data-number="10.1" role="heading" aria-level="3" id="the-minimax-game"><span class="header-section-number">10.1</span>
 The Minimax Game</h2>
@@ -4842,12 +4837,13 @@ not guarantee coherent interpolation or disentangled axes. Recovering
 distinct factors requires additional assumptions or supervision and
 evaluation; see <a href="https://proceedings.mlr.press/v97/locatello19a.html">Locatello and
 colleagues</a>.</p>
-<p>If you want very fast single-pass generation and can tolerate the
-training instability that comes with it, use a GAN. StyleGAN remains a
-strong choice for photorealistic images, and GANs still hold a niche in
-latency-critical video generation (real-time avatars, face reenactment)
-— but for general-purpose video generation, diffusion and
-diffusion-transformer models have taken over.</p>
+<p>If fast single-pass generation matters and adversarial training is
+acceptable, evaluate a GAN against other fast generators on the target
+hardware. StyleGAN remains a strong choice for photorealistic images,
+and GANs still hold a niche in latency-critical video generation
+(real-time avatars, face reenactment) — but for general-purpose video
+generation, diffusion and diffusion-transformer models have taken
+over.</p>
 <p>If you want high-quality conditional image, audio, or video
 generation and can afford iterative sampling, diffusion is a strong
 default to evaluate. Its quality, diversity, and latency depend on the
