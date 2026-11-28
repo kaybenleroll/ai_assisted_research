@@ -2019,11 +2019,17 @@ connectivity</strong>: each output value depends only on a small
 neighbourhood of the input, not on the entire image. A neuron in a conv
 layer has a small “receptive field”, which matches the reality that
 low-level visual features are local. The third is <strong>translation
-equivariance</strong>: if you shift a feature in the input — slide the
-cat two pixels to the right — the corresponding activation in the output
-map shifts by the same amount, unchanged in value. The network does not
-need to relearn the cat at every possible location, because the same
-kernel detects it wherever it appears.</p>
+equivariance</strong>: for a stride-1 convolution on an infinite grid,
+shifting the input shifts the output by the same amount because the same
+kernel is applied at every location. Real images have finite boundaries,
+so padding and cropping can change values near an edge. With stride
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>&gt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">s&gt;1</annotation></semantics></math>,
+a shift by a multiple of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>
+aligns with the sampled output grid, but a one-pixel shift need not
+produce a shifted copy of the output. Shared kernels still let a
+detector be reused across locations; exact equivariance depends on the
+boundary and sampling conditions.</p>
 <p>Two more knobs control how the kernel moves. <strong>Stride</strong>
 is how far the kernel jumps between applications. A stride of 1 moves it
 one pixel at a time, producing a dense output; a stride of 2 skips every
